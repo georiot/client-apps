@@ -20,13 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("apiSecret").value = localStorage["apiSecret"];
 
     if (localStorage["defaultGroup"] != null && localStorage != "") {
-        //$("#groupConfigLink").append("<a href=groups.html>Select default group</a><br>");
-        //$("#groupConfigLink").append("<a href=lastlinks.html>View last five links</a>");
-        $('#help').css('visibility', 'hidden');
-        $('#back').css('visibility', 'visible');
+        $("#help").css("visibility", "hidden");
+        $("#back").css("visibility", "visible");
     } else {
-        $('#back').css('visibility', 'hidden');
-        $('#help').css('visibility', 'visible');
+        $("#back").css("visibility", "hidden");
+        $("#help").css("visibility", "visible");
     }
 
 
