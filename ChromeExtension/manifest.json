@@ -27,6 +27,7 @@
         "contextMenus",
         "tabs",
         "https://api.geni.us/",
-        "storage"
+      "storage",
+      "clipboardRead"
     ]
 }

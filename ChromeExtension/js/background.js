@@ -3,10 +3,20 @@ function getCurrentTab() {
         chrome.tabs.query({
             active: true, // Select active tabs
             lastFocusedWindow: true // In the current window
-        }, function(tabs) {
+        }, function (tabs) {
             resolve(tabs[0]);
         });
     });
+}
+
+function copyToClipBoard(text) {
+    var input = document.createElement('textarea');
+    document.body.appendChild(input);
+    input.value = (text);
+    input.focus();
+    input.select();
+    document.execCommand('Copy');
+    input.remove();
 }
 
 function createGeniusCurrentTab() {
@@ -29,7 +39,8 @@ function createGeniusLink(url) {
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.onload = function() {
         if (req.status == 200) {
-            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".");
+            copyToClipBoard(url);
+            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".\n Added link to clipboard");
             req.response;
         } else {
             if (req.status == 401) {
