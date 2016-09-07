@@ -39,7 +39,6 @@ function createGeniusLink(url) {
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.onload = function() {
         if (req.status == 200) {
-            copyToClipBoard(url);
             alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".\n Added link to clipboard");
             req.response;
         } else {
@@ -55,7 +54,12 @@ function createGeniusLink(url) {
         Error("Network Error");
     };
     req.send();
-
+ 
+    req.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            copyToClipBoard(JSON.parse(req.response)['NewLink']);
+        }
+    };
 }
 
 
