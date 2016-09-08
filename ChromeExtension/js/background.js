@@ -3,10 +3,23 @@ function getCurrentTab() {
         chrome.tabs.query({
             active: true, // Select active tabs
             lastFocusedWindow: true // In the current window
-        }, function(tabs) {
+        }, function (tabs) {
             resolve(tabs[0]);
         });
     });
+}
+
+//sources for copyToClipboard function:
+//http://www.is-beer-a-vegetable.com/wiki/index.php/Copy_text_to_clipboard_using_Javascript_(Chrome)
+//http://stackoverflow.com/questions/25622359/clipboard-copy-paste-on-content-script-chrome-extension
+function copyToClipBoard(text) {
+    var input = document.createElement('textarea');
+    document.body.appendChild(input);
+    input.value = (text);
+    input.focus();
+    input.select();
+    document.execCommand('Copy');
+    input.remove();
 }
 
 function createGeniusCurrentTab() {
@@ -27,9 +40,10 @@ function createGeniusLink(url) {
     var req = new XMLHttpRequest();
     req.open('POST', "https://api.geni.us/v2/shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&format=json&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0&domain=geni.us&Url=" + url);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.onload = function() {
-        if (req.status == 200) {
-            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".");
+    req.onreadystatechange = function () {
+        if (req.status === 200 && req.readyState === 4) {
+            copyToClipBoard(JSON.parse(req.response)['NewLink']);
+            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".\n Added link to clipboard");
             req.response;
         } else {
             if (req.status == 401) {
@@ -44,7 +58,7 @@ function createGeniusLink(url) {
         Error("Network Error");
     };
     req.send();
-
+ 
 }
 
 
