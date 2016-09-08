@@ -9,6 +9,18 @@ function getCurrentTab() {
     });
 }
 
+function goTo(page) {
+    if (localStorage["defaultGroup"] != null && localStorage != "") {
+        chrome.browserAction.setPopup({
+            popup: page
+        });
+    }
+};
+
+
+
+
+
 function createGeniusCurrentTab() {
     getCurrentTab().then(function(tab) {
         var url = tab.url;
@@ -77,4 +89,5 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
+goTo("groups.html");
 CreateContentMenus();

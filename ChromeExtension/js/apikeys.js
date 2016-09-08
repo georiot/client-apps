@@ -1,20 +1,21 @@
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function () {
     if (localStorage["apiKey"] == null && localStorage["apiSecret"] == null) {
         localStorage.setItem("apiKey", "");
         localStorage.setItem("apiSecret", "");
 
     }
 
-
     $(document).ready(function() {
-        $('#tutorial').on('click', 'a', function() {
+        $('#tutorial').on('click', 'a', function () {
             chrome.tabs.create({
                 url: $(this).attr('href')
             });
             return false;
         });
+
     });
+
+ 
 
     document.getElementById("apiKey").value = localStorage["apiKey"];
     document.getElementById("apiSecret").value = localStorage["apiSecret"];
@@ -65,7 +66,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("save button works");
 
     });
-
-
-
 });
