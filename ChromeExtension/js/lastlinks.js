@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var resp = JSON.parse(response);
         var results = resp["Results"];
 
-        console.log(results);
-
         if(results.length == 0) {
           $("#loadingOption").text("You don't have links in this group. Go ahead and add a lot!");
         }
