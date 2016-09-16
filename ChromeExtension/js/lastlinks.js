@@ -12,10 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         for (var i = 0; i < 5; i++) {
             $("#results").append("<li style=font-size:13px><a href=http://geni.us/" + results[i]["ShortUrlCode"] + ">http://geni.us/" + results[i]["ShortUrlCode"] + "</a>&nbsp;Total Clicks:&nbsp;" + results[i]["TotalClicks"] + "</li>");
             $("#loadingOption").remove();
-
-
-
-
         }
 
 

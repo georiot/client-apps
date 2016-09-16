@@ -41,4 +41,8 @@ function getJSON(url, extraParameters) {
 }
 
 
+function localStorageHasValue(val) {
+    return localStorage[val] != null && localStorage != "";
+}
+
 // Add link function

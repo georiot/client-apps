@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("apiKey").value = localStorage["apiKey"];
     document.getElementById("apiSecret").value = localStorage["apiSecret"];
 
-    if (localStorage["defaultGroup"] != null && localStorage != "") {
+    if (localStorageHasValue("defaultGroup")) {
         $("#help").css("visibility", "hidden");
         $("#back").css("visibility", "visible");
     } else {

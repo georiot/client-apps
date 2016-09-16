@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return false;
     });
 
-    if (localStorage["defaultGroup"] != null && localStorage != "") {
+    if (localStorageHasValue("defaultGroup")) {
         $("#apikeys").css("visibility", "hidden");
         $("#groups").css("visibility", "visible");
     } else {

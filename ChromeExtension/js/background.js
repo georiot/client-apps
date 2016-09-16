@@ -10,15 +10,10 @@ function getCurrentTab() {
 }
 
 function goTo(page) {
-    if (localStorage["defaultGroup"] != null && localStorage != "") {
-        chrome.browserAction.setPopup({
-            popup: page
-        });
-    }
+    chrome.browserAction.setPopup({
+        popup: page
+    });
 };
-
-
-
 
 
 function createGeniusCurrentTab() {
@@ -89,5 +84,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-goTo("groups.html");
+if (localStorageHasValue("defaultGroup")) {
+    goTo("groups.html");
+}
 CreateContentMenus();
