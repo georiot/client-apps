@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     var getGroupList = getJSON("https://api.geni.us/v1/groups/list", "").then(function(response) {
-        console.log("json saved");
         var resp = JSON.parse(response);
         var groups = resp["Groups"];
         if (groups.length === 0) {
