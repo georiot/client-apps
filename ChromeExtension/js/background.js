@@ -1,9 +1,9 @@
 function getCurrentTab() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         chrome.tabs.query({
             active: true, // Select active tabs
             lastFocusedWindow: true // In the current window
-        }, function(tabs) {
+        }, function (tabs) {
             resolve(tabs[0]);
         });
     });
@@ -15,28 +15,42 @@ function goTo(page) {
     });
 };
 
+//sources for copyToClipboard function: 
+//http://www.is-beer-a-vegetable.com/wiki/index.php/Copy_text_to_clipboard_using_Javascript_(Chrome) 
+//http://stackoverflow.com/questions/25622359/clipboard-copy-paste-on-content-script-chrome-extension 
+function copyToClipBoard(text) {
+    var input = document.createElement('textarea');
+    document.body.appendChild(input);
+    input.value = (text);
+    input.focus();
+    input.select();
+    document.execCommand('Copy');
+    input.remove();
+}
 
 function createGeniusCurrentTab() {
-    getCurrentTab().then(function(tab) {
+    getCurrentTab().then(function (tab) {
         var url = tab.url;
         createGeniusLink(url);
     })
 }
 
 function createGeniusCurrentLink(e) {
-    if(e.linkUrl)
-    {
+    if (e.linkUrl) {
         createGeniusLink(e.linkUrl);
     }
 }
 
 function createGeniusLink(url) {
     var req = new XMLHttpRequest();
+    var newLink;
     req.open('POST', "https://api.geni.us/v2/shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&format=json&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0&domain=geni.us&Url=" + url);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.onload = function() {
-        if (req.status == 200) {
-            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".");
+    req.onload = function () {
+        if (req.status == 200 && req.readyState === 4) {
+            newLink = JSON.parse(req.response)['NewLink'];
+            copyToClipBoard(newLink);
+            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".\n Added new link: " + newLink + " to clipboard.");
             req.response;
         } else {
             if (req.status == 401) {
@@ -47,7 +61,7 @@ function createGeniusLink(url) {
             }
         }
     };
-    req.onerror = function() {
+    req.onerror = function () {
         Error("Network Error");
     };
     req.send();
