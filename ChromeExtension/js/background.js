@@ -41,6 +41,8 @@ function createGeniusCurrentLink(e) {
     }
 }
 
+
+
 function createGeniusLink(url) {
     var req = new XMLHttpRequest();
     var newLink;
@@ -50,7 +52,7 @@ function createGeniusLink(url) {
         if (req.status == 200 && req.readyState === 4) {
             newLink = JSON.parse(req.response)['NewLink'];
             copyToClipBoard(newLink);
-            alert("Geni.us link created! Added to group: " + localStorage["defaultGroup"] + ".\n Added new link: " + newLink + " to clipboard.");
+            alert("Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".");
             req.response;
         } else {
             if (req.status == 401) {
