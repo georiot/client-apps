@@ -9,13 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if(results.length == 0) {
           $("#loadingOption").text("You don't have links in this group. Go ahead and add a lot!");
         }
+
         for (var i = 0; i < 5; i++) {
             $("#results").append("<li style=font-size:13px><a href=http://geni.us/" + results[i]["ShortUrlCode"] + ">http://geni.us/" + results[i]["ShortUrlCode"] + "</a>&nbsp;Total Clicks:&nbsp;" + results[i]["TotalClicks"] + "</li>");
             $("#loadingOption").remove();
-
-
-
-
         }
 
 
