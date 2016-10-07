@@ -15,6 +15,7 @@ function goTo(page) {
     });
 };
 
+
 //sources for copyToClipboard function: 
 //http://www.is-beer-a-vegetable.com/wiki/index.php/Copy_text_to_clipboard_using_Javascript_(Chrome) 
 //http://stackoverflow.com/questions/25622359/clipboard-copy-paste-on-content-script-chrome-extension 
