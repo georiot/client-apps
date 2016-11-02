@@ -16,7 +16,7 @@
     },
 
     "background": {
-        "scripts": ["js/background.js", "js/jquery.min.js"],
+        "scripts": ["js/globalfunctions.js", "js/background.js", "js/jquery.min.js"],
         "persistent": true
     },
 
