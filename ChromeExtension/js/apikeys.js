@@ -17,8 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
  
 
-    document.getElementById("apiKey").value = localStorage["apiKey"];
-    document.getElementById("apiSecret").value = localStorage["apiSecret"];
+var apiKeysViewModel = {
+    apiKey: ko.observable(document.getElementById("apiKey").value = localStorage["apiKey"]),
+    apiSecret: ko.observable(document.getElementById("apiSecret").value = localStorage["apiSecret"])
+};
 
     if (localStorageHasValue("defaultGroup")) {
         $("#help").css("visibility", "hidden");
