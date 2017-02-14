@@ -28,17 +28,21 @@
                 height="80" width="300">
             <h2>API Keys</h2>
             <b>ApiKey:</b>
+            
             <form action="groups.html">
                 <center>
                     <div class="input-group">
-                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="value: apiModel.apiKey()">
+                        
+                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="value: apiKey" >
                     </div>
                     <br> <b>ApiSecret:</b>
                     <div class="input-group">
                         <input type="text" id="apiSecret" class="form-control" data-bind="value: apiModel.apiSecret()">
                     </div>
                     <br>
-                    <button id="saveButton" class="btn btn-gr" width="200px">Save</button>
+                    <!--<button id="saveButton" class="btn btn-gr" width="200px">Save</button>-->
+                    <button id="saveButton" class="btn btn-gr" width="200px" data-bind="click: saveKeys()">Save</button>
+
                 </center>
             </form>
             <div data-bind="visible: showBackLink">
@@ -52,6 +56,7 @@
                 </a>
             </div>
         </center>
+     
     </div>
 </body>
 
