@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#tutorial').on('click', 'a', function () {
             chrome.tabs.create({
                 url: $(this).attr('href')
@@ -15,36 +15,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
- 
 
-var apiKeysViewModel = {
-    apiKey: ko.observable(document.getElementById("apiKey").value = localStorage["apiKey"]),
-    apiSecret: ko.observable(document.getElementById("apiSecret").value = localStorage["apiSecret"])
-};
 
-    if (localStorageHasValue("defaultGroup")) {
-        $("#help").css("visibility", "hidden");
-        $("#back").css("visibility", "visible");
-    } else {
-        $("#back").css("visibility", "hidden");
-        $("#help").css("visibility", "visible");
-    }
+    document.getElementById("apiKey").value = localStorage["apiKey"];
+    document.getElementById("apiSecret").value = localStorage["apiSecret"];
+
 
 
     var saveButton = document.getElementById('saveButton');
 
-    apiKey.addEventListener('change', function() {
+    apiKey.addEventListener('change', function () {
         var apiKey = document.getElementById("apiKey").value;
         localStorage.setItem("apiKey", apiKey);
     });
 
-    apiSecret.addEventListener('change', function() {
+    apiSecret.addEventListener('change', function () {
         var apiKey = document.getElementById("apiSecret").value;
         localStorage.setItem("apiSecret", apiKey);
     });
 
     // onClick funcion
-    saveButton.addEventListener('click', function() {
+    saveButton.addEventListener('click', function () {
         var apiKey = document.getElementById("apiKey").value;
         var apiSecret = document.getElementById("apiSecret").value;
         if (apiKey != null && apiSecret != null && apiKey != "" && apiSecret != "") {
@@ -68,4 +59,43 @@ var apiKeysViewModel = {
         console.log("save button works");
 
     });
+
+
+
 });
+
+function apiKeyViewModel() {
+    var self = this;
+    self.apiKey = ko.observable('');
+    self.apiSecret = ko.observable('');
+    self.showBackLink = ko.observable(false);
+    self.showHelpLink = ko.observable(true);
+    self.loadKey = function () {
+        var ak = localStorage["apiKey"];
+        if (ak == '') {
+            self.apiKey(ak);
+        }
+
+        var as = localStorage["apiKey"];
+        if (as == '') {
+            self.apiSecret(as);
+        }
+    }
+
+    if (localStorageHasValue("defaultGroup")) {
+        self.showBackLink(true); 
+        self.showHelpLink(false);
+    } 
+
+
+
+
+}
+
+var apiModel = new apiKeyViewModel();
+
+if (typeof testModel === 'undefined') {
+    ko.applyBindings(apiModel);
+} else {
+    testModel = apiModel;
+}
