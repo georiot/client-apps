@@ -18,7 +18,7 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
     <script type="text/javascript" src="js/globalfunctions.js"></script>
-    <script type="text/javascript" src="js/apikeys.js" defer="defer"></script>
+    <script type="text/javascript" src="js/apiKeyViewModel.js" defer="defer"></script>
 </head>
 
 <body id="body">
@@ -32,12 +32,13 @@
             <form action="groups.html">
                 <center>
                     <div class="input-group">
+
                         
                         <input type="text" id="apiKey" class="form-control" size="20" data-bind="value: apiKey" >
                     </div>
                     <br> <b>ApiSecret:</b>
                     <div class="input-group">
-                        <input type="text" id="apiSecret" class="form-control" data-bind="value: apiModel.apiSecret()">
+                        <input type="text" id="apiSecret" class="form-control" data-bind="value: apiSecret">
                     </div>
                     <br>
                     <!--<button id="saveButton" class="btn btn-gr" width="200px">Save</button>-->
@@ -56,7 +57,6 @@
                 </a>
             </div>
         </center>
-     boom <span data-bind="text: apiKey"></span>
     </div>
 </body>
 
