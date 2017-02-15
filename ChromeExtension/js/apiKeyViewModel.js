@@ -16,7 +16,6 @@ function apiKeyViewModel() {
         localStorage.setItem("apiSecret", newValue);
     });
 
-    // self.apiKey(localStorage["apiKey"]);
 
     self.loadKey = function () {
         var ak = localStorage["apiKey"];
