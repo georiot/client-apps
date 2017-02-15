@@ -9,9 +9,6 @@
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
-
-
-
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -19,37 +16,48 @@
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/knockout.js"></script>
     <script type="text/javascript" src="js/globalfunctions.js"></script>
-    <script type="text/javascript" src="js/apikeys.js"></script>
+    <script type="text/javascript" src="js/apiKeyViewModel.js" defer="defer"></script>
 </head>
 
 <body id="body">
-  <div name="wrappedcontent" style="padding: 15px">
-    <center>
-        <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience." height="80" width="300">
-        <h2>API Keys</h2>
-        <b>ApiKey:</b>
-        <form action="groups.html">
-            <center>
-                <div class="input-group">
-                    <input type="text" id="apiKey" class="form-control" size="20" value="">
-                </div>
-                <br> <b>ApiSecret:</b>
-                <div class="input-group">
-                    <input type="text" id="apiSecret" class="form-control" value="">
-                </div>
-                <br>
-                <button id="saveButton" class="btn btn-gr" width="200px">Save</button>
-            </center>
-        </form>
-        <a href="apikeys.html">
-            <p id="help" class="text-left" style="font-size: 12px; "><a href="help.html">How to use this plugin</a></p>
-        </a>
-        <a href="groups.html">
-            <p id="back" class="text-left" style="font-size: 12px; "><a href="groups.html">Back</a></p>
-        </a>
-    </center>
-</div>
+    <div name="wrappedcontent" style="padding: 15px">
+        <center>
+            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience."
+                height="80" width="300">
+            <h2>API Keys</h2>
+            <b>ApiKey:</b>
+            
+            <form action="groups.html">
+                <center>
+                    <div class="input-group">
+
+                        
+                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="value: apiKey" >
+                    </div>
+                    <br> <b>ApiSecret:</b>
+                    <div class="input-group">
+                        <input type="text" id="apiSecret" class="form-control" data-bind="value: apiSecret">
+                    </div>
+                    <br>
+                    <!--<button id="saveButton" class="btn btn-gr" width="200px">Save</button>-->
+                    <button  class="btn btn-gr" width="200px" data-bind="click: saveKeys()">Save</button>
+
+                </center>
+            </form>
+            <div data-bind="visible: showBackLink">
+                <a href="groups.html">
+                    <p id="back" class="text-left" style="font-size: 12px; "><a href="groups.html">Back</a></p>
+                </a>
+            </div>
+            <div data-bind="visible: showHelpLink">
+                <a href="apikeys.html">
+                    <p id="help" class="text-left" style="font-size: 12px; "><a href="help.html">How to use this plugin</a></p>
+                </a>
+            </div>
+        </center>
+    </div>
 </body>
 
 </html>
