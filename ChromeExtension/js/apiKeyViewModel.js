@@ -20,11 +20,11 @@ function apiKeyViewModel() {
     self.loadKey = function () {
         var ak = localStorage["apiKey"];
         if (typeof ak !== 'undefined') {
-            self.apiKey(localStorage["apiKey"]);
+            self.apiKey(ak);
         }
         var asa = localStorage["apiSecret"];
         if (typeof asa !== 'undefined') {
-            self.apiSecret(localStorage["apiSecret"]);
+            self.apiSecret(asa);
         }
 
     }
@@ -35,12 +35,10 @@ function apiKeyViewModel() {
     }
 
     self.saveKeys = function () {
-        var apiKey = document.getElementById("apiKey").value;
-        var apiSecret = document.getElementById("apiSecret").value;
         var Empty = "";
         if (self.apiKey() != null && self.apiSecret() != null && self.apiKey() != Empty && self.apiSecret() != Empty) {
-            localStorage.setItem("apiKey", apiKey);
-            localStorage.setItem("apiSecret", apiSecret);
+            localStorage.setItem("apiKey", self.apiKey());
+            localStorage.setItem("apiSecret", self.apiSecret());
             chrome.browserAction.setPopup({
                 popup: "groups.html"
             });
