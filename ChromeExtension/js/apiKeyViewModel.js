@@ -36,7 +36,7 @@ function apiKeyViewModel() {
 
     self.saveKeys = function () {
         var Empty = "";
-        if (self.apiKey() != null && self.apiSecret() != null && self.apiKey() != Empty && self.apiSecret() != Empty) {
+        if (self.apiKey() !== null && self.apiSecret() !== null && self.apiKey() !== Empty && self.apiSecret() !== Empty) {
             localStorage.setItem("apiKey", self.apiKey());
             localStorage.setItem("apiSecret", self.apiSecret());
             chrome.browserAction.setPopup({
