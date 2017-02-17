@@ -9,9 +9,8 @@
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
-
-
-
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-2.0.0/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.0.0/jasmine.css">
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -28,17 +27,21 @@
 <body id="body">
     <div name="wrappedcontent" style="padding: 15px">
         <center>
-            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience." height="80" width="300">
+            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience."
+                height="80" width="300">
         </center>
-        <div id="loadingOption"><p class="text-center"><b>Loading links...</b></div>
+        <div id="loadingOption">
+            <p class="text-center"><b>Loading links...</b></div>
         <div id="results"></div>
         <br>
         <a class="text-left" style="font-size: 12px;" href="groups.html">Back</a>
-
         <div id="dialog" title="Error">
             <div id="networkError"></div>
         </div>
     </div>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/boot.js"></script>
 </body>
 
 </html>

@@ -9,6 +9,8 @@
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-2.0.0/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.0.0/jasmine.css">
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -30,22 +32,17 @@
                 height="80" width="300">
             <h2>API Keys</h2>
             <b>ApiKey:</b>
-            
             <form action="groups.html">
                 <center>
                     <div class="input-group">
-
-                        
-                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="textInput: apiKey" >
+                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="textInput: apiKey">
                     </div>
                     <br> <b>ApiSecret:</b>
                     <div class="input-group">
                         <input type="text" id="apiSecret" class="form-control" data-bind="textInput: apiSecret">
                     </div>
                     <br>
-
-                    <button  class="btn btn-gr" width="200px" data-bind="click: saveKeys()">Save</button>
-
+                    <button class="btn btn-gr" width="200px" data-bind="click: saveKeys()">Save</button>
                 </center>
             </form>
             <div data-bind="visible: showBackLink">
@@ -60,6 +57,9 @@
             </div>
         </center>
     </div>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/boot.js"></script>
 </body>
 
 </html>

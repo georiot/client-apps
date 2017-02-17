@@ -1,14 +1,12 @@
 <!doctype html>
-
 <html>
 
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
-
-
-
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-2.0.0/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.0.0/jasmine.css">
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -20,40 +18,39 @@
     <script type="text/javascript" src="js/globalfunctions.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
     <script type="text/javascript" src="js/groups.js" defer="defer"></script>
-
 </head>
 
 <body id="body">
     <div name="contentwrap" style="padding: 15px">
         <center>
-            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience." height="80" width="300">
+            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience."
+                height="80" width="300">
             <div class="text-left">
                 <label>Put new links in this group</label>
                 <select id="listOfGroups" class="form-control">
                     <option id="loadingOption" value="Loading">Loading...</option>
                 </select>
-
-
             </div>
             <p id="result">&nbsp;</p>
             <div>
                 <a href="apikeys.html">
-                    <p class="text-left" style="font-size: 12px;">Change API Keys</a></p>
-
-                        <a href="lastLinks.html">
-                            <p class="text-left" style="font-size: 12px;">View last five links</a></p>
-
-                                <a href="help.html">
-                                    <p class="text-left" style="font-size: 12px; ">How to use this plugin</a></p>
-
-
+                    <p class="text-left" style="font-size: 12px;">Change API Keys</a>
+                </p>
+                <a href="lastLinks.html">
+                    <p class="text-left" style="font-size: 12px;">View last five links</a>
+                </p>
+                <a href="help.html">
+                    <p class="text-left" style="font-size: 12px; ">How to use this plugin</a>
+                </p>
             </div>
-       
         </center>
         <div id="dialog" title="Error">
             <div id="networkError"></div>
         </div>
     </div>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-2.0.0/boot.js"></script>
 </body>
 
 </html>
