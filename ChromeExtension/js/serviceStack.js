@@ -587,10 +587,3 @@ JsvServiceClient.parseResponseStatus_ = function(status)
 	return result;
 };
 
-var client =  new JsvServiceClient("https://api.geni.us/v1");
-client.getFromService("affiliate/stats", {apiSecret:"alfredo", apiKey:"key", format: "jsv"} , function(data)
-{
- alert(data.TotalProgramsAvailable);
-},function(data)
-{
-})

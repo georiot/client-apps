@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/servicestack.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        GeniusLinkServiceClient.prototype = JsvServiceClient.prototype;
+
+        function GeniusLinkServiceClient(baseUrl, apiKey, apiSecret) {
+            var that = this;
+            JsvServiceClient.call(this, baseUrl);
+            that.baseSyncReplyUri = baseUrl;
+            that.baseAsyncOneWayUri = baseUrl;
+            that.apiSecret = apiSecret;
+            that.apiKey = apiKey;
+            that.getFromService = function (url, objectToProcess, callback) {
+                objectToProcess.apiKey = that.apiKey;
+                objectToProcess.apiSecret = that.apiSecret;
+                objectToProcess.format = "jsv";
+                // Checkea como es
+                GeniusLinkServiceClient.prototype.getFromService.call(this, url, objectToProcess, callback);
+            }
+        }
+        // var client = new JsvServiceClient("https://api.geni.us/v1");
+
+
+
+
+        var client = new GeniusLinkServiceClient("https://api.geni.us/v1", "key", "alfredo");
+
+        client.getFromService("affiliate/stats", {
+            format: "jsv"
+        }, function (data) {
+            alert(data.TotalProgramsAvailable);
+        }, function (data) {})
+    </script>
+</body>
+
+</html>
