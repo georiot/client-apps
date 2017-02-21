@@ -1,10 +1,13 @@
 var groupsList = [];
 var groupsIds = [];
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
+    var client = new GeniusLinkServiceClient("https://api.geni.us/v1", localStorage["apiKey"], localStorage["apiSecret"]);
 
-    var getGroupList = getJSON("https://api.geni.us/v1/groups/list", "").then(function(response) {
-        var resp = JSON.parse(response);
+    client.getFromService("groups/list", {
+        format: "jsv"
+    }, function (data) {
+        var resp = data;
         var groups = resp["Groups"];
         if (groups.length === 0) {
             $("#dialog").dialog({
@@ -55,10 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: "CreateContentMenus",
 
             },
-            function(response) {});
+            function (response) {});
 
 
-    }, function(error) {
+    }, function (error) {
         $("#loadingOption").text("Please verify your keys");
         $("#dialog").dialog({
             draggable: false,
@@ -67,43 +70,38 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#networkError").html("Hmm.. we couldn't find any groups in your account. Create a new one, or email help@geni.us and we can take a look.");
         console.error("Error: ", error);
     });
-
-
-    listOfGroups.addEventListener('change', function() {
-
-        var defaultGroup = document.getElementById("listOfGroups").value;
-        var e = document.getElementById("listOfGroups");
-        var groupName = e.options[e.selectedIndex].text;
-        var groupId = e.options[e.selectedIndex].value;
-
-        localStorage.setItem("defaultGroup", groupName);
-        localStorage.setItem("defaultGroupId", groupId);
+}, function (data) {})
 
 
 
+listOfGroups.addEventListener('change', function () {
 
-        document.getElementById("result").innerHTML = "Saved! <img src=images/check.svg>";
-        $('#result').fadeIn(3000);
+    var defaultGroup = document.getElementById("listOfGroups").value;
+    var e = document.getElementById("listOfGroups");
+    var groupName = e.options[e.selectedIndex].text;
+    var groupId = e.options[e.selectedIndex].value;
 
-        setTimeout(function() {
-
-            $("#result").html("&nbsp;").fadeIn(3000);
-        }, 3000);
+    localStorage.setItem("defaultGroup", groupName);
+    localStorage.setItem("defaultGroupId", groupId);
 
 
 
 
+    document.getElementById("result").innerHTML = "Saved! <img src=images/check.svg>";
+    $('#result').fadeIn(3000);
 
-        chrome.storage.sync.set({
-            'defaultGroup': groupName
-        });
+    setTimeout(function () {
+
+        $("#result").html("&nbsp;").fadeIn(3000);
+    }, 3000);
 
 
+
+
+
+    chrome.storage.sync.set({
+        'defaultGroup': groupName
     });
 
 
-
-
 });
-
-

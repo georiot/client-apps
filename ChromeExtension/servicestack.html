@@ -20,22 +20,20 @@
                 objectToProcess.apiKey = that.apiKey;
                 objectToProcess.apiSecret = that.apiSecret;
                 objectToProcess.format = "jsv";
-                // Checkea como es
+
                 GeniusLinkServiceClient.prototype.getFromService.call(this, url, objectToProcess, callback);
             }
         }
-        // var client = new JsvServiceClient("https://api.geni.us/v1");
 
 
+       var client = new GeniusLinkServiceClient("https://api.geni.us/v1", "alfredo", "key");
 
+       var prueba;
 
-        var client = new GeniusLinkServiceClient("https://api.geni.us/v1", "key", "alfredo");
+        client.getFromService("affiliate/stats", { format: "jsv" }, function (data) { alert("prueba: " + data.AvailablePrograms) }, function (data) {});
+        
+        
 
-        client.getFromService("affiliate/stats", {
-            format: "jsv"
-        }, function (data) {
-            alert(data.TotalProgramsAvailable);
-        }, function (data) {})
     </script>
 </body>
 
