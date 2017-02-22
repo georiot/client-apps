@@ -8,6 +8,7 @@ function getCurrentTab() {
         });
     });
 }
+
 function localStorageHasValue(val) {
     return localStorage[val] != null && localStorage != "";
 }
@@ -47,22 +48,26 @@ function createGeniusCurrentLink(e) {
 
 function createGeniusLink(url) {
 
- // no entiendo porque no coge los parametros que le envio en el segundo paramentro(spot) de la funcion
-    var client = new GeniusLinkServiceClientPost("https://api.geni.us/v2", localStorage["apiKey"], localStorage["apiSecret"]);
-    client.postToService("shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&Url=" + url + "&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0", 
-    {
-        
-    },
+    var client = new GeniusLinkServiceClient("https://api.geni.us/v2", localStorage["apiKey"], localStorage["apiSecret"]);
+    client.postToService("shorturl", {
+            GroupId: localStorage["defaultGroupId"],
+            Url: url
+        },
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
             alert("Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".");
 
         },
-        function (xhr) {
-            //aqui me quede, no se manejar ese error el problema esta en la manera que servicestack maneja los errores CREO.
-            alert(xhr)
-
+        function (error) {
+            var parseError = JSV.parse(error);
+            var error401 = parseError.ResponseStatus.ErrorCode;
+            if (error401 == "AuthenticationException") {
+                alert("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
+            }
+            else {
+                alert("Hmm.. looks like we're having trouble connecting. Try again, or email help@geni.us to let us know.");
+            }
 
         });
 
