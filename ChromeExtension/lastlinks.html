@@ -1,3 +1,4 @@
+
 <!doctype html>
 <!--
  This page is shown when the extension button is clicked, because the
@@ -16,6 +17,7 @@
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/utilities.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
     <script type="text/javascript" src="js/servicestack.js"></script>
     <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
@@ -34,11 +36,11 @@
                 <b data-bind="text: loadingOption"></b>
             </p>
         </div>
-        <!--<ul data-bind="foreach: resultsArray">-->
-            <!--<li>-->
-                <div data-bind="html: resultsArray, click: function(data, event) { openTab(data, event) }"></div>
-            <!--</li>-->
-        <!--</ul>-->
+        <div>
+        <ul data-bind="foreach: resultsArray">            
+                <li style=font-size:13px><a  data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></li>                           
+        </ul>
+        </div>
         <br>
         <a class="text-left" style="font-size: 12px;" href="groups.html">Back</a>
         <div id="dialog" title="Error">

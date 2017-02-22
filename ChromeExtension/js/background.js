@@ -9,9 +9,6 @@ function getCurrentTab() {
     });
 }
 
-function localStorageHasValue(val) {
-    return localStorage[val] != null && localStorage != "";
-}
 
 function goTo(page) {
     chrome.browserAction.setPopup({
