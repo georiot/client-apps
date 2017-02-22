@@ -36,7 +36,7 @@
         </div>
         <!--<ul data-bind="foreach: resultsArray">-->
             <!--<li>-->
-                <div data-bind="html: resultsArray, click: openTab"></div>
+                <div data-bind="html: resultsArray, click: function(data, event) { openTab(data, event) }"></div>
             <!--</li>-->
         <!--</ul>-->
         <br>

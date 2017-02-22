@@ -5,11 +5,15 @@ function lastLinksViewModel() {
     self.loadingOption = ko.observable('Loading links...');
     self.details = ko.observable('');
     self.resultsArray = ko.observableArray('');
-    self.openTab = function () {
+    // self.openTab =  function(data, event) {
+    //    alert("you clicked " + event.target.href);
+    // }
+    self.openTab = function (data, event) {
         chrome.tabs.create({
-                url: $(this).attr('href')
+                url: event.target.href,
+                
+                
             });
-
     }
 
 
@@ -21,6 +25,7 @@ function lastLinksViewModel() {
         var resp = data;
         var results = resp["Results"];
         self.resultsArray(results);
+        console.log(self.resultsArray);
         if (results.length == 0) {
             self.loadingOption("You don't have links in this group. Go ahead and add a lot!");
         }
