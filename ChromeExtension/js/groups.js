@@ -2,6 +2,9 @@ var groupsList = [];
 var groupsIds = [];
 document.addEventListener('DOMContentLoaded', function () {
 
+
+
+
     var client = new GeniusLinkServiceClient("https://api.geni.us/v1", localStorage["apiKey"], localStorage["apiSecret"]);
 
     client.getFromService("groups/list", {

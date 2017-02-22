@@ -7,33 +7,37 @@
 
 <body>
     <script type="text/javascript">
-        GeniusLinkServiceClient.prototype = JsvServiceClient.prototype;
+        GeniusLinkServiceClientPost.prototype = JsvServiceClient.prototype;
 
-        function GeniusLinkServiceClient(baseUrl, apiKey, apiSecret) {
+        function GeniusLinkServiceClientPost(baseUrl, apiKey, apiSecret) {
             var that = this;
             JsvServiceClient.call(this, baseUrl);
             that.baseSyncReplyUri = baseUrl;
             that.baseAsyncOneWayUri = baseUrl;
             that.apiSecret = apiSecret;
             that.apiKey = apiKey;
-            that.getFromService = function (url, objectToProcess, callback) {
-                objectToProcess.apiKey = that.apiKey;
-                objectToProcess.apiSecret = that.apiSecret;
-                objectToProcess.format = "jsv";
+            that.postToService = function (url, objectToProcess, callback) {
+                objectToProcess.apiKey = "4a1fd6cb544449028fc86aba6aa5effd";
+                objectToProcess.apiSecret = "4a103e15551a43e4804c502f3320acf7";
+                // objectToProcess.format = "jsv";
 
-                GeniusLinkServiceClient.prototype.getFromService.call(this, url, objectToProcess, callback);
+                GeniusLinkServiceClientPost.prototype.postFormDataToService.call(this, url, objectToProcess,
+                    callback);
             }
         }
 
 
-       var client = new GeniusLinkServiceClient("https://api.geni.us/v1", "alfredo", "key");
-
-       var prueba;
-
-        client.getFromService("affiliate/stats", { format: "jsv" }, function (data) { alert("prueba: " + data.AvailablePrograms) }, function (data) {});
-        
-        
-
+        var client = new GeniusLinkServiceClientPost("https://api.geni.us/v2", "4a1fd6cb544449028fc86aba6aa5effd",
+            "4a103e15551a43e4804c502f3320acf7");
+            
+        client.postToService(
+            "shorturl?apiKey=4a1fd6cb544449028fc86aba6aa5effd&apiSecret=4a103e15551a43e4804c502f3320acf7", {
+                GroupId: 24886,
+                bulkMode: 0,
+                domain: "geni.us"
+            },
+            function (data) {},
+            function (data) {});
     </script>
 </body>
 

@@ -8,6 +8,9 @@ function getCurrentTab() {
         });
     });
 }
+function localStorageHasValue(val) {
+    return localStorage[val] != null && localStorage != "";
+}
 
 function goTo(page) {
     chrome.browserAction.setPopup({
@@ -42,32 +45,27 @@ function createGeniusCurrentLink(e) {
     }
 }
 
-
-
 function createGeniusLink(url) {
-    var req = new XMLHttpRequest();
-    var newLink;
-    req.open('POST', "https://api.geni.us/v2/shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&format=json&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0&domain=geni.us&Url=" + url);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.onload = function () {
-        if (req.status == 200 && req.readyState === 4) {
-            newLink = JSON.parse(req.response)['NewLink'];
+
+ // no entiendo porque no coge los parametros que le envio en el segundo paramentro(spot) de la funcion
+    var client = new GeniusLinkServiceClientPost("https://api.geni.us/v2", localStorage["apiKey"], localStorage["apiSecret"]);
+    client.postToService("shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&Url=" + url + "&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0", 
+    {
+        
+    },
+        function (data) {
+            newLink = data.NewLink;
             copyToClipBoard(newLink);
             alert("Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".");
-            req.response;
-        } else {
-            if (req.status == 401) {
-                alert("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
-            }
-            if (req.status == 500) {
-                alert("Hmm.. looks like we're having trouble connecting. Try again, or email help@geni.us to let us know.");
-            }
-        }
-    };
-    req.onerror = function () {
-        Error("Network Error");
-    };
-    req.send();
+
+        },
+        function (xhr) {
+            //aqui me quede, no se manejar ese error el problema esta en la manera que servicestack maneja los errores CREO.
+            alert(xhr)
+
+
+        });
+
 
 }
 
@@ -95,7 +93,7 @@ function CreateContentMenus() {
 
 
 
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.name == "CreateContentMenus") {
         CreateContentMenus();
     }
@@ -105,7 +103,3 @@ if (localStorageHasValue("defaultGroup")) {
     goTo("groups.html");
 }
 CreateContentMenus();
-
-
-
-

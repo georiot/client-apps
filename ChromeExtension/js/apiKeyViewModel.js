@@ -1,3 +1,7 @@
+function localStorageHasValue(val) {
+    return localStorage[val] != null && localStorage != "";
+}
+
 function apiKeyViewModel() {
 
 
