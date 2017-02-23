@@ -9,6 +9,7 @@ function getCurrentTab() {
     });
 }
 
+
 function goTo(page) {
     chrome.browserAction.setPopup({
         popup: page
@@ -42,32 +43,31 @@ function createGeniusCurrentLink(e) {
     }
 }
 
-
-
 function createGeniusLink(url) {
-    var req = new XMLHttpRequest();
-    var newLink;
-    req.open('POST', "https://api.geni.us/v2/shorturl?apiKey=" + localStorage["apiKey"] + "&apiSecret=" + localStorage["apiSecret"] + "&format=json&GroupId=" + localStorage["defaultGroupId"] + "&bulkMode=0&domain=geni.us&Url=" + url);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.onload = function () {
-        if (req.status == 200 && req.readyState === 4) {
-            newLink = JSON.parse(req.response)['NewLink'];
+
+    var client = new GeniusLinkServiceClient("https://api.geni.us/v2", localStorage["apiKey"], localStorage["apiSecret"]);
+    client.postToService("shorturl", {
+            GroupId: localStorage["defaultGroupId"],
+            Url: url
+        },
+        function (data) {
+            newLink = data.NewLink;
             copyToClipBoard(newLink);
             alert("Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".");
-            req.response;
-        } else {
-            if (req.status == 401) {
+
+        },
+        function (error) {
+            var parseError = JSV.parse(error);
+            var error401 = parseError.ResponseStatus.ErrorCode;
+            if (error401 == "AuthenticationException") {
                 alert("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
             }
-            if (req.status == 500) {
+            else {
                 alert("Hmm.. looks like we're having trouble connecting. Try again, or email help@geni.us to let us know.");
             }
-        }
-    };
-    req.onerror = function () {
-        Error("Network Error");
-    };
-    req.send();
+
+        });
+
 
 }
 
@@ -95,7 +95,7 @@ function CreateContentMenus() {
 
 
 
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.name == "CreateContentMenus") {
         CreateContentMenus();
     }
@@ -105,7 +105,3 @@ if (localStorageHasValue("defaultGroup")) {
     goTo("groups.html");
 }
 CreateContentMenus();
-
-
-
-
