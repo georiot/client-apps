@@ -17,7 +17,6 @@
 
     "background": {
         "scripts": ["js/servicestack.js" , "js/GeniusLinkServiceClient.js", "js/background.js", "js/jquery.min.js"],
-        // "page": "prueba.html",
         "persistent": true
     },
 
