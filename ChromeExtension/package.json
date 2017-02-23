@@ -1,0 +1,22 @@
+{
+  "name": "geniuslink-chrome-extension",
+  "version": "0.2.3",
+  "description": "Easily build geni.us links with the click of a button!",
+  "main": "popup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/georiot/client-apps.git"
+  },
+  "author": "GeoRiot Networks, inc.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/georiot/client-apps/issues"
+  },
+  "homepage": "https://github.com/georiot/client-apps#readme",
+  "dependencies": {
+    "jasmine": "^2.5.3"
+  }
+}
