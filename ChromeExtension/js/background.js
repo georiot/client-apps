@@ -53,17 +53,17 @@ function createGeniusLink(url) {
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            alert("Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".");
+            alert('Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".');
 
         },
         function (error) {
             var parseError = JSV.parse(error);
             var error401 = parseError.ResponseStatus.ErrorCode;
-            if (error401 == "AuthenticationException") {
-                alert("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
+            if (error401 == 'AuthenticationException') {
+                alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
             }
             else {
-                alert("Hmm.. looks like we're having trouble connecting. Try again, or email help@geni.us to let us know.");
+                alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');
             }
 
         });

@@ -1,3 +1,3 @@
 function localStorageHasValue(val) {
-    return localStorage[val] != null && localStorage != "";
+    return localStorage[val] != null && localStorage != '';
 }

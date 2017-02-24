@@ -50,7 +50,7 @@ function apiKeyViewModel() {
                 modal: true
             });
 
-            $("#networkError").html("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
+            $("#networkError").html('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
 
 
         }

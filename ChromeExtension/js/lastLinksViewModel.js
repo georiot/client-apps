@@ -20,7 +20,7 @@ function lastLinksViewModel() {
     }, function (resp) {        
         var results = resp["Results"];                
         if (results.length === 0) {
-            self.loadingOption("You don't have links in this group. Go ahead and add a lot!");
+            self.loadingOption('You don\'t have links in this group. Go ahead and add a lot!');
         }
         else
         {
@@ -41,7 +41,7 @@ function lastLinksViewModel() {
             draggable: false,
             modal: true
         });
-        $("#networkError").html("Hmm.. we couldn't find any groups in your account. Create a new one, or email help@geni.us and we can take a look.");
+        $("#networkError").html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
         console.error("Error: ", error);
     });
 

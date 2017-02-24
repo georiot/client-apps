@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 draggable: false,
                 modal: true
             });
-            $("#networkError").html("Hmm.. we couldn't find any groups in your account. Create a new one, or email help@geni.us and we can take a look.");
+            $("#networkError").html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
 
 
         }
@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }, function (error) {
-        $("#loadingOption").text("Please verify your keys");
+        $("#loadingOption").text('Please verify your keys');
         $("#dialog").dialog({
             draggable: false,
             modal: true
         });
-        $("#networkError").html("Hmm.. we couldn't find any groups in your account. Create a new one, or email help@geni.us and we can take a look.");
+        $("#networkError").html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
         console.error("Error: ", error);
     });
 }, function (data) {})
@@ -90,7 +90,7 @@ listOfGroups.addEventListener('change', function () {
 
 
 
-    document.getElementById("result").innerHTML = "Saved! <img src=images/check.svg>";
+    document.getElementById("result").innerHTML = 'Saved! <img src=images/check.svg>';
     $('#result').fadeIn(3000);
 
     setTimeout(function () {
