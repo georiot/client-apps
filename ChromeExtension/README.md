@@ -9,3 +9,14 @@ Create and share links even faster, without even logging into the dashboard. Wit
 1. Select the group where you want your links to live, or leave it on "default".
 
 **That's it!** Once installed, you can simply right-click any link in your browser window, and select "Create geni.us link." It will be added to the links in your dashboard automatically.
+
+
+## For Developers
+
+
+## Unit Testing
+The project is set to use the jasmine framework : http://jasmine.github.io/2.5/introduction.html
+
+This is a BDD(Behavioural Driven) framework it works by writing specs additionally it includes a mocking framework in it.
+
+All test should be in the geniuslink_js_tests. 
