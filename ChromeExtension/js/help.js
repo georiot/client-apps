@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", function() {
         return false;
     });
 
-    if (localStorageHasValue("defaultGroup")) {
-        $("#apikeys").css("visibility", "hidden");
-        $("#groups").css("visibility", "visible");
+    if (localStorageHasValue('defaultGroup')) {
+        $('#apikeys').css('visibility', 'hidden');
+        $('#groups').css('visibility', 'visible');
     } else {
-        $("#groups").css("visibility", "hidden");
-        $("#apikeys").css("visibility", "visible");
+        $('#groups').css('visibility', 'hidden');
+        $('#apikeys').css('visibility', 'visible');
     }
 
 

@@ -45,15 +45,15 @@ function createGeniusCurrentLink(e) {
 
 function createGeniusLink(url) {
 
-    var client = new GeniusLinkServiceClient("https://api.geni.us/v2", localStorage["apiKey"], localStorage["apiSecret"]);
-    client.postToService("shorturl", {
-            GroupId: localStorage["defaultGroupId"],
+    var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
+    client.postToService('shorturl', {
+            GroupId: localStorage['defaultGroupId'],
             Url: url
         },
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            alert('Geni.us link created and copied to clipboard!\n " + newLink + " added to group: " + localStorage["defaultGroup"] + ".');
+            alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
 
         },
         function (error) {
@@ -75,19 +75,19 @@ function createGeniusLink(url) {
 
 function CreateContentMenus() {
 
-    if (localStorage["defaultGroup"] != null && localStorage["defaultGroup"] != "") {
+    if (localStorage['defaultGroup'] != null && localStorage['defaultGroup'] != '') {
         chrome.contextMenus.removeAll()
         chrome.contextMenus.create({
-            title: "Create geni.us link from current tab",
-            contexts: ["page"],
-            id: "child1",
+            title: 'Create geni.us link from current tab',
+            contexts: ['page'],
+            id: 'child1',
             onclick: createGeniusCurrentTab
         });
 
         chrome.contextMenus.create({
-            title: "Create geni.us link from selected URL",
-            contexts: ["link"],
-            id: "child2",
+            title: 'Create geni.us link from selected URL',
+            contexts: ['link'],
+            id: 'child2',
             onclick: createGeniusCurrentLink
         });
     }
@@ -96,12 +96,12 @@ function CreateContentMenus() {
 
 
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.name == "CreateContentMenus") {
+    if (request.name == 'CreateContentMenus') {
         CreateContentMenus();
     }
 });
 
-if (localStorageHasValue("defaultGroup")) {
-    goTo("groups.html");
+if (localStorageHasValue('defaultGroup')) {
+    goTo('groups.html');
 }
 CreateContentMenus();

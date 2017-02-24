@@ -13,12 +13,12 @@ function lastLinksViewModel() {
     }
 
 
-    var client = new GeniusLinkServiceClient("https://api.geni.us/v1", localStorage["apiKey"], localStorage["apiSecret"]);
+    var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
-    client.getFromService("links/list" + "?groupid=" + localStorage["defaultGroupId"] + "&numberoflinks=5", {
-        format: "jsv"
+    client.getFromService('links/list' + '?groupid=' + localStorage['defaultGroupId'] + '&numberoflinks=5', {
+        format: 'jsv'
     }, function (resp) {        
-        var results = resp["Results"];                
+        var results = resp['Results'];                
         if (results.length === 0) {
             self.loadingOption('You don\'t have links in this group. Go ahead and add a lot!');
         }
@@ -26,23 +26,23 @@ function lastLinksViewModel() {
         {
             for (var i = 0; i < results.length; i++) {
                 self.resultsArray.push({
-                    url: "http://geni.us/" + results[i]["ShortUrlCode"],
-                    totalClicks: results[i]["TotalClicks"]
+                    url: 'http://geni.us/' + results[i]['ShortUrlCode'],
+                    totalClicks: results[i]['TotalClicks']
                 });
             }    
         }
-        self.loadingOption("");    
+        self.loadingOption('');    
 
 
     }, function (error) {
 
-        $("#loadingOption").remove();
-        $("#dialog").dialog({
+        $('#loadingOption').remove();
+        $('#dialog').dialog({
             draggable: false,
             modal: true
         });
-        $("#networkError").html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
-        console.error("Error: ", error);
+        $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
+        console.error('Error: ', error);
     });
 
 

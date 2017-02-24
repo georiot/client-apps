@@ -13,18 +13,18 @@ function GeniusLinkServiceClient(baseUrl, apiKey, apiSecret) {
     that.getFromService = function (url, objectToProcess, callback, error) {
         objectToProcess.apiKey = that.apiKey;
         objectToProcess.apiSecret = that.apiSecret;
-        objectToProcess.format = "jsv";
+        objectToProcess.format = 'jsv';
         GeniusLinkServiceClient.prototype.getFromService.call(this, url, objectToProcess, callback, error);
     };
     that.postFormDataToService = function (url, objectToProcess, callback, error) {
-        GeniusLinkServiceClient.prototype.postFormDataToService.call(this, url + "?apiKey=" + that.apiKey + "&apiSecret=" + that.apiSecret + "&format=jsv" , objectToProcess,
+        GeniusLinkServiceClient.prototype.postFormDataToService.call(this, url + '?apiKey=' + that.apiKey + '&apiSecret=' + that.apiSecret + '&format=jsv' , objectToProcess,
             callback, error);
     };
     that.postToService = function (url, objectToProcess, callback, error) {
 
         objectToProcess.apiKey = that.apiKey;
         objectToProcess.apiSecret = that.apiSecret;
-        GeniusLinkServiceClient.prototype.postFormDataToService.call(this, url + "?apiKey=" + that.apiKey + "&apiSecret=" + that.apiSecret + "&format=jsv", objectToProcess,
+        GeniusLinkServiceClient.prototype.postFormDataToService.call(this, url + '?apiKey=' + that.apiKey + '&apiSecret=' + that.apiSecret + '&format=jsv', objectToProcess,
             callback, error);
     };
 }
