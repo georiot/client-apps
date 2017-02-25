@@ -1,9 +1,8 @@
 var groupsList = [];
+
 var groupsIds = [];
+
 document.addEventListener('DOMContentLoaded', function () {
-
-
-
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
@@ -26,17 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 groupsList.push(groups[i]['Name']);
                 groupsIds.push(groups[i]['Id']);
             }
-            if (localStorage['defaultGroup'] == null) {
 
+            if (localStorage['defaultGroup'] == null) {
                 localStorage.setItem('defaultGroup', groups[0]['Name']);
                 localStorage.setItem('defaultGroupId', groups[0]['Id']);
-
             }
-
-
-
         }
-
 
         localStorage.setItem('groups', JSON.stringify(groupsList));
         localStorage.setItem('groupsIds', JSON.stringify(groupsIds));
@@ -57,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('#loadingOption').remove();
         $('#' + localStorage['defaultGroup'] + '').attr('selected', true);
+
         chrome.extension.sendMessage({
                 name: 'CreateContentMenus',
-
             },
             function (response) {});
 
@@ -70,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
             draggable: false,
             modal: true
         });
+
         $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
+        
         console.error('Error: ', error);
     });
 }, function (data) {})
