@@ -20,3 +20,5 @@ The project is set to use the jasmine framework : http://jasmine.github.io/2.5/i
 This is a BDD(Behavioural Driven) framework it works by writing specs additionally it includes a mocking framework in it.
 
 All test should be in the geniuslink_js_tests. 
+
+This project follows the Airbnb styled guidelines. If you are making a commit please use the Airbnb ES5 guideline. https://github.com/airbnb/javascript/tree/es5-deprecated/es5
