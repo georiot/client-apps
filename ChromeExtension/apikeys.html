@@ -9,6 +9,8 @@
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -17,6 +19,7 @@
      -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
     <script type="text/javascript" src="js/utilities.js"></script>
     <script type="text/javascript" src="js/servicestack.js"></script>
@@ -25,42 +28,43 @@
 </head>
 
 <body id="body">
-    <div name="wrappedcontent" style="padding: 15px">
-        <center>
-            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience."
-                height="80" width="300">
-            <h2>API Keys</h2>
-            <b>ApiKey:</b>
+    <div name="wrappedcontent" style="padding: 20px">
+        <div data-bind="visible: newInstall">
             
-            <form action="groups.html">
-                <center>
-                    <div class="input-group">
+                <p class="text-left"><b>Welcome!</b> To get started, enter your <a href="https://my.geni.us/tools#api-section" target="_blank">Geniuslink API Keys</a>.</p>
+            
+        </div>
 
-                        
-                        <input type="text" id="apiKey" class="form-control" size="20" data-bind="textInput: apiKey" >
-                    </div>
-                    <br> <b>ApiSecret:</b>
-                    <div class="input-group">
-                        <input type="text" id="apiSecret" class="form-control" data-bind="textInput: apiSecret">
-                    </div>
-                    <br>
+        <form action="groups.html">
 
-                    <button  class="btn btn-gr" width="200px" data-bind="click: saveKeys()">Save</button>
-
-                </center>
-            </form>
-            <div data-bind="visible: showBackLink">
-                <a href="groups.html">
-                    <p id="back" class="text-left" style="font-size: 12px; "><a href="groups.html">Back</a></p>
-                </a>
+            <div class="input-group">
+                <p style="position: relative; top: 14px;">API Key</p>
+                <input type="text" id="apiKey" class="form-control input-md" size="100px" data-bind="textInput: apiKey">
             </div>
-            <div data-bind="visible: showHelpLink">
-                <a href="apikeys.html">
-                    <p id="help" class="text-left" style="font-size: 12px; "><a href="help.html">How to use this plugin</a></p>
-                </a>
+            <div class="input-group">
+                <p style="position: relative; top: 14px;">API Secret</p>
+                <input type="text" id="apiSecret" class="form-control input-md" size="100px" data-bind="textInput: apiSecret">
             </div>
-        </center>
+            <br>
+
+            <button class="btn-gl-blue" style="width: 125px" data-bind="click: saveKeys()">Save</button>
+
+
+        </form>
+        <hr style="margin-right: -30px; margin-left: -10px; width: 300px;">
+        <div data-bind="visible: showBackLink">
+            <a href="groups.html">
+                <p id="back" class="text-left" style="font-size: 12px; "><a href="groups.html">Back</a></p>
+            </a>
+        </div>
+        <div data-bind="visible: showHelpLink">
+            <a href="apikeys.html">
+                <p id="help" class="text-left" style="font-size: 12px; "><a href="help.html">How to use this plugin</a></p>
+            </a>
+        </div>
+
     </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 
 </html>
