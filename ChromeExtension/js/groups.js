@@ -2,6 +2,14 @@ var groupsList = [];
 
 var groupsIds = [];
 
+function groupsViewModel() {
+
+    var self = this;
+    self.createLinkFromButton = function () {
+        createGeniusCurrentTab();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
@@ -66,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
-        
+
         console.error('Error: ', error);
     });
 }, function (data) {})
@@ -104,3 +112,12 @@ listOfGroups.addEventListener('change', function () {
 
 
 });
+
+
+var groupsModel = new groupsViewModel();
+if (typeof testModel === 'undefined') {
+    ko.applyBindings(groupsModel);
+
+} else {
+    testModel = groupsModel;
+}

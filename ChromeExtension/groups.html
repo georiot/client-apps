@@ -5,8 +5,9 @@
 <head>
     <title>Geniuslink Extension</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 
     <!--
@@ -15,47 +16,58 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
+     
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/utilities.js"></script>
     <script type="text/javascript" src="js/servicestack.js"></script>
     <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
+    <script type="text/javascript" src="js/background.js"></script>
     <script type="text/javascript" src="js/groups.js" defer="defer"></script>
 
 </head>
 
 <body id="body">
-    <div name="contentwrap" style="padding: 15px">
+    <div name="contentwrap" style="padding: 20px">
         <center>
-            <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience." height="80" width="300">
+            <button class="btn-gl-blue" style="width: 250px; font-size: 13px;" data-bind="event: { click: createLinkFromButton }">New link from current page</button>
+            <p class="fine-print">Or, right-click a link and select "Create..."</p>
+        </center>
+        <br\>
+            <hr>
+            <div>
+                <a class="text-left" href="apikeys.html" style="font-size: 12px;">
+                    <p class="text-left" style="font-size: 12px;">Change API Keys</a>
+                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                </p>
+
+                <a href="lastLinks.html">
+                    <p class="text-left" style="font-size: 12px;">View last five links</a>
+                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                </p>
+
+                <a href="help.html">
+                    <p class="text-left" style="font-size: 12px; ">How to use this plugin</a>
+                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                </p>
+
+
+            </div>
+            <hr>
             <div class="text-left">
-                <label>Put new links in this group</label>
+                <p style="position: relative; top: 14px;">Put new links in this group</p>
                 <select id="listOfGroups" class="form-control">
                     <option id="loadingOption" value="Loading">Loading...</option>
                 </select>
-
-
             </div>
             <p id="result">&nbsp;</p>
-            <div>
-                <a href="apikeys.html">
-                    <p class="text-left" style="font-size: 12px;">Change API Keys</a></p>
-
-                        <a href="lastLinks.html">
-                            <p class="text-left" style="font-size: 12px;">View last five links</a></p>
-
-                                <a href="help.html">
-                                    <p class="text-left" style="font-size: 12px; ">How to use this plugin</a></p>
 
 
+            <div id="dialog" title="Error">
+                <div id="networkError"></div>
             </div>
-       
-        </center>
-        <div id="dialog" title="Error">
-            <div id="networkError"></div>
-        </div>
     </div>
+    
 </body>
-
 </html>
