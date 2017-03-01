@@ -34,45 +34,49 @@
             <button class="btn-gl-blue" style="width: 250px; font-size: 13px; " data-bind="event: { click: createLinkFromButton }">New link from current page</button>
             <p class="fine-print" style="position: relative; top: 8px;">Or, right-click a link and select "Create..."</p>
         </center>
-        <br\>
-            <hr style="width: 100; margin-left: -20px; margin-right: -20px;">
-            <div style="vertical-align: 50px;">
-                <a  href="apikeys.html" class="menu-item text-left">
-                    <p>Change API Keys
-                        <span class="glyphicon glyphicon-chevron-right pull-right"  style="color: gray" aria-hidden="true"></span>
-                    </p>
-                </a>
+        <hr class="hr-group">
+        <div class="menu-group">
 
-                <a href="lastLinks.html"  class="menu-item text-left">
-                    <p >View last five links
-                        <span class="glyphicon glyphicon-chevron-right pull-right" style="color: gray" aria-hidden="true"></span>
-                    </p>
-                </a>
-
-                <a href="help.html" class="menu-item text-left">
-                    <p >How to use this plugin
-                        <span class="glyphicon glyphicon-chevron-right pull-right" style="color: gray" aria-hidden="true"></span>
-                    </p>
-                </a>
+            <p><a href="apikeys.html" class="menu-item text-left">Change API Keys
+                        <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
+                         </a>
+            </p>
 
 
-            </div>
-            <hr style="width: 100; margin-left: -20px; margin-right: -20px;">
+
+            <p><a href="lastLinks.html" class="menu-item text-left">View last five links
+                        <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
+                         </a>
+            </p>
+
+
+
+            <p><a href="help.html" class="menu-item text-left">How to use this plugin
+                        <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
+                          </a>
+            </p>
+
+
+
+        </div>
+        <hr class="hr-group">
+        <div class="position: relative">
             <div class="text-left">
-                <p style="position: relative; top: 14px;">Put new links in this group</p>
+                <p style="position:relative; top: 8px;">Put new links in this group</p>
                 <select id="listOfGroups" class="form-control">
                     <option id="loadingOption" value="Loading">Loading...</option>
                 </select>
             </div>
 
             <center>
-                <p id="result">&nbsp;</p>
+                <p style="position: absolute" id="result">&nbsp;</p>
             </center>
 
 
-            <div id="dialog" title="Error">
+            <div style="position: absolute" id="dialog" title="Error">
                 <div id="networkError"></div>
             </div>
+        </div>
     </div>
 
 </body>

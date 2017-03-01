@@ -12,10 +12,31 @@ body {
     font-size: 14px;
     color: black;
     vertical-align: 50px;
-
+    margin: 0;
 }
 
 .menu-item:hover {
     text-decoration: underline;
     color: black;
+}
+
+.menu-group p {
+    line-height: 1px;
+    margin-top: 0;
+    margin-bottom: -20px;
+    color: black; 
+}
+
+.hr-group {
+    width: 100;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-top: 0;
+}
+
+.menu-icons {
+    color: gray;
+    line-height: 1px;
+    margin-top: 0;
+    margin-bottom: -20px;
 }

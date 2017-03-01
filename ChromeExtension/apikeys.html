@@ -50,16 +50,16 @@
 
         </form>
         <hr style="width: 100; margin-left: -20px; margin-right: -20px;">
-        <div data-bind="visible: showBackLink">
+        <div style="position: relative;" data-bind="visible: showBackLink">
 
-            <p id="back" class="text-left"><span style="position: relative; right: 1px; top: 3px;  size: 12px; " class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <p id="back" class="text-left" style="position: absolute"><span style="position: relative; right: 1px; top: 3px;  size: 12px; " class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 <a href="groups.html" style="font-size: 14px; color: black; ">Back</a>
             </p>
 
         </div>
-        <div data-bind="visible: showHelpLink">
+        <div style="position: relative;" data-bind="visible: showHelpLink">
 
-            <p id="help" class="text-left" ><a href="help.html" style="font-size: 12px; color: black; ">How to use this plugin</a></p>
+            <p id="help" class="text-left" style="position: absolute" ><a href="help.html" style="font-size: 12px; color: black; ">How to use this plugin</a></p>
 
         </div>
 
