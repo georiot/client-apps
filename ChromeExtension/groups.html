@@ -16,7 +16,7 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-     
+
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/utilities.js"></script>
@@ -31,43 +31,50 @@
 <body id="body">
     <div name="contentwrap" style="padding: 20px">
         <center>
-            <button class="btn-gl-blue" style="width: 250px; font-size: 13px;" data-bind="event: { click: createLinkFromButton }">New link from current page</button>
-            <p class="fine-print">Or, right-click a link and select "Create..."</p>
+            <button class="btn-gl-blue" style="width: 250px; font-size: 13px; " data-bind="event: { click: createLinkFromButton }">New link from current page</button>
+            <p class="fine-print" style="position: relative; top: 8px;">Or, right-click a link and select "Create..."</p>
         </center>
         <br\>
-            <hr>
-            <div>
-                <a class="text-left" href="apikeys.html" style="font-size: 12px;">
-                    <p class="text-left" style="font-size: 12px;">Change API Keys</a>
-                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
-                </p>
+            <hr style="width: 100; margin-left: -20px; margin-right: -20px;">
+            <div style="vertical-align: 50px;">
+                <a  href="apikeys.html" class="menu-item text-left">
+                    <p>Change API Keys
+                        <span class="glyphicon glyphicon-chevron-right pull-right"  style="color: gray" aria-hidden="true"></span>
+                    </p>
+                </a>
 
-                <a href="lastLinks.html">
-                    <p class="text-left" style="font-size: 12px;">View last five links</a>
-                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
-                </p>
+                <a href="lastLinks.html"  class="menu-item text-left">
+                    <p >View last five links
+                        <span class="glyphicon glyphicon-chevron-right pull-right" style="color: gray" aria-hidden="true"></span>
+                    </p>
+                </a>
 
-                <a href="help.html">
-                    <p class="text-left" style="font-size: 12px; ">How to use this plugin</a>
-                    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
-                </p>
+                <a href="help.html" class="menu-item text-left">
+                    <p >How to use this plugin
+                        <span class="glyphicon glyphicon-chevron-right pull-right" style="color: gray" aria-hidden="true"></span>
+                    </p>
+                </a>
 
 
             </div>
-            <hr>
+            <hr style="width: 100; margin-left: -20px; margin-right: -20px;">
             <div class="text-left">
                 <p style="position: relative; top: 14px;">Put new links in this group</p>
                 <select id="listOfGroups" class="form-control">
                     <option id="loadingOption" value="Loading">Loading...</option>
                 </select>
             </div>
-            <p id="result">&nbsp;</p>
+
+            <center>
+                <p id="result">&nbsp;</p>
+            </center>
 
 
             <div id="dialog" title="Error">
                 <div id="networkError"></div>
             </div>
     </div>
-    
+
 </body>
+
 </html>

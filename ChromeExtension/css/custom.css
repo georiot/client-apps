@@ -7,3 +7,15 @@ body {
     color: #b4b4b4;
     font-size: 12px;
 }
+
+.menu-item {
+    font-size: 14px;
+    color: black;
+    vertical-align: 50px;
+
+}
+
+.menu-item:hover {
+    text-decoration: underline;
+    color: black;
+}
