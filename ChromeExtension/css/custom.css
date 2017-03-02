@@ -11,8 +11,8 @@ body {
 .menu-item {
     font-size: 14px;
     color: black;
-    vertical-align: 50px;
     margin: 0;
+    line-height: 30px;
 }
 
 .menu-item:hover {
@@ -20,23 +20,29 @@ body {
     color: black;
 }
 
-.menu-group p {
-    line-height: 1px;
+.menu-group  {
+    padding: 10px 0 10px 0; 
+}
+
+.menu-group a {
+    display: block;
     margin-top: 0;
-    margin-bottom: -20px;
+    margin-bottom: 0;
     color: black;
 }
 
+
+
 .hr-group {
-    width: 100;
+    width: 300px;
     margin-left: -20px;
-    margin-right: -20px;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 .menu-icons {
     color: gray;
-    line-height: 1px;
+    line-height: 23px;
     margin-top: 0;
     margin-bottom: 0px;
 }
@@ -45,4 +51,9 @@ body {
     line-height: 0px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.group-div {
+    padding: 0;
+    margin: 0;
 }
