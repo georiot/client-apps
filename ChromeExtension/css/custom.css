@@ -24,7 +24,7 @@ body {
     line-height: 1px;
     margin-top: 0;
     margin-bottom: -20px;
-    color: black; 
+    color: black;
 }
 
 .hr-group {
@@ -38,5 +38,11 @@ body {
     color: gray;
     line-height: 1px;
     margin-top: 0;
-    margin-bottom: -20px;
+    margin-bottom: 0px;
+}
+
+.newlink-group {
+    line-height: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
