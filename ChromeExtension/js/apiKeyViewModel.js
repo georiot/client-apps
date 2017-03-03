@@ -15,7 +15,6 @@ function apiKeyViewModel() {
     });
 
     self.apiSecret.subscribe(function (newValue) {
-
         localStorage.setItem("apiSecret", newValue);
     });
 

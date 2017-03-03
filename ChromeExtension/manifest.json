@@ -16,7 +16,7 @@
     },
 
     "background": {
-        "scripts": ["js/background.js", "js/servicestack.js" , "js/GeniusLinkServiceClient.js",  "js/jquery.min.js"],
+        "scripts": ["js/utilities.js", "js/background.js", "js/servicestack.js" , "js/GeniusLinkServiceClient.js",  "js/jquery.min.js"],
         "persistent": true
     },
 

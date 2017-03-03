@@ -44,7 +44,7 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-
+   
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
