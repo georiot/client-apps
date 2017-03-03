@@ -30,11 +30,11 @@
     <div name="wrappedcontent" style="padding: 20px; width: 300px">
         <center>
             <p class="newlink-group">Select costum domain</p>
-            <select id="listOfGroups" class="form-control" data-bind="foreach: domainArray, event: { onchange: $data.prueba } ">
-                    <option id="loadingOption"  data-bind="text: name"></option>
-                </select>
 
-
+            <select class="form-control" data-bind="options: domainArray,optionsText: 'name',  value: selectedDomain">
+                   
+            </select>
+            <p data-bind="text: selectedDomain"></p>
             <p id="back" class="text-left" style="position: absolute"><span style="position: relative; right: 1px; top: 3px;  size: 12px; " class="glyphicon glyphicon-chevron-left"
                     aria-hidden="true"></span>
                 <a href="groups.html" style="font-size: 14px; color: black; ">Back</a>

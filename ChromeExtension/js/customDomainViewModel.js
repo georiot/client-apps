@@ -1,22 +1,25 @@
 function customDomainViewModel() {
 
     var self = this;
-    self.customDomain = ko.observable('');
+    self.selectedDomain = ko.observable('');
     self.domainArray = ko.observableArray();
-    self.prueba = function(){
-        alert("wepa?");
-        
-    }
+    
+    self.selectedDomain.subscribe(function(newValue) {
+        localStorage.setItem("selectedDomain", newValue.name);
+    });
+
+
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
     client.getFromService('custom-domains/domains', {
         format: 'jsv'
     }, function (resp) {
-        var result = JSV.parse(resp['Domains']);
+        var result = resp['Domains'];
         for (var i = 0; i < result.length; i++) {
             self.domainArray.push({
                 name: result[i]['Name'],
+                id: i,
             
            });
         }
@@ -30,6 +33,8 @@ function customDomainViewModel() {
 
 
 }
+
+
 
 var customDomainModel = new customDomainViewModel();
 if (typeof testModel === 'undefined') {
