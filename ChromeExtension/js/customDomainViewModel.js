@@ -10,6 +10,7 @@ function customDomainViewModel() {
 
 
 
+
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
     client.getFromService('custom-domains/domains', {
