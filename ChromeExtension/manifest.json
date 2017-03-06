@@ -16,11 +16,11 @@
     },
 
     "background": {
-        "scripts": ["js/servicestack.js" , "js/GeniusLinkServiceClient.js", "js/background.js", "js/jquery.min.js"],
+        "scripts": ["js/utilities.js", "js/background.js", "js/servicestack.js" , "js/GeniusLinkServiceClient.js",  "js/jquery.min.js"],
         "persistent": true
     },
 
-"content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+"content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
 
     "permissions": [
         "activeTab",

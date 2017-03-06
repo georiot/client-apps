@@ -48,6 +48,7 @@ function createGeniusLink(url) {
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
+            Domain: localStorage['selectedDomain'],
             Url: url
         },
         function (data) {
@@ -61,8 +62,7 @@ function createGeniusLink(url) {
             var error401 = parseError.ResponseStatus.ErrorCode;
             if (error401 == 'AuthenticationException') {
                 alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
-            }
-            else {
+            } else {
                 alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');
             }
 
