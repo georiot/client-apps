@@ -53,8 +53,13 @@ function createGeniusLink(url) {
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            bootbox.alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
-            // alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+            console.log(window.location.href);
+            if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
+                bootbox.alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+            } else {
+                alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+            }
+
 
         },
         function (error) {
