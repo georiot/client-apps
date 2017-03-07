@@ -44,6 +44,10 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});  
+});
+document.body.style.cursor = 'wait';
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
@@ -53,14 +57,16 @@ function createGeniusLink(url) {
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            console.log(window.location.href);
+            var alertCreate = 'Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.';
             if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
-                bootbox.alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+                bootbox.alert(alertCreate);
+                document.body.style.cursor = 'default';
             } else {
-                alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+                alert(alertCreate);
+                 
             }
 
-
+           
         },
         function (error) {
             var parseError = JSV.parse(error);

@@ -11,22 +11,21 @@
     },
     "icons": {
         "16": "images/icon.png",
-		"48": "images/icon48.png",
-		"128": "images/icon128.png"
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
     },
-      "content_scripts": [
-    {
-      "matches": ["http://www.amazon.com/*"],
-      "js": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js","js/bootbox.min.js"]
-    }
-  ],
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/openDialog.js"]
+        // "css": ["css/main.css"]
+    }],
 
     "background": {
-        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/utilities.js","js/bootbox.min.js",  "js/servicestack.js" , "js/GeniusLinkServiceClient.js", "js/background.js"],
+        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/utilities.js", "js/bootbox.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js", "js/background.js"],
         "persistent": true
     },
 
-"content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+    "content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
 
     "permissions": [
         "activeTab",
