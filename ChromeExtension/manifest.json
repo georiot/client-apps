@@ -14,9 +14,15 @@
 		"48": "images/icon48.png",
 		"128": "images/icon128.png"
     },
+      "content_scripts": [
+    {
+      "matches": ["http://www.amazon.com/*"],
+      "js": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js","js/bootbox.min.js"]
+    }
+  ],
 
     "background": {
-        "scripts": ["js/utilities.js", "js/background.js", "js/servicestack.js" , "js/GeniusLinkServiceClient.js",  "js/jquery.min.js"],
+        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/utilities.js","js/bootbox.min.js",  "js/servicestack.js" , "js/GeniusLinkServiceClient.js", "js/background.js"],
         "persistent": true
     },
 

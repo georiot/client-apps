@@ -32,8 +32,6 @@ function customDomainViewModel() {
             }
         }
 
-        //self.loadKey();
-
     }, function (error) {
         alert(error)
     });
