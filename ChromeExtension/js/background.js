@@ -44,7 +44,6 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-bootbox.alert("Hello world!");
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
@@ -54,7 +53,7 @@ bootbox.alert("Hello world!");
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            bootbox.alert("Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.'");
+            bootbox.alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
             // alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
 
         },
