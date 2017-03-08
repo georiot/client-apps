@@ -1,4 +1,3 @@
-
 <!doctype html>
 <!--
  This page is shown when the extension button is clicked, because the
@@ -37,12 +36,15 @@
             </p>
         </div>
         <div>
-        <ul data-bind="foreach: resultsArray">            
-                <li style=font-size:13px><a  data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></li>                           
-        </ul>
+            <ul data-bind="foreach: resultsArray">
+                <li style=font-size:13px>
+                    <a data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></li>
+            </ul>
         </div>
         <br>
-        <a class="text-left" style="font-size: 12px;" href="groups.html">Back</a>
+        <p id="back" class="text-left" style="position: absolute"><span style="position: relative; right: 1px; top: 3px;  size: 12px; " class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <a href="groups.html" style="font-size: 14px; color: black; ">Back</a>
+        </p><br>
         <div id="dialog" title="Error">
             <div id="networkError"></div>
         </div>

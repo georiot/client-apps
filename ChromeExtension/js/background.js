@@ -44,10 +44,14 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});  
-});
-document.body.style.cursor = 'wait';
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            action: "loading"
+        }, function (response) {});
+    });
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
@@ -59,14 +63,29 @@ document.body.style.cursor = 'wait';
             copyToClipBoard(newLink);
             var alertCreate = 'Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.';
             if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
-                bootbox.alert(alertCreate);
-                document.body.style.cursor = 'default';
+
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                }, function (tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        action: "linkCreated"
+                    }, function (response) {});
+                });
+                
             } else {
-                alert(alertCreate);
-                 
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                }, function (tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        action: "linkCreated"
+                    }, function (response) {});
+                });
+
             }
 
-           
+
         },
         function (error) {
             var parseError = JSV.parse(error);
