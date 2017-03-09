@@ -16,9 +16,12 @@
     },
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*"],
-        "js": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/openDialog.js"]
-        //  "css": ["css/bootstrap-iso.css"]
+        "js": ["js/openDialog.js"],
+        "css": ["css/alertBox.css"]
     }],
+        "web_accessible_resources": [
+        "frame.html", "frame2.html"
+    ],
 
     "background": {
         "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/utilities.js", "js/bootbox.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js", "js/background.js"],
@@ -33,6 +36,7 @@
         "contextMenus",
         "https://api.geni.us/",
         "storage",
-        "clipboardRead"
+        "clipboardRead",
+        "tabs", "http://*/*", "https://*/*"
     ]
 }
