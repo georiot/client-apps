@@ -52,6 +52,9 @@ function createGeniusLink(url) {
             action: "loading"
         }, function (response) {});
     });
+    if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
+        window.close();
+    }
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
@@ -61,29 +64,17 @@ function createGeniusLink(url) {
         function (data) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
+            localStorage.setItem("lastCreatedLink", newLink);
             var alertCreate = 'Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.';
-            if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "linkCreated"
+                }, function (response) {});
+            });
 
-                chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                }, function (tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        action: "linkCreated"
-                    }, function (response) {});
-                });
-                
-            } else {
-                chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                }, function (tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        action: "linkCreated"
-                    }, function (response) {});
-                });
-
-            }
 
 
         },

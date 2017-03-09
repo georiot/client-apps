@@ -19,7 +19,7 @@
         "js": ["js/openDialog.js"]
     }],
         "web_accessible_resources": [
-        "frame.html", "frame2.html"
+        "frame.html", "frame2.html", "css/vsprites.svg",  "css/custom.css"
     ],
 
     "background": {
