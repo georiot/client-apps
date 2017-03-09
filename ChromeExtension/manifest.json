@@ -16,8 +16,7 @@
     },
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*"],
-        "js": ["js/openDialog.js"],
-        "css": ["css/alertBox.css"]
+        "js": ["js/openDialog.js"]
     }],
         "web_accessible_resources": [
         "frame.html", "frame2.html"

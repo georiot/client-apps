@@ -10,13 +10,13 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             iframe.src = chrome.runtime.getURL('frame.html');
 
             // Some styles for a fancy sidebar
-            iframe.style.cssText = 'position:fixed;top:50%;left:50%; transform: translate(-50%, -50%);display:block;' +
-                'width:300px;height:100px;z-index:1000;border:1px';
+            iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +
+                'width:300px;height:50px;z-index:1000;frameborder:1px';
             document.body.appendChild(iframe);
         }
         setTimeout(function () {
             iframe.style.visibility = "hidden";
-        }, 3000);
+        }, 4000);
     }
 
 
@@ -30,8 +30,8 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             iframe.src = chrome.runtime.getURL('frame2.html');
 
             // Some styles for a fancy sidebar
-            iframe.style.cssText = 'position:fixed;top:50%;left:50%; transform: translate(-50%, -50%);display:block;' +
-                'width:300px;height:100px;z-index:1000;border:1px';
+            iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +
+                'width:300px;height:50px;z-index:1000;frameborder:1px';
             document.body.appendChild(iframe);
         }
 
