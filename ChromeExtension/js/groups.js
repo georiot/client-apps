@@ -7,6 +7,7 @@ function groupsViewModel() {
     var self = this;
     self.createLinkFromButton = function () {
         createGeniusCurrentTab();
+        // top.window.close();
     }
 }
 
