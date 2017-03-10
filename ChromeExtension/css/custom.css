@@ -128,3 +128,14 @@ body {
     color: gray;
     height: 200px;
 }
+.groove2 {
+    border-style: solid;
+    border-width: 0.001px;
+    color: gray;
+    height: 50px;
+}
+
+.successText {
+    font-size: 12px;
+    color: black;
+}
