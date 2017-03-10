@@ -11,7 +11,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
 
         
             iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +
-                'width:300px;height:50px;z-index:1000;border:0';
+                'width:300px;height:50px;z-index:999999999999999999999999999999999999999999999999999999999999999;border:0';
             document.body.appendChild(iframe);
         }
         setTimeout(function () {
@@ -31,7 +31,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
 
 
             iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +
-                'width:300px;height:200px;z-index:1000;border:0';
+                'width:300px;height:200px;z-index:999999999999999999999999999999999999999999999999999999999999999999999999999999999999;border:0';
             document.body.appendChild(iframe);
         }
 
