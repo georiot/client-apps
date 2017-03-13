@@ -7,7 +7,12 @@ function groupsViewModel() {
     var self = this;
     self.createLinkFromButton = function () {
         createGeniusCurrentTab();
-        // top.window.close();
+        setTimeout(function () {
+            window.location.href = "frame3.html";
+        }, 500);
+
+
+
     }
 }
 

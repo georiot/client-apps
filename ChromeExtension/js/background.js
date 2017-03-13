@@ -44,10 +44,8 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-    if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
-        top.parent.window.close();
-    }
-    chrome.tabs.query({
+    if (window.location.href !== "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
+            chrome.tabs.query({
         active: true,
         currentWindow: true
     }, function (tabs) {
@@ -55,6 +53,9 @@ function createGeniusLink(url) {
             action: "loading"
         }, function (response) {});
     });
+        
+    }
+
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
@@ -67,6 +68,7 @@ function createGeniusLink(url) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
+            if (window.location.href !== "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
@@ -77,7 +79,7 @@ function createGeniusLink(url) {
             });
 
 
-
+            }
         },
         function (error) {
             var parseError = JSV.parse(error);

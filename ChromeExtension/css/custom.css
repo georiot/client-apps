@@ -135,7 +135,10 @@ body {
     height: 50px;
 }
 
+[frameAlert]  { border-width: 200px;}
+
 .successText {
     font-size: 12px;
     color: black;
 }
+
