@@ -8,7 +8,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
                 iframe.setAttribute("scrolling", "no");
                 iframe.className = "frameAlert";
 
-                iframe.src = chrome.runtime.getURL('frame.html');
+                iframe.src = chrome.runtime.getURL('alertLoadingOutside.html');
 
 
                 iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +
@@ -30,7 +30,7 @@ chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
                 var iframe = document.createElement('iframe');
                 iframe.setAttribute("scrolling", "no");
                 iframe.className = "frameAlert";
-                iframe.src = chrome.runtime.getURL('frame2.html');
+                iframe.src = chrome.runtime.getURL('alertDoneOutside.html');
 
 
                 iframe.style.cssText = 'position:fixed;top:0px;right:0px;display:block;' +

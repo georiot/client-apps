@@ -18,8 +18,9 @@
         "matches": ["http://*/*", "https://*/*", "*://*/*"],
         "js": ["js/openDialog.js"]
     }],
-        "web_accessible_resources": [
-        "frame.html", "frame2.html", "frame3.html", "css/vsprites.svg",  "css/main.css", "css/custom.css", "js/bootstrap.min.js"
+    "web_accessible_resources": [
+        "css/custom.css",
+        "alertDoneInside.html", "alerLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
     ],
 
     "background": {

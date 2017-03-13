@@ -57,6 +57,8 @@ body {
 }
 
 .spinner {
+        position: relative;
+    top: 8px;
     margin: 0;
     width: 50px;
     text-align: left;
@@ -90,7 +92,6 @@ body {
     height: 26px;
     vertical-align: -15%;
     margin-right: 6px;
-    
 }
 
 .spinner em:nth-child(2) {
@@ -124,21 +125,35 @@ body {
 
 .groove {
     border-style: solid;
-    border-width: 0.001px;
-    color: gray;
+    border-width: 1px;
+    border-color: gray;
     height: 200px;
-}
-.groove2 {
-    border-style: solid;
-    border-width: 0.001px;
-    color: gray;
-    height: 50px;
+    border-radius: 4px;
 }
 
-[frameAlert]  { border-width: 200px;}
+.groove2 {
+    border-style: solid;
+    border-width: 1px;
+    border-color: gray;
+    height: 50px;
+    border-radius: 4px;
+}
+
+.nested.groove {
+    border: none;
+}
+
+.nested.groove2 {
+    border: none;
+}
 
 .successText {
     font-size: 12px;
     color: black;
 }
 
+.generatingLink {
+    display: inline;
+    position: relative;
+    top: 8px;
+}
