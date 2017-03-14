@@ -9,6 +9,9 @@ function getCurrentTab() {
     });
 }
 
+if(localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
+    localStorage.setItem("selectedDomainName", "geni.us");
+}
 
 function goTo(page) {
     chrome.browserAction.setPopup({
@@ -44,16 +47,16 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-    if (window.location.href !== "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
-            chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            action: "loading"
-        }, function (response) {});
-    });
-        
+    if (window.location.href !== "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                action: "loading"
+            }, function (response) {});
+        });
+
     }
 
 
@@ -68,15 +71,15 @@ function createGeniusLink(url) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
-            if (window.location.href !== "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    action: "linkCreated"
-                }, function (response) {});
-            });
+            if (window.location.href != "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                }, function (tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        action: "linkCreated"
+                    }, function (response) {});
+                });
 
 
             }

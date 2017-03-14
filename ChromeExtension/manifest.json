@@ -20,11 +20,12 @@
     }],
     "web_accessible_resources": [
         "css/custom.css",
-        "alertDoneInside.html", "alerLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
+        "js/frame.js",
+        "alertDoneInside.html", "alertLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
     ],
 
     "background": {
-        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/utilities.js", "js/bootbox.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js", "js/background.js"],
+        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/background.js", "js/utilities.js", "js/bootbox.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
         "persistent": true
     },
 

@@ -9,7 +9,7 @@ function groupsViewModel() {
         createGeniusCurrentTab();
         setTimeout(function () {
             window.location.href = "alertLoadingInside.html";
-        }, 500);
+        }, 1000);
 
 
 

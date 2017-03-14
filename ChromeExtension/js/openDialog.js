@@ -1,5 +1,5 @@
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-    if (window.location.href != "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/groups.html") {
+    if (window.location.href !== "chrome-extension://" + chrome.runtime.id + "/groups.html") {
         if (msg.action == 'loading') {
 
             var extensionOrigin = 'chrome-extension://' + chrome.runtime.id;

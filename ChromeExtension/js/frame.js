@@ -1,10 +1,10 @@
-if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/alertLoadingInside.html") {
+if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
     setTimeout(function () {
         window.location.href = "alertDoneInside.html";
-    }, 1000);
+    }, 2000);
 }
 
-if (window.location.href === "chrome-extension://haebimmpcepjkbodcfbajdnlhhijimec/alertDoneInside.html") {
+if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertDoneInside.html") {
     setTimeout(function () {
         window.close();
     }, 5000);
