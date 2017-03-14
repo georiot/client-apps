@@ -7,12 +7,6 @@ function groupsViewModel() {
     var self = this;
     self.createLinkFromButton = function () {
         createGeniusCurrentTab();
-        setTimeout(function () {
-            window.location.href = "alertLoadingInside.html";
-        }, 1000);
-
-
-
     }
 }
 

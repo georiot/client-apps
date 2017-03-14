@@ -9,7 +9,7 @@ function getCurrentTab() {
     });
 }
 
-if(localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
+if (localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
     localStorage.setItem("selectedDomainName", "geni.us");
 }
 
@@ -83,6 +83,18 @@ function createGeniusLink(url) {
 
 
             }
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function callback(tabs) {
+                var currentTab = tabs[0]; // there will be only one in this array
+                console.log(currentTab); // also has properties like currentTab.id
+            })
+            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+                window.location.href = "alertLoadingInside.html";
+
+
+            }
         },
         function (error) {
             var parseError = JSV.parse(error);
@@ -97,6 +109,8 @@ function createGeniusLink(url) {
 
 
 }
+
+
 
 
 
