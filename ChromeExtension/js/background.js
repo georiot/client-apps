@@ -13,6 +13,21 @@ if (localStorage["selectedDomainName"] == null || typeof localStorage["selectedD
     localStorage.setItem("selectedDomainName", "geni.us");
 }
 
+if (localStorage["createdLinks"] == null || typeof localStorage["createdLinks"] === 'undefined') {
+    localStorage.setItem("createdLinks", "0");
+}
+document.addEventListener('DOMContentLoaded', function () {
+if (localStorage["createdLinks"] > 10) {
+    chrome.browserAction.setPopup({
+        popup: "groupsReview.html"
+    });
+}
+});
+
+var createdLinks = parseInt(localStorage["createdLinks"]);
+// alert(createdLinks);
+
+
 function goTo(page) {
     chrome.browserAction.setPopup({
         popup: page
@@ -47,7 +62,8 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-    if (window.location.href !== "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+    var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/groups.html";
+    if (window.location.href !== groupsUrl) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
@@ -71,7 +87,9 @@ function createGeniusLink(url) {
             newLink = data.NewLink;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
-            if (window.location.href != "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+            var createdLinks = parseInt(localStorage["createdLinks"]);
+            localStorage.setItem("createdLinks", createdLinks+1);
+            if (window.location.href != groupsUrl) {
                 chrome.tabs.query({
                     active: true,
                     currentWindow: true
@@ -83,16 +101,10 @@ function createGeniusLink(url) {
 
 
             }
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, function callback(tabs) {
-                var currentTab = tabs[0]; // there will be only one in this array
-                console.log(currentTab); // also has properties like currentTab.id
-            })
-            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/groups.html") {
-                window.location.href = "alertLoadingInside.html";
 
+            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+
+                window.location.href = "alertLoadingInside.html";
 
             }
         },
