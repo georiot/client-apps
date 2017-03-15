@@ -1,3 +1,21 @@
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == "install") {
+        alert("This is a first install!");
+        localStorage.setItem("createdLinks", "0");
+        localStorage.setItem("doneReview", "false");
+        var dateobj = new Date();
+
+        function pad(n) {
+            return n < 10 ? "0" + n : n;
+        }
+        var result = pad(dateobj.getDate()) + "/" + pad(dateobj.getMonth() + 1) + "/" + dateobj.getFullYear();
+        localStorage.setItem("installDate", result);
+    } else if (details.reason == "update") {
+        var thisVersion = chrome.runtime.getManifest().version;
+        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+    }
+});
+
 function getCurrentTab() {
     return new Promise(function (resolve, reject) {
         chrome.tabs.query({
@@ -9,24 +27,13 @@ function getCurrentTab() {
     });
 }
 
-if (localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
-    localStorage.setItem("selectedDomainName", "geni.us");
-}
+// if (localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
+//     localStorage.setItem("selectedDomainName", "geni.us");
+// }
 
-if (localStorage["createdLinks"] == null || typeof localStorage["createdLinks"] === 'undefined') {
-    localStorage.setItem("createdLinks", "0");
-}
-document.addEventListener('DOMContentLoaded', function () {
-if (localStorage["createdLinks"] > 10) {
-    chrome.browserAction.setPopup({
-        popup: "groupsReview.html"
-    });
-}
-});
+
 
 var createdLinks = parseInt(localStorage["createdLinks"]);
-// alert(createdLinks);
-
 
 function goTo(page) {
     chrome.browserAction.setPopup({
@@ -88,7 +95,7 @@ function createGeniusLink(url) {
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
             var createdLinks = parseInt(localStorage["createdLinks"]);
-            localStorage.setItem("createdLinks", createdLinks+1);
+            localStorage.setItem("createdLinks", createdLinks + 1);
             if (window.location.href != groupsUrl) {
                 chrome.tabs.query({
                     active: true,
@@ -158,3 +165,36 @@ if (localStorageHasValue('defaultGroup')) {
     goTo('groups.html');
 }
 CreateContentMenus();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var dateobj = new Date();
+
+    function pad(n) {
+        return n < 10 ? "0" + n : n;
+    }
+    var result = pad(dateobj.getDate()) + "/" + pad(dateobj.getMonth() + 1) + "/" + dateobj.getFullYear();
+
+    //sources for parseDate and daydiff to http://stackoverflow.com/questions/542938/how-do-i-get-the-number-of-days-between-two-dates-in-javascript
+    function parseDate(str) {
+        var mdy = str.split('/');
+        return new Date(mdy[2], mdy[0] - 1, mdy[1]);
+    }
+
+    function daydiff(first, second) {
+        return Math.round((second - first) / (1000 * 60 * 60 * 24));
+    }
+
+    var installDate = localStorage["installDate"];
+    var daysInstalled = daydiff(parseDate(installDate), parseDate(result));
+    if (daysInstalled === 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
+
+        chrome.browserAction.setPopup({
+            popup: "groupsReview.html"
+        });
+
+    }
+
+
+
+});
