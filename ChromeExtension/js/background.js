@@ -1,8 +1,8 @@
 chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason == "install") {
-        alert("This is a first install!");
         localStorage.setItem("createdLinks", "0");
         localStorage.setItem("doneReview", "false");
+        localStorage.setItem("selectedDomainName", "geni.us");
         var dateobj = new Date();
 
         function pad(n) {
@@ -27,13 +27,6 @@ function getCurrentTab() {
     });
 }
 
-// if (localStorage["selectedDomainName"] == null || typeof localStorage["selectedDomainName"] === 'undefined') {
-//     localStorage.setItem("selectedDomainName", "geni.us");
-// }
-
-
-
-var createdLinks = parseInt(localStorage["createdLinks"]);
 
 function goTo(page) {
     chrome.browserAction.setPopup({
@@ -69,7 +62,7 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
-    var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/groups.html";
+    var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
     if (window.location.href !== groupsUrl) {
         chrome.tabs.query({
             active: true,
@@ -109,9 +102,9 @@ function createGeniusLink(url) {
 
             }
 
-            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/groups.html") {
+            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
 
-                window.location.href = "alertLoadingInside.html";
+                window.location.href = "alertDoneInside.html";
 
             }
         },
@@ -161,13 +154,20 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     }
 });
 
-if (localStorageHasValue('defaultGroup')) {
-    goTo('groups.html');
+
+if (localStorage['defaultGroup'] !== '' && typeof localStorage['defaultGroup'] !== 'undefined') {
+    chrome.browserAction.setPopup({
+        popup: "groups.html"
+    });
 }
 CreateContentMenus();
 
 
 document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
     var dateobj = new Date();
 
     function pad(n) {
