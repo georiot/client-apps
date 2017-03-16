@@ -8,12 +8,49 @@ chrome.runtime.onInstalled.addListener(function (details) {
         function pad(n) {
             return n < 10 ? "0" + n : n;
         }
-        var result = pad(dateobj.getDate()) + "/" + pad(dateobj.getMonth() + 1) + "/" + dateobj.getFullYear();
+        var result = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
         localStorage.setItem("installDate", result);
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
     }
+});
+document.addEventListener('DOMContentLoaded', function () {
+
+    var dateobj = new Date();
+
+    function pad(n) {
+        return n < 10 ? "0" + n : n;
+    }
+    var today = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
+
+    //sources for parseDate and daydiff to http://stackoverflow.com/questions/542938/how-do-i-get-the-number-of-days-between-two-dates-in-javascript
+    function parseDate(str) {
+        var mdy = str.split('/');
+        return new Date(mdy[2], mdy[0] - 1, mdy[1]);
+    }
+
+    function daydiff(first, second) {
+        return Math.round((second - first) / (1000 * 60 * 60 * 24));
+    }
+
+    var installDate = localStorage["installDate"];
+    var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
+    if (daysInstalled >= 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
+
+        chrome.browserAction.setPopup({
+            popup: "groupsReview.html"
+        });
+
+    } else {
+        chrome.browserAction.setPopup({
+            popup: "groups.html"
+        });
+
+    }
+
+
+
 });
 
 function getCurrentTab() {
@@ -63,7 +100,7 @@ function createGeniusCurrentLink(e) {
 
 function createGeniusLink(url) {
     var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
-    if (window.location.href !== groupsUrl) {
+    if (window.location.href !== groupsUrl && localStorage["wrongKeys"] === "false") {
         chrome.tabs.query({
             active: true,
             currentWindow: true
@@ -161,40 +198,3 @@ if (localStorage['defaultGroup'] !== '' && typeof localStorage['defaultGroup'] !
     });
 }
 CreateContentMenus();
-
-
-document.addEventListener('DOMContentLoaded', function () {
-
-
-
-
-    var dateobj = new Date();
-
-    function pad(n) {
-        return n < 10 ? "0" + n : n;
-    }
-    var result = pad(dateobj.getDate()) + "/" + pad(dateobj.getMonth() + 1) + "/" + dateobj.getFullYear();
-
-    //sources for parseDate and daydiff to http://stackoverflow.com/questions/542938/how-do-i-get-the-number-of-days-between-two-dates-in-javascript
-    function parseDate(str) {
-        var mdy = str.split('/');
-        return new Date(mdy[2], mdy[0] - 1, mdy[1]);
-    }
-
-    function daydiff(first, second) {
-        return Math.round((second - first) / (1000 * 60 * 60 * 24));
-    }
-
-    var installDate = localStorage["installDate"];
-    var daysInstalled = daydiff(parseDate(installDate), parseDate(result));
-    if (daysInstalled === 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
-
-        chrome.browserAction.setPopup({
-            popup: "groupsReview.html"
-        });
-
-    }
-
-
-
-});

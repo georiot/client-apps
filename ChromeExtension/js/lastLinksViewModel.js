@@ -48,6 +48,9 @@ function lastLinksViewModel() {
 
 
 }
+$('#back').on('click', 'a', function () {
+    window.location.href = window.history.back(1);
+});
 
 
 var lastLinksModel = new lastLinksViewModel();

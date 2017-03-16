@@ -8,7 +8,7 @@ function apiKeyViewModel() {
     self.showHelpLink = ko.observable(true);
     self.newInstall = ko.observable(true);
     self.UrlApiKeys = ko.observable('');
-    
+
 
     self.apiKey.subscribe(function (newValue) {
         localStorage.setItem("apiKey", newValue);
@@ -43,9 +43,6 @@ function apiKeyViewModel() {
         if (self.apiKey() !== null && self.apiSecret() !== null && self.apiKey() !== Empty && self.apiSecret() !== Empty) {
             localStorage.setItem("apiKey", self.apiKey());
             localStorage.setItem("apiSecret", self.apiSecret());
-            chrome.browserAction.setPopup({
-                popup: "groups.html"
-            });
 
 
         } else {
@@ -62,6 +59,10 @@ function apiKeyViewModel() {
 
 
 }
+
+$('#back').on('click', 'a', function () {
+    window.location.href = window.history.back(1);
+});
 
 
 var apiModel = new apiKeyViewModel();

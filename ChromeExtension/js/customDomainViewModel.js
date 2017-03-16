@@ -23,9 +23,9 @@ function customDomainViewModel() {
             var newItem = {
                 name: result[i]['Name'],
                 id: i
-               };
+            };
             self.domainArray.push(newItem);
-            
+
             if (typeof ak !== 'undefined' && ak === result[i]['Name']) {
                 self.selectedDomain(newItem);
 
@@ -40,6 +40,10 @@ function customDomainViewModel() {
 
 
 }
+
+$('#back').on('click', 'a', function () {
+    window.location.href = window.history.back(1);
+});
 
 
 

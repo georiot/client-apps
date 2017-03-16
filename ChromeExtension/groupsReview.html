@@ -34,14 +34,14 @@
     <div style="padding: 20px">
         <div class="group-div">
             <div class="text-left">
-                <p class="newlink-group newlink-group-review">Put new links in this group</p>
-                <select id="listOfGroups" class="form-control">
+                <p class="newlink-group newlink-select-review">Put new links in this group</p>
+                <select id="listOfGroups" class="form-control listOfGroups-review">
                     <option id="loadingOption" value="Loading">Loading...</option>
                 </select>
             </div>
 
             <center>
-                <p style="margin-bottom: -20px;" id="result">&nbsp;</p>
+                <p style="margin-bottom: 5px;" id="result">&nbsp;</p>
             </center>
 
             <div id="dialog" title="Error">
@@ -75,13 +75,21 @@
 
 
         </div>
+
         <hr class="hr-group">
+
         <div class="review-text">
-            <p class="text-center">Thanks for using this extension. How has your experience been so far?</p><br>
-            <div class="thumps-up-down" style="display: inline;"> <span class="glyphicon glyphicon-thumbs-up"></span>
-                <span class="glyphicon glyphicon-thumbs-down"></span>
+            <p>Thanks for using this extension. How has your experience been so far?</p>
+            <br>
+            <div class="thumbs-up-down">
+                <center>
+                    <span class="glyphicon glyphicon-thumbs-up thumbs-up" data-bind="click: thumbsup"></span>
+                    <span class="glyphicon glyphicon-thumbs-down thumbs-down" data-bind="click: thumbsdown"></span>
+                </center>
             </div>
         </div>
+
+
     </div>
 
 </body>

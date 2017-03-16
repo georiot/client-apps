@@ -25,7 +25,7 @@
     ],
 
     "background": {
-        "scripts": ["js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/background.js", "js/utilities.js", "js/bootbox.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
+        "scripts": ["js/background.js", "js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/utilities.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
         "persistent": true
     },
 
