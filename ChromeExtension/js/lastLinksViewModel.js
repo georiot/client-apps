@@ -26,7 +26,8 @@ function lastLinksViewModel() {
             for (var i = 0; i < results.length; i++) {
                 self.resultsArray.push({
                     url: 'http://geni.us/' + results[i]['ShortUrlCode'],
-                    totalClicks: results[i]['TotalClicks']
+                    totalClicks: results[i]['TotalClicks'],
+                    editUrl: 'https://my.geni.us/links#!editlink=' + results[i]['ShortUrlCode']
                 });
             }
 

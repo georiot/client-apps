@@ -36,10 +36,11 @@
             </p>
         </div>
         <div>
-            <ul data-bind="foreach: resultsArray">
-                <li style=font-size:13px>
-                    <a data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></li>
-            </ul>
+            <table data-bind="foreach: resultsArray">
+                <td><a data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></td>
+                <td>&nbsp;<a data-bind="attr:{href:editUrl}, click: $parent.openTab">Edit</a></td>
+            </table>
+
         </div>
         <br>
         <p id="back" class="text-left" style="position: absolute"><span style="position: relative; right: 1px; top: 3px;  size: 12px; " class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
