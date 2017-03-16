@@ -12,7 +12,7 @@ function groupsViewModel() {
         bootbox.confirm({
             size: "large",
             title: "Great to hear!",
-            message: "Would you mind helping us out by leaving a reating at the Chrome Store? \n Each review makes a huge difference.",
+            message: "Would you mind helping us out by leaving a review at the Chrome Store? \n Each review makes a huge difference.",
             buttons: {
                 confirm: {
                     label: 'Sure, take me there!',
