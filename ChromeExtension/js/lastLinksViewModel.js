@@ -29,9 +29,9 @@ function lastLinksViewModel() {
                     totalClicks: results[i]['TotalClicks']
                 });
             }
-        }
 
-        self.loadingOption('');
+            self.loadingOption('');
+        }
     }, function (error) {
 
         $('#loadingOption').remove();
