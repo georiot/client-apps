@@ -28,7 +28,7 @@
     <div style="padding: 20px">
         <center>
             <img src="images/logo.svg" style="margin-bottom: 30px" alt="Geniuslink: The world's most intelligent link shortener for marketing products across a fragmented audience."
-                height="80" width="300">
+                height="80" width="200">
         </center>
         <div>
             <p class="text-center">
@@ -36,10 +36,26 @@
             </p>
         </div>
         <div>
-            <table data-bind="foreach: resultsArray">
-                <td><a data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>&nbsp;Total Clicks:&nbsp;<span data-bind="text:totalClicks"> </span></td>
-                <td>&nbsp;<a data-bind="attr:{href:editUrl}, click: $parent.openTab">Edit</a></td>
+
+            <table width="300">
+                <thead>
+                    <tr data-bind="html: tableHeader"></tr>
+                </thead>
+                <tbody data-bind="foreach: resultsArray">
+                    <tr>
+                        <td>
+                            <a class="pull-left" data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>
+                        </td>
+                        <td>
+                            <center><span data-bind="text:totalClicks"></span></center>
+                        </td>
+                        <td>
+                            <a data-bind="attr:{href:editUrl}, click: $parent.openTab, text: 'Edit'"></a>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+
 
         </div>
         <br>

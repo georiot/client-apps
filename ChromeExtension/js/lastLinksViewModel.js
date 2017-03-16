@@ -4,12 +4,14 @@ function lastLinksViewModel() {
     var self = this;
     self.loadingOption = ko.observable('Loading links...');
     self.details = ko.observable('');
-    self.resultsArray = ko.observableArray();
+    self.resultsArray = ko.observableArray('');
+    self.tableHeader = ko.observable('');
     self.openTab = function (data, event) {
 
         chrome.tabs.create({
             url: event.target.href,
         });
+
     }
 
 
@@ -32,6 +34,10 @@ function lastLinksViewModel() {
             }
 
             self.loadingOption('');
+            self.tableHeader('\
+                              <th>Links</th>\
+                              <th>Total Clicks</th>\
+                              ');
         }
     }, function (error) {
 
