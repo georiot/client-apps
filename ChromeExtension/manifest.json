@@ -11,16 +11,25 @@
     },
     "icons": {
         "16": "images/icon.png",
-		"48": "images/icon48.png",
-		"128": "images/icon128.png"
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
     },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*", "*://*/*"],
+        "js": ["js/openDialog.js"]
+    }],
+    "web_accessible_resources": [
+        "css/custom.css",
+        "js/frame.js",
+        "alertDoneInside.html", "alertLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
+    ],
 
     "background": {
-        "scripts": ["js/utilities.js", "js/background.js", "js/servicestack.js" , "js/GeniusLinkServiceClient.js",  "js/jquery.min.js"],
+        "scripts": ["js/background.js", "js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/utilities.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
         "persistent": true
     },
 
-"content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+    "content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
 
     "permissions": [
         "activeTab",
@@ -28,6 +37,7 @@
         "contextMenus",
         "https://api.geni.us/",
         "storage",
-        "clipboardRead"
+        "clipboardRead",
+        "tabs", "http://*/*", "https://*/*"
     ]
 }

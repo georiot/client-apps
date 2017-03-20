@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+
+<head>
+    <title>Geniuslink Extension</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/frame.js"></script>
+
+</head>
+
+<body>
+
+    <div id="popupAlert" class="container groove">
+        <div class="row">
+            <br>
+            <center>
+                <div class="check-icon-2" style="position:relative; top: 2px;"></div>
+                <p style="display: inline">Done!</p>
+            </center>
+        </div><br>
+        <div class="row">
+            <b  style="padding-left: 40px; padding-right: 20px" id="lastCreatedLink" ></b><br>
+                <p class="successText" class="text-nowrap" style="padding-left: 40px; padding-right: 20px">Is copied to your clipboard and can be managed in your link <a id="dashboardLink" target="_blank">Genius Link dashboard.</a></p>
+            
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="js/utilities.js"></script>
+
+</html>

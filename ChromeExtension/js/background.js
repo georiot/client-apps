@@ -1,3 +1,58 @@
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == "install") {
+        localStorage.setItem("createdLinks", "0");
+        localStorage.setItem("doneReview", "false");
+        localStorage.setItem("selectedDomainName", "geni.us");
+        var dateobj = new Date();
+
+        function pad(n) {
+            return n < 10 ? "0" + n : n;
+        }
+        var result = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
+        localStorage.setItem("installDate", result);
+    } else if (details.reason == "update") {
+        var thisVersion = chrome.runtime.getManifest().version;
+        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+
+    var dateobj = new Date();
+
+    function pad(n) {
+        return n < 10 ? "0" + n : n;
+    }
+    var today = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
+
+    //sources for parseDate and daydiff to http://stackoverflow.com/questions/542938/how-do-i-get-the-number-of-days-between-two-dates-in-javascript
+    function parseDate(str) {
+        var mdy = str.split('/');
+        return new Date(mdy[2], mdy[0] - 1, mdy[1]);
+    }
+
+    function daydiff(first, second) {
+        return Math.round((second - first) / (1000 * 60 * 60 * 24));
+    }
+
+    var installDate = localStorage["installDate"];
+    var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
+    if (daysInstalled >= 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
+
+        chrome.browserAction.setPopup({
+            popup: "groupsReview.html"
+        });
+
+    } else {
+        chrome.browserAction.setPopup({
+            popup: "groups.html"
+        });
+
+    }
+
+
+
+});
+
 function getCurrentTab() {
     return new Promise(function (resolve, reject) {
         chrome.tabs.query({
@@ -44,18 +99,51 @@ function createGeniusCurrentLink(e) {
 }
 
 function createGeniusLink(url) {
+    var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
+    if (window.location.href !== groupsUrl && localStorage["wrongKeys"] === "false") {
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                action: "loading"
+            }, function (response) {});
+        });
+
+    }
+
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturl', {
             GroupId: localStorage['defaultGroupId'],
-            Domain: localStorage['selectedDomain'],
+            Domain: localStorage['selectedDomainName'],
             Url: url
         },
         function (data) {
+
             newLink = data.NewLink;
             copyToClipBoard(newLink);
-            alert('Geni.us link created and copied to clipboard!\n ' + newLink + ' added to group: ' + localStorage['defaultGroup'] + '.');
+            localStorage.setItem("lastCreatedLink", newLink);
+            var createdLinks = parseInt(localStorage["createdLinks"]);
+            localStorage.setItem("createdLinks", createdLinks + 1);
+            if (window.location.href != groupsUrl) {
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                }, function (tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        action: "linkCreated"
+                    }, function (response) {});
+                });
 
+
+            }
+
+            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
+
+                window.location.href = "alertDoneInside.html";
+
+            }
         },
         function (error) {
             var parseError = JSV.parse(error);
@@ -70,6 +158,8 @@ function createGeniusLink(url) {
 
 
 }
+
+
 
 
 
@@ -101,7 +191,10 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     }
 });
 
-if (localStorageHasValue('defaultGroup')) {
-    goTo('groups.html');
+
+if (localStorage['defaultGroup'] !== '' && typeof localStorage['defaultGroup'] !== 'undefined') {
+    chrome.browserAction.setPopup({
+        popup: "groups.html"
+    });
 }
 CreateContentMenus();

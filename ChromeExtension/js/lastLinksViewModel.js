@@ -4,12 +4,14 @@ function lastLinksViewModel() {
     var self = this;
     self.loadingOption = ko.observable('Loading links...');
     self.details = ko.observable('');
-    self.resultsArray = ko.observableArray();
+    self.resultsArray = ko.observableArray('');
+    self.tableHeader = ko.observable('');
     self.openTab = function (data, event) {
 
         chrome.tabs.create({
             url: event.target.href,
         });
+
     }
 
 
@@ -26,12 +28,17 @@ function lastLinksViewModel() {
             for (var i = 0; i < results.length; i++) {
                 self.resultsArray.push({
                     url: 'http://geni.us/' + results[i]['ShortUrlCode'],
-                    totalClicks: results[i]['TotalClicks']
+                    totalClicks: results[i]['TotalClicks'],
+                    editUrl: 'https://my.geni.us/links#!editlink=' + results[i]['ShortUrlCode']
                 });
             }
-        }
 
-        self.loadingOption('');
+            self.loadingOption('');
+            self.tableHeader('\
+                              <th>Links</th>\
+                              <th>Total Clicks</th>\
+                              ');
+        }
     }, function (error) {
 
         $('#loadingOption').remove();
@@ -48,6 +55,9 @@ function lastLinksViewModel() {
 
 
 }
+$('#back').on('click', 'a', function () {
+    window.location.href = window.history.back(1);
+});
 
 
 var lastLinksModel = new lastLinksViewModel();

@@ -6,7 +6,78 @@ function groupsViewModel() {
 
     var self = this;
     self.createLinkFromButton = function () {
-        createGeniusCurrentTab();
+        window.location.href = "alertLoadingInside.html";
+    }
+    self.thumbsup = function () {
+        bootbox.confirm({
+            size: "large",
+            title: "Great to hear!",
+            message: "Would you mind helping us out by leaving a review at the Chrome Store? \n Each review makes a huge difference.",
+            buttons: {
+                confirm: {
+                    label: 'Sure, take me there!',
+                    className: 'btn btn-primary btn-sm pull-left'
+                },
+                cancel: {
+                    label: 'Done / Dismiss',
+                    className: 'btn btn-danger btn-sm pull-right'
+                }
+            },
+            callback: function (result) {
+                if (result == true) {
+                    var url = "https://chrome.google.com/webstore/detail/geniuslink-intelligent-li/fgoilnlnleemcedbmhoalpmhkefdppbm/reviews";
+                    chrome.tabs.create({
+                        url: url
+                    });
+
+                }
+                localStorage.setItem("doneReview", true);
+                chrome.browserAction.setPopup({
+                    popup: "groups.html"
+                });
+
+                setTimeout(function () {
+                    window.location.href = "groups.html";
+                }, 500);
+
+            }
+        })
+    }
+
+    self.thumbsdown = function () {
+        bootbox.confirm({
+            size: "large",
+            title: "Sorry to hear that!",
+            message: "Please let us know if there is anything we can help with or if you have any suggestions.",
+            buttons: {
+                cancel: {
+                    label: 'Contact us',
+                    className: 'btn btn-primary btn-sm '
+                },
+                confirm: {
+                    label: 'Ok',
+                    className: 'btn btn-danger btn-sm '
+                },
+            },
+            callback: function (result) {
+                if (!result) {
+                    var url = "https://www.geni.us/contact";
+                    chrome.tabs.create({
+                        url: url
+                    });
+
+                }
+                localStorage.setItem("doneReview", true);
+                chrome.browserAction.setPopup({
+                    popup: "groups.html"
+                });
+
+                setTimeout(function () {
+                    window.location.href = "groups.html";
+                }, 500);
+
+            }
+        })
     }
 }
 
@@ -19,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, function (data) {
         var resp = data;
         var groups = resp['Groups'];
+        localStorage.setItem("wrongKeys", false);
         if (groups.length === 0) {
             $('#dialog').dialog({
                 draggable: false,
@@ -67,13 +139,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }, function (error) {
-        $('#loadingOption').text('Please verify your keys');
-        $('#dialog').dialog({
-            draggable: false,
-            modal: true
-        });
+        var parseError = JSV.parse(error);
+        var error401 = parseError.ResponseStatus.ErrorCode;
+        localStorage.setItem("wrongKeys", true);
+        if (error401 == 'AuthenticationException') {
+            chrome.browserAction.setPopup({
+                popup: "apikeys.html"
+            });
+            bootbox.confirm({
+                size: "large",
+                title: "Authentication error",
+                message: "Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.",
+                buttons: {
+                    cancel: {
+                        label: 'Get my API Keys',
+                        className: 'btn btn-primary btn-sm '
+                    },
+                    confirm: {
+                        label: 'Ok',
+                        className: 'btn btn-danger btn-sm '
+                    },
+                },
+                callback: function (result) {
+                    if (!result) {
+                        var url = "https://my.geni.us/tools#api-section";
+                        chrome.tabs.create({
+                            url: url
+                        });
 
-        $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
+                    }
+                    setTimeout(function () {
+                        window.location.href = "apikeys.html";
+                    }, 500);
+
+
+
+                }
+            })
+
+
+        }
 
         console.error('Error: ', error);
     });

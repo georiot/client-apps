@@ -15,5 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#apikeys').css('visibility', 'visible');
     }
 
+    $('#back').on('click','a', function(){
+        window.location.href = window.history.back(1);
+    });
+
 
 });
