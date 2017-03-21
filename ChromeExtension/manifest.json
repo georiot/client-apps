@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
 
-    "name": "Geniuslink | Intelligent Link Creator [beta]",
+    "name": "Geniuslink | Intelligent Link Creator",
     "description": "Easily build geni.us links with the click of a button!",
-    "version": "0.2.3",
+    "version": "1.0.0",
 
     "browser_action": {
         "default_icon": "images/icon.png",

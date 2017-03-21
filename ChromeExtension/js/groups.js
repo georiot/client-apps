@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var parseError = JSV.parse(error);
         var error401 = parseError.ResponseStatus.ErrorCode;
         localStorage.setItem("wrongKeys", true);
-        if (error401 == 'AuthenticationException') {
+        if (error401 == 'AuthenticationException' || error401 == 'Unauthorized') {
             chrome.browserAction.setPopup({
                 popup: "apikeys.html"
             });
