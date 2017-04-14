@@ -1,10 +1,11 @@
 var apiKey = '';
 var apiSecret = '';
+var fetchUrl = 'custom-domains/domains';
 
 
 var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
 
-client.getFromService('custom-domains/domains', {
+client.getFromService(fetchUrl, {
     format: 'jsv'
 }, function (resp) {
 
