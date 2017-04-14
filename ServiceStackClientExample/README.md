@@ -1,7 +1,7 @@
 # Service Stack Client Example
 This is a example how to use servicestack client with the Geniuslink API.
 
-##How to
+#How to
 
 Just go to 'js/jsvCall.js' and paste the apiKey and apiSecret that you have here https://my.geni.us/tools#api-section
 
