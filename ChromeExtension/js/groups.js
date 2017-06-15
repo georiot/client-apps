@@ -128,9 +128,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         }
-
         $('#loadingOption').remove();
-        $('#' + localStorage['defaultGroup'] + '').attr('selected', true);
+		$('#listOfGroups option[id="' + localStorage['defaultGroup']  + '"]').attr('selected', true);     
 
         chrome.extension.sendMessage({
                 name: 'CreateContentMenus',
