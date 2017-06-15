@@ -26,10 +26,18 @@ function lastLinksViewModel() {
         } else {
 
             for (var i = 0; i < results.length; i++) {
+				var current = results[i];
+				var urlToShow = current['ShortUrlCode'];
+				var baseUrl = current['ShortUrlCode'];
+				if(typeof(current.Aliases) != undefined && current.Aliases.length > 0)
+				{
+					urlToShow = current.Aliases[0].Code;
+					baseUrl = current.Aliases[0].BaseCode;
+				}
                 self.resultsArray.push({
-                    url: 'http://' + results[i]['Domain'] + '/' + results[i]['ShortUrlCode'],
-                    totalClicks: results[i]['TotalClicks'],
-                    editUrl: 'https://my.geni.us/links#!editlink=' + results[i]['ShortUrlCode']
+                    url: 'http://' + current['Domain'] + '/' + urlToShow,
+                    totalClicks: current['TotalClicks'],
+                    editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
                 });
             }
 
