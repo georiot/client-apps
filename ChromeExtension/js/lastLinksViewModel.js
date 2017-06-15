@@ -29,7 +29,7 @@ function lastLinksViewModel() {
 				var current = results[i];
 				var urlToShow = current['ShortUrlCode'];
 				var baseUrl = current['ShortUrlCode'];
-				if(typeof(current.Aliases) != undefined && current.Aliases.length > 0)
+				if(typeof(current.Aliases) != "undefined" && current.Aliases.length > 0)
 				{
 					urlToShow = current.Aliases[0].Code;
 					baseUrl = current.Aliases[0].BaseCode;
