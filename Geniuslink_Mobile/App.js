@@ -1,15 +1,45 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ListView, StyleSheet, Text, View } from 'react-native';
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    }
+  }
 
-        <Text>Try and see a change.</Text>
+  componentDidMount() {
+    return listLinks()
+      .then((responseJson) => {
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.setState({
+          isLoading: false,
+          dataSource: ds.cloneWithRows(responseJson.Results),
+        }, function() {
+          // do something with new state
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+    
+    return (
+      <View style={{flex: 1, paddingTop: 20}}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text>{rowData.ShortUrlCode}     {rowData.ProductUrl}</Text>}
+        />
       </View>
     );
   }
@@ -25,15 +55,19 @@ const styles = StyleSheet.create({
 });
 
 function listLinks() {
-  return fetch('https://api.geni.us/v1/links/list', {
+  const baseUrl = 'https://api.geni.us';
+  const endpoint = '/v1/links/list';
+  const groupId = 0;
+  const maxlinks = 100;
+  const key = '0831700ddf234e2cb07cfc005464f1f5';
+  const secret = '3320582798ae432eaf577b9139552056';
+
+  return fetch(baseUrl + endpoint + '?groupid=' + groupId + '&numberoflinks=' + maxlinks, {
     method: 'GET',
     headers: {
-      'X-Api-Key': '0831700ddf234e2cb07cfc005464f1f5',
-      'X-Api-Secret': '3320582798ae432eaf577b9139552056',
-      Accept: 'application/json'
+      'X-Api-Key': key,
+      'X-Api-Secret': secret,
+      Accept: 'application/json',
     }
-  }).then(response => response.json())
-    .then(responseJson => {
-      return responseJson.Results;
-    });
+  }).then(response => response.json());
 }
