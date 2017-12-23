@@ -1,23 +1,34 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import Login from './src/pages/LoginPage.js';
+import Home from './src/pages/HomePage.js';
 
 export default class App extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      loading: false, // set to true to see splash screen
+      authenticated: true, // set to true to see home page, false to see login page
+    };
+  }
+
+  // componentDidMount() {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       this.setState({ loading: false, authenticated: true });
+  //     } else {
+  //       this.setState({ loading: false, authenticated: false });
+  //     }
+  //   });
+  // }
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
+    if (this.state.loading) return null; // null --> change to render loading/splash screen etc
+
+    if (!this.state.authenticated) {
+      return <Login />;
+    }
+
+    return <Home />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
