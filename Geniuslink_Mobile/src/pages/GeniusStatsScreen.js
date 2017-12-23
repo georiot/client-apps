@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ScrollView,
   View,
+  Button,
   Text
 } from 'react-native';
 import TopNavigation from '../common/TopNavigationBar';

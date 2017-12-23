@@ -2,7 +2,10 @@ import React from 'react';
 import {
   ScrollView,
   View,
-  Text
+  Button,
+  Image,
+  Text,
+  TextInput
 } from 'react-native';
 import TopNavigation from '../common/TopNavigationBar';
 import styles from '../styles/index';
@@ -16,7 +19,19 @@ export default class LoginScreen extends React.Component {
     return (
       <View style={styles.global.container}>
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <Text>This is the login page</Text>
+                <Image style={{width: '50%', top: 100}} source={require('../images/geniuslink-simpler.png')} resizeMode='contain' />
+                <TextInput
+                    style={{width: 75/100*constants.dimensions.width, height: 50, top: -50}}
+                    placeholder='  Username or email' />
+                <TextInput
+                    style={{width: 75/100*constants.dimensions.width, height: 50, top: -50}}
+                    placeholder='  Password' />
+                <Button 
+                        onPress={this.props.onLoginPress}
+                        title="Log in"
+                        style={{top: -200}}
+                    />
+                <View style={{margin:200}} />
           </ScrollView>
       </View>
     );

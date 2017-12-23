@@ -8,7 +8,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       loading: false, // set to true to see splash screen
-      authenticated: true, // set to true to see home page, false to see login page
+      authenticated: false, // set to true to see home page, false to see login page
     };
   }
 
@@ -26,9 +26,9 @@ export default class App extends React.Component {
     if (this.state.loading) return null; // null --> change to render loading/splash screen etc
 
     if (!this.state.authenticated) {
-      return <Login />;
+      return <Login onLoginPress={() => this.setState({authenticated: true})}/>;
     }
 
-    return <Home />;
+    return <Home onLogoutPress={() => this.setState({authenticated: false})}/>;
   }
 }

@@ -45,9 +45,9 @@ export default (MainScreenNavigator = TabNavigator(
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
                   <Image
-                      style={[styles.button.bottomButtonMenu, {left: -0*bottomButtonSideOffset}]}
+                      style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]}
                       source={require('../images/button-placeholder.png')}
                       resizeMode='contain'
                   />
