@@ -10,9 +10,6 @@ import {
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-const topButtonSideOffset = constants.topButtonSideOffset;
-const bottomButtonSideOffset = constants.bottomButtonSideOffset;
-
 export default class LoginScreen extends React.Component {
   render() {
     return (

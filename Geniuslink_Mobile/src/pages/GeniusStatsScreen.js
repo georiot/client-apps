@@ -9,9 +9,6 @@ import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-const topButtonSideOffset = constants.topButtonSideOffset;
-const bottomButtonSideOffset = constants.bottomButtonSideOffset;
-
 export default class GeniusStatsScreen extends React.Component {
   render() {
     return (
