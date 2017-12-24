@@ -8,7 +8,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       loading: false, // set to true to see splash screen
-      authenticated: false, // set to true to see home page, false to see login page
+      authenticated: true, // set to true to see home page, false to see login page
     };
   }
 

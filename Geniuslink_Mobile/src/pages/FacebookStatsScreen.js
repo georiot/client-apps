@@ -4,7 +4,7 @@ import {
   View,
   Text
 } from 'react-native';
-import TopNavigation from '../common/TopNavigationBar';
+import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 

@@ -7,7 +7,6 @@ import {
   Text,
   TextInput
 } from 'react-native';
-import TopNavigation from '../common/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
