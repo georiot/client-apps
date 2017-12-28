@@ -8,7 +8,7 @@ import {
 import LinksAndGroupsScreenNavBar from '../navbars/LinksAndGroupsScreenNavBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
-import { listLinks } from '../backend/genius-api.js';
+import { listLinks, listGroups } from '../backend/genius-api.js';
 
 export default class LinksAndGroupsScreen extends React.Component {
   constructor(props) {
@@ -19,20 +19,24 @@ export default class LinksAndGroupsScreen extends React.Component {
   }
 
   componentDidMount() {
-    return listLinks('0831700ddf234e2cb07cfc005464f1f5', '3320582798ae432eaf577b9139552056')
-      .then((response) => response.json())
-      .then((responseJson) => {
+    var key = '0831700ddf234e2cb07cfc005464f1f5';
+    var secret = '3320582798ae432eaf577b9139552056';
+
+    var getLinks = listLinks(key, secret);
+    var getGroups = listGroups(key, secret);
+
+    var afterEndpoints = Promise.all([getLinks, getGroups])
+      .then(values => {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
         this.setState({
           isLoading: false,
-          dataSource: ds.cloneWithRows(responseJson.Results),
-        }, function() {
-          // do something with new state
-        });
-      })
-      .catch((error) => {
-        console.error(error);
+          allLinks: ds.cloneWithRows(values[0]),
+          allGroups: ds.cloneWithRows(values[1])
+        }, function() {});
       });
+
+    return afterEndpoints;
   }
 
   render() {
@@ -52,8 +56,12 @@ export default class LinksAndGroupsScreen extends React.Component {
         <LinksAndGroupsScreenNavBar />
         <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
           <ListView
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Text>{rowData.ShortUrlCode}     {rowData.ProductUrl}</Text>}/>
+          dataSource={this.state.allLinks}
+          renderRow={(r) => <Text>{r.ShortUrlCode} {r.ProductUrl}</Text>}/>
+
+          <ListView
+          dataSource={this.state.allGroups}
+          renderRow={(r) => <Text>{r.Name} {r.Description} {r.Id}</Text>}/>
         </ScrollView>
       </View>
     );
