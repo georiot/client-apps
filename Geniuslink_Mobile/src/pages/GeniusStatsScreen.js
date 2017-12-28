@@ -15,7 +15,7 @@ export default class GeniusStatsScreen extends React.Component {
       <View style={styles.global.container}>
           <TopNavigation />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <Text>This is the GENIUS stats screen</Text>
+            <Text>This is the GENIUS stats screen!!</Text>
           </ScrollView>
       </View>
     );
