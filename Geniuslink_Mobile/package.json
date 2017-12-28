@@ -20,7 +20,12 @@
   },
   "dependencies": {
     "expo": "^23.0.4",
+    "native-base": "^2.3.5",
     "react": "16.0.0",
-    "react-native": "0.50.3"
+    "react-native": "0.50.3",
+    "react-native-elements": "^0.18.5",
+    "react-native-search-bar": "^3.0.2",
+    "react-native-searchbar": "^1.14.0",
+    "react-navigation": "^1.0.0-beta.22"
   }
 }
