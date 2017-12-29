@@ -55,17 +55,20 @@ export default class LinksAndGroupsScreen extends React.Component {
       <View style={styles.global.container}>
         <LinksAndGroupsScreenNavBar />
         <ScrollView style={styles.global.main} scrollEnabled={false} contentContainerStyle={styles.global.scrollViewMain}>
+          {/* need to change formatting later using constants,
+              need to change ListView to FlatList --> ListView is to be deprecated */}
+          
           <Text>Top Links</Text>
-          <View style={{height: 200}}>
+          <View style={{height: 180}}>
             <ListView
               dataSource={this.state.allLinks}
               renderRow={(r) => <Text>{r.ShortUrlCode} {r.ProductUrl}</Text>}/>
           </View>
           
-          <View style={{height: 30}} />
+          <View style={{height: 25}} />
 
           <Text>Top Groups</Text>
-          <View style={{height: 200}}>
+          <View style={{height: 180}}>
             <ListView
               dataSource={this.state.allGroups}
               renderRow={(r) => <Text>{r.Name} {r.Description} {r.Id}</Text>}/>
