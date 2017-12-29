@@ -39,3 +39,24 @@ export function listGroups(key, secret) {
         .then((response) => response.json())
         .then((responseJson) => responseJson.Groups);
 }
+
+export function createSimpleLink(key,secret,url,tsid)
+{
+    var encodedUrl = encodeURI(url);
+    var payload =  "url="+encodedUrl+"&tsid="+tsid+"&bulkMode=0&domain=geni.us";
+    const endpoint = '/v1/links/add';
+    
+        var url = baseUrl + endpoint;
+        var options = 
+        {
+            method: 'GET',
+            headers: {
+                'X-Api-Key': key,
+                'X-Api-Secret': secret,
+                Accept: 'application/json',
+            },
+            body : payload
+        };
+    
+        fetch(url, options).then(()=>alert("Link Created")); // Ideally this should be a proper inspection and answer or give back a user message.
+}
