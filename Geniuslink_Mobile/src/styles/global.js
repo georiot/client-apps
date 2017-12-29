@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
   },
 
   main: {
+    flex: 1,
+    //padding: 50,
     width: dimensions.width,
-    height: dimensions.height-(topNavBarHeight+bottomNavBarHeight)
   },
 
   scrollViewMain: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
