@@ -54,14 +54,22 @@ export default class LinksAndGroupsScreen extends React.Component {
     return (
       <View style={styles.global.container}>
         <LinksAndGroupsScreenNavBar />
-        <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-          <ListView
-          dataSource={this.state.allLinks}
-          renderRow={(r) => <Text>{r.ShortUrlCode} {r.ProductUrl}</Text>}/>
+        <ScrollView style={styles.global.main} scrollEnabled={false} contentContainerStyle={styles.global.scrollViewMain}>
+          <Text>Top 5 Links</Text>
+          <View style={{height: 200}}>
+            <ListView
+              dataSource={this.state.allLinks}
+              renderRow={(r) => <Text>{r.ShortUrlCode} {r.ProductUrl}</Text>}/>
+          </View>
+          
+          <View style={{height: 30}} />
 
-          <ListView
-          dataSource={this.state.allGroups}
-          renderRow={(r) => <Text>{r.Name} {r.Description} {r.Id}</Text>}/>
+          <Text>Top 5 Groups</Text>
+          <View style={{height: 200}}>
+            <ListView
+              dataSource={this.state.allGroups}
+              renderRow={(r) => <Text>{r.Name} {r.Description} {r.Id}</Text>}/>
+          </View>
         </ScrollView>
       </View>
     );
