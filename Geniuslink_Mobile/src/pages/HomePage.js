@@ -3,6 +3,7 @@ import GeniusStatsScreen from "../pages/GeniusStatsScreen";
 import FacebookStatsScreen from "../pages/FacebookStatsScreen";
 import LinksAndGroupsScreen from "../pages/LinksAndGroupsScreen";
 import UserSettingsScreen from "../pages/UserSettingsScreen";
+import BuildALinkScreen from "../pages/BuildALinkScreen";
 import {
   Image,
   View,
@@ -23,6 +24,7 @@ export default (MainScreenNavigator = TabNavigator(
     FacebookStats: { screen: FacebookStatsScreen },
     LinksAndGroups: { screen: LinksAndGroupsScreen },
     UserSettings: { screen: UserSettingsScreen },
+    BuildALink: { screen: BuildALinkScreen },
   },
   {
     tabBarPosition: "bottom",
@@ -31,11 +33,12 @@ export default (MainScreenNavigator = TabNavigator(
         <View>
             <View style={styles.navbar.navSeparator} />
             <View style={styles.navbar.bottomNavBar}>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats")}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats",{navi: navigation})}>
                     <Image
                         style={[styles.button.bottomButtonMenu, {left: -2*bottomButtonSideOffset}]}
                         source={require('../images/button-placeholder.png')}
                         resizeMode='contain'
+
                     />
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
@@ -59,7 +62,7 @@ export default (MainScreenNavigator = TabNavigator(
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserSettings")}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("BuildALink")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
                       source={require('../images/button-placeholder.png')}
