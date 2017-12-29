@@ -55,7 +55,7 @@ export default class LinksAndGroupsScreen extends React.Component {
       <View style={styles.global.container}>
         <LinksAndGroupsScreenNavBar />
         <ScrollView style={styles.global.main} scrollEnabled={false} contentContainerStyle={styles.global.scrollViewMain}>
-          <Text>Top 5 Links</Text>
+          <Text>Top Links</Text>
           <View style={{height: 200}}>
             <ListView
               dataSource={this.state.allLinks}
@@ -64,7 +64,7 @@ export default class LinksAndGroupsScreen extends React.Component {
           
           <View style={{height: 30}} />
 
-          <Text>Top 5 Groups</Text>
+          <Text>Top Groups</Text>
           <View style={{height: 200}}>
             <ListView
               dataSource={this.state.allGroups}
