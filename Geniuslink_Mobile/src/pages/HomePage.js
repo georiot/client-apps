@@ -20,11 +20,12 @@ const bottomButtonSideOffset = constants.bottomButtonSideOffset;
 
 export default (MainScreenNavigator = TabNavigator(
   {
+    // do not change the order of the navigation
     GeniusStats: { screen: GeniusStatsScreen },
     FacebookStats: { screen: FacebookStatsScreen },
-    LinksAndGroups: { screen: LinksAndGroupsScreen },
-    UserSettings: { screen: UserSettingsScreen },
     BuildALink: { screen: BuildALinkScreen },
+    LinksAndGroups: { screen: LinksAndGroupsScreen },
+    UserSettings: { screen: UserSettingsScreen }
   },
   {
     tabBarPosition: "bottom",
@@ -33,10 +34,10 @@ export default (MainScreenNavigator = TabNavigator(
         <View>
             <View style={styles.navbar.navSeparator} />
             <View style={styles.navbar.bottomNavBar}>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats",{navi: navigation})}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats")}>
                     <Image
                         style={[styles.button.bottomButtonMenu, {left: -2*bottomButtonSideOffset}]}
-                        source={require('../images/button-placeholder.png')}
+                        source={require('../images/genius_lighttheme.png')}
                         resizeMode='contain'
 
                     />
@@ -44,28 +45,28 @@ export default (MainScreenNavigator = TabNavigator(
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: -1*bottomButtonSideOffset}]}
-                      source={require('../images/button-placeholder.png')}
+                      source={require('../images/facebook_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("BuildALink")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]}
-                      source={require('../images/button-placeholder.png')}
+                      source={require('../images/createlink_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("LinksAndGroups")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 1*bottomButtonSideOffset}]}
-                      source={require('../images/button-placeholder.png')}
+                      source={require('../images/simplelink_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("BuildALink")}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserSettings")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
-                      source={require('../images/button-placeholder.png')}
+                      source={require('../images/user_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>

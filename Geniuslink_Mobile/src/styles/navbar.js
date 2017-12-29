@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
   
     navSeparator: {
-      borderWidth: 1,
+      borderWidth: 0.5,
       borderColor:'#afafaf',
       width: dimensions.width,
       margin: 0

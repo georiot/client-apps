@@ -14,7 +14,7 @@ export default class LinksAndGroupsScreenNavBar extends React.Component {
         <View>
             <TouchableWithoutFeedback onPress={() => this.searchBar.show()}>
                 <View style={[styles.navbar.topNavBar, {top:2*constants.buttonTopOffset-2}]}>
-                    <Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: -constants.topButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
+                    <Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: -constants.topButtonSideOffset}]} source={require('../images/search_lighttheme.png')} resizeMode='contain' />
                     {/* The following 2 images are invisible --> for a more uniform formatting */}
                     <Image style={[styles.global.logo, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2)}]} source={require('../images/geniuslink-simpler.png')} resizeMode='contain' />
                     <Image style={[styles.button.topButtonMenu, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: constants.topButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
@@ -24,6 +24,11 @@ export default class LinksAndGroupsScreenNavBar extends React.Component {
                     width='100%'
                     heightAdjust={-constants.buttonTopOffset}
                     placeholder='Search by keyword or tag'
+                    //backButton={<Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-constants.buttonTopOffset-3}]} source={require('../images/back_lighttheme.png')} />}
+                    iconColor='#59595b'
+                    textColor='#59595b'
+                    backCloseSize={20}
+                    fontSize={15}
                     animate={false}
                     clearOnBlur
                     />
