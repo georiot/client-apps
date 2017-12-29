@@ -8,15 +8,15 @@ import {
 import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
-import LinkSelection from '../navbars/LinkCreationNavBar'
-export default class GeniusStatsScreen extends React.Component {
+import LinkCreationNavBar from '../navbars/LinkCreationNavBar'
+export default class BuildALinkScreen extends React.Component {
   render() {
     return (
       <View style={styles.global.container}>
-          <TopNavigation />
-          <LinkSelection />
+          <TopNavigation/>
+          <LinkCreationNavBar/>            
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <Text>This is the GENIUS Link Creation Screen!</Text>
+          <Text>This is the GENIUS Link Creation Screen!</Text>
           </ScrollView>
       </View>
     );
