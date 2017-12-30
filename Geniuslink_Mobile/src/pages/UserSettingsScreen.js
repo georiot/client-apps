@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Linking,
   Clipboard,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import {
   Gravatar,
@@ -44,12 +45,18 @@ export default class UserSettingsScreen extends React.Component {
               <View style={{height: 25}} />
               <Text style={style.header}>Refer a friend</Text>
               <View style={{height: 5}} />
-              <View style={[styles.button.general, {backgroundColor: '#9e9e9e'}]}>      
-                <Text style={[styles.button.generalButtonText, {color: 'black'}]}
-                    onPress={() => {[Clipboard.setString('https://geni.us/X574j'), Alert.alert('Copied to clipboard:', 'https://geni.us/X574j')]}}>
-                    https://geni.us/X574j
-                </Text>
-              </View>
+              <TouchableOpacity
+                style={[styles.button.general, {backgroundColor: '#9e9e9e'}]}
+                onPress={() => Clipboard.setString('https://geni.us/X574j')}> 
+                <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>    
+                  <Text style={[styles.button.generalButtonText, {color: 'black'}]}>
+                      https://geni.us/X574j
+                  </Text>
+                  <Image source={require('../../assets/images/clipboard_lighttheme_2.png')}
+                      style={{height: 25, width: 25}}
+                      resizeMode='contain' />
+                </View>
+              </TouchableOpacity>
           </ScrollView>
       </View>
     );

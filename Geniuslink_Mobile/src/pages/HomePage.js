@@ -29,6 +29,9 @@ export default (MainScreenNavigator = TabNavigator(
   },
   {
     tabBarPosition: "bottom",
+    lazy: true,
+    swipeEnabled: false,
+    animationEnabled: false,
     tabBarComponent: props => {
       return (
         <View>

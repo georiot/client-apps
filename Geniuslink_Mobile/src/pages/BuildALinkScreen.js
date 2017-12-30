@@ -2,15 +2,27 @@ import React from 'react';
 import {
   ScrollView,
   View,
+  Image,
   Button,
   Text,
-  TextInput
+  TextInput,
+  StyleSheet,
+  TouchableWithoutFeedback
 } from 'react-native';
+import { TabNavigator } from "react-navigation";
 import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
-import LinkCreationNavBar from '../navbars/LinkCreationNavBar'
-export default class BuildALinkScreen extends React.Component {
+
+export class CreateSimpleLinkScreen extends React.Component {
+  static navigationOptions = {
+    tabBarLabel: ({ tintColor }) => (
+      <Image
+        source={require('../../assets/images/link_simple.png')}
+        style={[style.icon, {tintColor: tintColor}]}
+      />
+    ),
+  };
 
   state = { url: 'Update me with a real url'};
   setUrl( t)
@@ -20,8 +32,6 @@ export default class BuildALinkScreen extends React.Component {
   render() {
     return (
       <View style={styles.global.container}>
-          <TopNavigation/>
-          <LinkCreationNavBar/>            
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
           <Text>Add an url to create a random shortlink on the geni.us domain. HI P</Text>
           <TextInput
@@ -40,3 +50,90 @@ export default class BuildALinkScreen extends React.Component {
     );
   }
 }
+
+export class CreateSplitDestinationLinkScreen extends React.Component {
+  static navigationOptions = {
+    tabBarLabel: ({ tintColor }) => (
+      <Image
+        source={require('../../assets/images/link_absplit.png')}
+        style={[style.icon, {tintColor: tintColor}]}
+      />
+    ),
+  };
+
+  state = { url: 'split destination test'};
+  setUrl( t)
+  {
+    this.state.url = t;
+  }
+  render() {
+    return (
+      <Text>Hi there! This is the split destination screen</Text>
+    );
+  }
+}
+
+export class CreateUserChoiceLandingPageScreen extends React.Component {
+  static navigationOptions = {
+    tabBarLabel: ({ tintColor }) => (
+      <Image
+        source={require('../../assets/images/link_userchoice.png')}
+        style={[style.icon, {tintColor: tintColor}]}
+      />
+    ),
+  };
+
+  state = { url: 'User Choice landing page'};
+  setUrl( t)
+  {
+    this.state.url = t;
+  }
+  render() {
+    return (
+      <Text>Hello! This is the user choice landing page screen</Text>
+    );
+  }
+}
+
+export default (MainScreenNavigator = TabNavigator(
+  {
+    // do not change the order of the navigation
+    SimpleLink: { screen: CreateSimpleLinkScreen },
+    SplitDestination: { screen: CreateSplitDestinationLinkScreen },
+    UserChoiceLandingPage: { screen: CreateUserChoiceLandingPageScreen }
+  },
+  {
+    initialRouteName: 'SimpleLink',
+    tabBarPosition: "top",
+    tabBarOptions: {
+      showLabel: true,
+      activeBackgroundColor: 'white',
+      inactiveBackgroundColor: 'white',
+      activeTintColor: '#59595b',
+      inactiveTintColor: '#59595b',
+      style: {
+        height: constants.topNavBarHeight,
+        backgroundColor: 'white',
+        borderBottomColor: '#afafaf',
+        borderBottomWidth: 0.5,
+        elevation: 0 // only for Android --> might need to remove for iOS
+      },
+      tabStyle: {
+        top: constants.buttonTopOffset-2,
+        height: constants.topNavBarHeight,
+        margin: 0,
+        padding: 0
+      },
+      indicatorStyle: { // not for iOS?
+        backgroundColor: '#00b9ee'
+      }
+    }
+  }  
+));
+
+const style = StyleSheet.create({
+  icon: {
+    width: constants.buttonSize*1.3,
+    height: constants.buttonSize*1.3,
+  },
+});
