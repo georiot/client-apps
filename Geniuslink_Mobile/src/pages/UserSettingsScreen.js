@@ -2,10 +2,12 @@ import React from 'react';
 import {
   ScrollView,
   View,
+  Image,
   Text,
   StyleSheet,
   Linking,
-  Clipboard
+  Clipboard,
+  Alert
 } from 'react-native';
 import {
   Gravatar,
@@ -44,7 +46,7 @@ export default class UserSettingsScreen extends React.Component {
               <View style={{height: 5}} />
               <View style={[styles.button.general, {backgroundColor: '#9e9e9e'}]}>      
                 <Text style={[styles.button.generalButtonText, {color: 'black'}]}
-                    onPress={() => Clipboard.setString('https://geni.us/X574j')}>
+                    onPress={() => {[Clipboard.setString('https://geni.us/X574j'), Alert.alert('Copied to clipboard:', 'https://geni.us/X574j')]}}>
                     https://geni.us/X574j
                 </Text>
               </View>
