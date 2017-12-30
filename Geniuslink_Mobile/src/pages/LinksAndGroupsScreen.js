@@ -29,8 +29,8 @@ export default class LinksAndGroupsScreen extends React.Component {
   }
 
   componentDidMount() {
-    var key = '0831700ddf234e2cb07cfc005464f1f5';
-    var secret = '3320582798ae432eaf577b9139552056';
+    var key = '36f712e665aa475c889d3e3cae55eefa';
+    var secret = 'ed16131bc5764ff9bd4c8b147fc48f0c';
 
     var getLinks = getLinksList(key, secret);
     var getGroups = getGroupsList(key, secret);
