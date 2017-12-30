@@ -33,28 +33,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '30%',
     top: buttonTopOffset,
-  },
-
-  lifetimeStats: {
-    height: 50,
-    width: 120,
-    backgroundColor: '#59595b',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 7
-  },
-
-  lifetimeStatsTextHeader: {
-    textAlign: 'center',
-    color: '#59595b',
-    fontFamily: 'OpenSans_Regular'
-  },
-
-  lifetimeStatsTextBody: {
-    textAlign: 'center',
-    color: 'white',
-    fontFamily: 'OpenSans_Semibold',
-    fontSize: 25
   }
 });
 

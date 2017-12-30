@@ -3,7 +3,8 @@ import {
   ScrollView,
   View,
   Button,
-  Text
+  Text,
+  StyleSheet
 } from 'react-native';
 import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
@@ -45,18 +46,18 @@ export default class GeniusStatsScreen extends React.Component {
             <View style={{flexDirection: 'row'}}>
               {/* stat 1 */}
               <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={styles.global.lifetimeStatsTextHeader}>Total clicks</Text>
-                <View style={styles.global.lifetimeStats}>
-                  <Text style={styles.global.lifetimeStatsTextBody}>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
+                <Text style={style.header}>Total clicks</Text>
+                <View style={style.statsBox}>
+                  <Text style={style.body}>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
                 </View>
               </View>
               {/* separator */}
               <View style={{width: 50}} />
               {/* stat 2 */}
               <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={styles.global.lifetimeStatsTextHeader}>Total link errors</Text>
-                <View style={styles.global.lifetimeStats}>
-                  <Text style={styles.global.lifetimeStatsTextBody}>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
+                <Text style={style.header}>Total link errors</Text>
+                <View style={style.statsBox}>
+                  <Text style={style.body}>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
                 </View>
               </View>
             </View>
@@ -65,3 +66,28 @@ export default class GeniusStatsScreen extends React.Component {
     );
   }
 }
+
+{/* specific style */}
+const style = StyleSheet.create({
+  statsBox: {
+    height: 50,
+    width: 120,
+    backgroundColor: '#59595b',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 7
+  },
+
+  header: {
+    textAlign: 'center',
+    color: '#59595b',
+    fontFamily: 'OpenSans_Regular'
+  },
+
+  body: {
+    textAlign: 'center',
+    color: 'white',
+    fontFamily: 'OpenSans_Semibold',
+    fontSize: 25
+  }
+});
