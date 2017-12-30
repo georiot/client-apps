@@ -92,7 +92,6 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
   _addRow(){
     this.state.rows.push(ABSplitIndex++);
     this.setState({ rows: this.state.rows });
-    console.log(this.state.rows);
   }
 
   render() {

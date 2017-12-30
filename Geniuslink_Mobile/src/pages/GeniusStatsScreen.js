@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ScrollView,
   View,
+  Image,
   Button,
   Text,
   StyleSheet
@@ -39,12 +40,37 @@ export default class GeniusStatsScreen extends React.Component {
   }
 
   render() {
+    let greetings;
+    var currentDate = new Date();
+    if (currentDate.getHours() >= 12){
+      if (currentDate.getHours() >= 18){
+        greetings = (
+          <Text style={style.greetings}>Good evening, Natasha!</Text>
+          );
+      }
+      else{
+        greetings = (
+          <Text style={style.greetings}>Good afternoon, Natasha!</Text>
+          );
+      }
+    }
+    else{
+      greetings = (
+        <Text style={style.greetings}>Good morning, Natasha!</Text>
+        );
+    }
+
     return (
       <View style={styles.global.container}>
           <TopNavigation/>
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
-              style={styles.global.scrollViewInsideView}>
+              style={[styles.global.scrollViewInsideView, {alignContent:'center', alignSelf:'center', alignItems:'center', justifyContent:'center'}]}>
+              
+              <View style={{height: 30}}/>
+              {greetings}
+              <View style={{height: 45}}/>
+              
               <View style={{flexDirection: 'row'}}>
                 {/* stat 1 */}
                 <View style={{alignContent: 'center', justifyContent: 'center'}}>
@@ -63,6 +89,16 @@ export default class GeniusStatsScreen extends React.Component {
                   </View>
                 </View>
               </View>
+
+              {/* world map */}
+              <View style={{height: 20}}/>
+              <Image
+                resizeMode='contain'
+                source={require('../../assets/images/worldmap-placeholder.png')}
+                style={{
+                  height: constants.dimensions.width-2*constants.padding,
+                  width: constants.dimensions.width-2*constants.padding
+                }} />
             </View>
           </ScrollView>
       </View>
@@ -92,5 +128,12 @@ const style = StyleSheet.create({
     color: 'white',
     fontFamily: 'OpenSans_Semibold',
     fontSize: 25
+  },
+
+  greetings: {
+    fontFamily: 'OpenSans_Light',
+    fontSize: 30,
+    color: '#afafaf',
+    textAlign: 'center'
   }
 });
