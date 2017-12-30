@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
 
   main: {
     flex: 1,
-    width: dimensions.width,
-    //height: dimensions.height-(topNavBarHeight+bottomNavBarHeight)
+    width: dimensions.width
   },
 
   scrollViewMain: {

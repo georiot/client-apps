@@ -4,6 +4,7 @@ import {
   ScrollView,
   Text,
   View,
+  ActivityIndicator,
   StyleSheet
 } from 'react-native';
 import {
@@ -50,14 +51,44 @@ export default class LinksAndGroupsScreen extends React.Component {
   }
 
   render() {
+    let linksContent;
+    let groupsContent;
     if (this.state.isLoading) {
-      return (
-        <View style={styles.global.container}>
-          <LinksAndGroupsScreenNavBar />
-          <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <Text>This is the Links and Groups screen</Text>
-          </ScrollView>
-        </View>
+      linksContent = (
+        <ActivityIndicator size='large' color='#afafaf' />
+      );
+      groupsContent = (
+        <ActivityIndicator size='large' color='#afafaf' />
+      );
+    }
+    else{
+      linksContent = (
+        <ListView
+        initialListSize={3}
+        dataSource={this.state.allLinks}
+        renderRow={(r) =>
+          <View>
+            <Table borderStyle={{borderWidth: 0}}>
+              <Col data={r.ProductDisplayName1.length > 30? [r.ProductDisplayName1.slice(0, 29)+'...'] : [r.ProductDisplayName1]} textStyle={style.title}/>
+              <Col data={[r.ShortUrlCode]} textStyle={style.subtitle}/>
+            </Table>
+            <View style={{height: 10}} />
+          </View>
+          }/>
+      );
+      groupsContent = (
+              <ListView
+                  initialListSize={3}
+                  dataSource={this.state.allGroups}
+                  renderRow={(r) =>
+                    <View>
+                        <Table borderStyle={{borderWidth: 0}}>
+                          <Col data={r.Name.length > 30? [r.Name.slice(0, 29)+'...'] : [r.Name]} textStyle={style.title}/>
+                          <Col data={[r.Id]} textStyle={style.subtitle}/>
+                        </Table>
+                        <View style={{height: 10}} />
+                      </View>
+                  }/>
       );
     }
 
@@ -75,18 +106,7 @@ export default class LinksAndGroupsScreen extends React.Component {
               <Text style={style.header}>Top Links</Text>
               <View style={{height: 10}} />
               <View style={style.section}>
-                <ListView
-                  initialListSize={3}
-                  dataSource={this.state.allLinks}
-                  renderRow={(r) =>
-                    <View>
-                      <Table borderStyle={{borderWidth: 0}}>
-                        <Col data={r.ProductDisplayName1.length > 30? [r.ProductDisplayName1.slice(0, 29)+'...'] : [r.ProductDisplayName1]} textStyle={style.title}/>
-                        <Col data={[r.ShortUrlCode]} textStyle={style.subtitle}/>
-                      </Table>
-                      <View style={{height: 10}} />
-                    </View>
-                    }/>
+                {linksContent}
               </View>
               
               <View style={{height: 25}} />
@@ -94,18 +114,7 @@ export default class LinksAndGroupsScreen extends React.Component {
               <Text style={style.header}>Top Groups</Text>
               <View style={{height: 10}} />
               <View style={style.section}>
-                <ListView
-                  initialListSize={3}
-                  dataSource={this.state.allGroups}
-                  renderRow={(r) =>
-                    <View>
-                        <Table borderStyle={{borderWidth: 0}}>
-                          <Col data={r.Name.length > 30? [r.Name.slice(0, 29)+'...'] : [r.Name]} textStyle={style.title}/>
-                          <Col data={[r.Id]} textStyle={style.subtitle}/>
-                        </Table>
-                        <View style={{height: 10}} />
-                      </View>
-                  }/>
+                {groupsContent}
               </View>
           </View>
         </ScrollView>
