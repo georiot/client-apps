@@ -63,13 +63,12 @@ export default class GeniusStatsScreen extends React.Component {
     return (
       <View style={styles.global.container}>
           <TopNavigation/>
-          <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
+          <ScrollView style={styles.global.main} scrollEnabled={false} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
               style={[styles.global.scrollViewInsideView, {alignContent:'center', alignSelf:'center', alignItems:'center', justifyContent:'center'}]}>
               
-              <View style={{height: 30}}/>
               {greetings}
-              <View style={{height: 45}}/>
+              <View style={{height: 15}}/>
               
               <View style={{flexDirection: 'row'}}>
                 {/* stat 1 */}
@@ -132,7 +131,7 @@ const style = StyleSheet.create({
 
   greetings: {
     fontFamily: 'OpenSans_Light',
-    fontSize: 30,
+    fontSize: 20,
     color: '#59595b',
     textAlign: 'center'
   }
