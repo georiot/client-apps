@@ -164,7 +164,7 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
           <View style={{height: 15}} />
           <View style={styles.button.general}>           
                 <Text style={styles.button.generalButtonText}
-                    onPress={() => Alert.alert('Success!', 'Simple link created.')}>
+                    onPress={() => Alert.alert('Success!', 'A/B split link created.')}>
                     Save
                 </Text>
           </View>
@@ -268,7 +268,7 @@ export class CreateUserChoiceLandingPageScreen extends React.Component {
           <View style={{height: 15}} />
           <View style={styles.button.general}>           
                 <Text style={styles.button.generalButtonText}
-                    onPress={() => Alert.alert('Success!', 'Simple link created.')}>
+                    onPress={() => Alert.alert('Success!', 'Link to a landing page created.')}>
                     Save
                 </Text>
           </View>
