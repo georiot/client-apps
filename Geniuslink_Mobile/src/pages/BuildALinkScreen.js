@@ -19,7 +19,7 @@ export class CreateSimpleLinkScreen extends React.Component {
   static navigationOptions = {
     tabBarLabel: ({ tintColor }) => (
       <Image
-        source={require('../../assets/images/link_simple.png')}
+        source={require('../../assets/images/simpleLink.png')}
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),
@@ -74,7 +74,7 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
   static navigationOptions = {
     tabBarLabel: ({ tintColor }) => (
       <Image
-        source={require('../../assets/images/link_absplit.png')}
+        source={require('../../assets/images/ABSplitLink.png')}
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),
@@ -178,7 +178,7 @@ export class CreateUserChoiceLandingPageScreen extends React.Component {
   static navigationOptions = {
     tabBarLabel: ({ tintColor }) => (
       <Image
-        source={require('../../assets/images/link_userchoice.png')}
+        source={require('../../assets/images/userChoiceLink.png')}
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),

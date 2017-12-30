@@ -54,7 +54,7 @@ export default class UserProfileScreen extends React.Component {
                       <Text style={[styles.button.generalButtonText, {color: 'black'}]}>
                           https://geni.us/X574j
                       </Text>
-                      <Image source={require('../../assets/images/clipboard_lighttheme_2.png')}
+                      <Image source={require('../../assets/images/clipboard-light-2.png')}
                           style={{height: 25, width: 25}}
                           resizeMode='contain' />
                     </View>

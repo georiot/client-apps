@@ -17,7 +17,7 @@ export default class UserProfileScreenNavBar extends React.Component {
       <View>
         <View style={styles.navbar.topNavBar}>
             <Text style={style.header}>@natashapetrus</Text>
-            <Image style={[styles.button.topButtonMenu, {left: constants.topButtonSideOffset}]} source={require('../../assets/images/options_lighttheme.png')} resizeMode='contain' />
+            <Image style={[styles.button.topButtonMenu, {left: constants.topButtonSideOffset}]} source={require('../../assets/images/optionsButton.png')} resizeMode='contain' />
         </View>
         <View style={styles.navbar.navSeparator} />
       </View>

@@ -18,11 +18,11 @@ export default class FacebookStatsScreenNavBar extends React.Component {
     return (
       <View>
         <View style={styles.navbar.topNavBar}>
-          <Image style={[styles.global.logo, {opacity: 0, left: -topButtonSideOffset}]} source={require('../../assets/images/geniuslink-simpler.png')} resizeMode='contain' />
+          <Image style={[styles.global.logo, {opacity: 0, left: -topButtonSideOffset}]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' />
           <TouchableWithoutFeedback>
               <Image style={[styles.button.topButtonMenu, {opacity:0}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
           </TouchableWithoutFeedback>
-            <Image style={[styles.button.topButtonMenu, {left: topButtonSideOffset}]} source={require('../../assets/images/options_lighttheme.png')} resizeMode='contain' />
+            <Image style={[styles.button.topButtonMenu, {left: topButtonSideOffset}]} source={require('../../assets/images/optionsButton.png')} resizeMode='contain' />
         </View>
         <View style={styles.navbar.navSeparator} />
       </View>

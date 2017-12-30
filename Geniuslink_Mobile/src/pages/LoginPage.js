@@ -14,7 +14,7 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.global.container}>
-                <Image style={{width: '50%', top: 100}} source={require('../../assets/images/geniuslink-simpler.png')} resizeMode='contain' />
+                <Image style={{width: '50%', top: 100}} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' />
                 <TextInput
                     style={{width: 75/100*constants.dimensions.width, height: 50, top: -50, paddingLeft:10, fontFamily:'OpenSans_Regular'}}
                     placeholder='  Username or email' />
