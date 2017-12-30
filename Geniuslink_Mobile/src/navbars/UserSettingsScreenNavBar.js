@@ -33,7 +33,7 @@ const style = StyleSheet.create({
     header: {
         textAlign: 'left',
         color: '#59595b',
-        fontFamily:'OpenSans_Semibold',
+        fontFamily:'OpenSans_Regular',
         fontSize: 18,
         top:constants.buttonTopOffset,
         left: -topButtonSideOffset
