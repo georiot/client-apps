@@ -9,8 +9,8 @@ export default class App extends React.Component {
     super();
     this.state = {
       loading: false, // set to true to see splash screen
-      authenticated: false, // set to true to see home page, false to see login page
-      isReady: false // to wait for fonts to load
+      authenticated: true, // set to true to see home page, false to see login page
+      isReady: false // to wait for fonts to load, do not change
     };
   }
 

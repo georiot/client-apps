@@ -28,6 +28,7 @@ export default class LinksAndGroupsScreenNavBar extends React.Component {
                     iconColor='#59595b'
                     textColor='#59595b'
                     backCloseSize={20}
+                    fontFamily='OpenSans_Regular'
                     fontSize={15}
                     animate={false}
                     clearOnBlur

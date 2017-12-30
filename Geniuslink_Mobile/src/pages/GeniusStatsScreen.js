@@ -133,7 +133,7 @@ const style = StyleSheet.create({
   greetings: {
     fontFamily: 'OpenSans_Light',
     fontSize: 30,
-    color: '#afafaf',
+    color: '#59595b',
     textAlign: 'center'
   }
 });

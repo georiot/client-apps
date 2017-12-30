@@ -48,7 +48,7 @@ export default class UserProfileScreen extends React.Component {
                   <Text style={style.header}>Refer a friend</Text>
                   <View style={{height: 5}} />
                   <TouchableOpacity
-                    style={[styles.button.general, {backgroundColor: '#9e9e9e'}]}
+                    style={[styles.button.general, {backgroundColor: '#afafaf'}]}
                     onPress={() => Clipboard.setString('https://geni.us/X574j')}> 
                     <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>    
                       <Text style={[styles.button.generalButtonText, {color: 'black'}]}>
