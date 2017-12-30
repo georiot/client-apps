@@ -27,5 +27,10 @@
     "react-native-search-bar": "^3.0.2",
     "react-native-searchbar": "^1.14.0",
     "react-navigation": "^1.0.0-beta.22"
+  },
+  "rnpm": {
+    "assets": [
+	  "./assets/fonts/"
+    ]
   }
 }

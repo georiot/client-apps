@@ -45,18 +45,18 @@ export default class GeniusStatsScreen extends React.Component {
             <View style={{flexDirection: 'row'}}>
               {/* stat 1 */}
               <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{textAlign: 'center', color: '#59595b'}}>Total clicks</Text>
+                <Text style={styles.global.lifetimeStatsTextHeader}>Total clicks</Text>
                 <View style={styles.global.lifetimeStats}>
-                  <Text>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
+                  <Text style={styles.global.lifetimeStatsTextBody}>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
                 </View>
               </View>
               {/* separator */}
               <View style={{width: 50}} />
               {/* stat 2 */}
               <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={{textAlign: 'center'}}>Total link errors</Text>
+                <Text style={styles.global.lifetimeStatsTextHeader}>Total link errors</Text>
                 <View style={styles.global.lifetimeStats}>
-                  <Text>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
+                  <Text style={styles.global.lifetimeStatsTextBody}>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
                 </View>
               </View>
             </View>
