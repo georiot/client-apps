@@ -25,7 +25,7 @@ export default class UserSettingsScreen extends React.Component {
           <UserSettingsScreenNavBar />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
-              style={styles.global.scrollViewInsideView}>
+              style={[styles.global.scrollViewInsideView, {alignContent:'center'}]}>
                 <Gravatar options={{
                     email: 'np@geni.us',
                     parameters: { "size": "1000", "d": "mm" },
@@ -74,12 +74,14 @@ const style = StyleSheet.create({
   },
 
   header: {
+    textAlign: 'center',
     fontFamily: 'OpenSans_Semibold',
     fontSize: 18,
     color: '#59595b'
   },
 
   body: {
+    textAlign: 'center',
     fontFamily: 'OpenSans_Regular',
     fontSize: 15,
     color: '#59595b'
