@@ -15,7 +15,7 @@ export default class LoginScreen extends React.Component {
     return (
       <View style={styles.global.container}>
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-                <Image style={{width: '50%', top: 100}} source={require('../images/geniuslink-simpler.png')} resizeMode='contain' />
+                <Image style={{width: '50%', top: 100}} source={require('../../assets/images/geniuslink-simpler.png')} resizeMode='contain' />
                 <TextInput
                     style={{width: 75/100*constants.dimensions.width, height: 50, top: -50}}
                     placeholder='  Username or email' />

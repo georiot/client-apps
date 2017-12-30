@@ -37,7 +37,7 @@ export default (MainScreenNavigator = TabNavigator(
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats")}>
                     <Image
                         style={[styles.button.bottomButtonMenu, {left: -2*bottomButtonSideOffset}]}
-                        source={require('../images/genius_lighttheme.png')}
+                        source={require('../../assets/images/genius_lighttheme.png')}
                         resizeMode='contain'
 
                     />
@@ -45,28 +45,28 @@ export default (MainScreenNavigator = TabNavigator(
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: -1*bottomButtonSideOffset}]}
-                      source={require('../images/facebook_lighttheme.png')}
+                      source={require('../../assets/images/facebook_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("BuildALink")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]}
-                      source={require('../images/createlink_lighttheme.png')}
+                      source={require('../../assets/images/createlink_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("LinksAndGroups")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 1*bottomButtonSideOffset}]}
-                      source={require('../images/simplelink_lighttheme.png')}
+                      source={require('../../assets/images/simplelink_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserSettings")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
-                      source={require('../images/user_lighttheme.png')}
+                      source={require('../../assets/images/user_lighttheme.png')}
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>

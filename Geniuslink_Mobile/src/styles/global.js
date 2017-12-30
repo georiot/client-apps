@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 
   main: {
     flex: 1,
-    padding: 35, // might need to remove this to enable scrolling
+    padding: 30, // might need to remove this to enable scrolling
     width: dimensions.width,
     height: dimensions.height-(topNavBarHeight+bottomNavBarHeight)
   },
@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '30%',
     top: buttonTopOffset,
+  },
+
+  lifetimeStats: {
+    height: 50,
+    width: 120,
+    backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

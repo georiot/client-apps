@@ -8,7 +8,7 @@ import {
 import LinksAndGroupsScreenNavBar from '../navbars/LinksAndGroupsScreenNavBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
-import { listLinks, listGroups } from '../backend/genius-api.js';
+import { getLinksList, getGroupsList } from '../backend/genius-api.js';
 
 export default class LinksAndGroupsScreen extends React.Component {
   constructor(props) {
@@ -22,8 +22,8 @@ export default class LinksAndGroupsScreen extends React.Component {
     var key = '0831700ddf234e2cb07cfc005464f1f5';
     var secret = '3320582798ae432eaf577b9139552056';
 
-    var getLinks = listLinks(key, secret);
-    var getGroups = listGroups(key, secret);
+    var getLinks = getLinksList(key, secret);
+    var getGroups = getGroupsList(key, secret);
 
     var afterEndpoints = Promise.all([getLinks, getGroups])
       .then(values => {

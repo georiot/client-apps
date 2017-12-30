@@ -14,17 +14,17 @@ export default class LinksAndGroupsScreenNavBar extends React.Component {
         <View>
             <TouchableWithoutFeedback onPress={() => this.searchBar.show()}>
                 <View style={[styles.navbar.topNavBar, {top:2*constants.buttonTopOffset-2}]}>
-                    <Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: -constants.topButtonSideOffset}]} source={require('../images/search_lighttheme.png')} resizeMode='contain' />
+                    <Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: -constants.topButtonSideOffset}]} source={require('../../assets/images/search_lighttheme.png')} resizeMode='contain' />
                     {/* The following 2 images are invisible --> for a more uniform formatting */}
-                    <Image style={[styles.global.logo, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2)}]} source={require('../images/geniuslink-simpler.png')} resizeMode='contain' />
-                    <Image style={[styles.button.topButtonMenu, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: constants.topButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
+                    <Image style={[styles.global.logo, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2)}]} source={require('../../assets/images/geniuslink-simpler.png')} resizeMode='contain' />
+                    <Image style={[styles.button.topButtonMenu, {opacity:0, top:constants.buttonTopOffset-(2*constants.buttonTopOffset-2), left: constants.topButtonSideOffset}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
                     <SearchBar
                     ref={(ref) => this.searchBar = ref}
                     data={null}
                     width='100%'
                     heightAdjust={-constants.buttonTopOffset}
                     placeholder='Search by keyword or tag'
-                    //backButton={<Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-constants.buttonTopOffset-3}]} source={require('../images/back_lighttheme.png')} />}
+                    //backButton={<Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-constants.buttonTopOffset-3}]} source={require('../../assets/images/back_lighttheme.png')} />}
                     iconColor='#59595b'
                     textColor='#59595b'
                     backCloseSize={20}
