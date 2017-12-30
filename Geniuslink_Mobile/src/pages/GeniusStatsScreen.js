@@ -43,21 +43,24 @@ export default class GeniusStatsScreen extends React.Component {
       <View style={styles.global.container}>
           <TopNavigation/>
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <View style={{flexDirection: 'row'}}>
-              {/* stat 1 */}
-              <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={style.header}>Total clicks</Text>
-                <View style={style.statsBox}>
-                  <Text style={style.body}>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
+            <View // need another view for padding for scrolling to work
+              style={styles.global.scrollViewInsideView}>
+              <View style={{flexDirection: 'row'}}>
+                {/* stat 1 */}
+                <View style={{alignContent: 'center', justifyContent: 'center'}}>
+                  <Text style={style.header}>Total clicks</Text>
+                  <View style={style.statsBox}>
+                    <Text style={style.body}>{this.state.isLoading? '?' : this.state.lifetimeClicks}</Text>
+                  </View>
                 </View>
-              </View>
-              {/* separator */}
-              <View style={{width: 50}} />
-              {/* stat 2 */}
-              <View style={{alignContent: 'center', justifyContent: 'center'}}>
-                <Text style={style.header}>Total link errors</Text>
-                <View style={style.statsBox}>
-                  <Text style={style.body}>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
+                {/* separator */}
+                <View style={{width: 50}} />
+                {/* stat 2 */}
+                <View style={{alignContent: 'center', justifyContent: 'center'}}>
+                  <Text style={style.header}>Total link errors</Text>
+                  <View style={style.statsBox}>
+                    <Text style={style.body}>{this.state.isLoading? '?' : this.state.totalLinkErrors}</Text>
+                  </View>
                 </View>
               </View>
             </View>

@@ -67,43 +67,46 @@ export default class LinksAndGroupsScreen extends React.Component {
         <ScrollView style={styles.global.main} scrollEnabled={false}
         //contentContainerStyle={styles.global.scrollViewMain}
         >
-          {/* need to change formatting later using constants,
-              need to change ListView to FlatList --> ListView is to be deprecated */}
-          
-          <Text style={style.header}>Top Links</Text>
-          <View style={{height: 10}} />
-          <View style={style.section}>
-            <ListView
-              initialListSize={3}
-              dataSource={this.state.allLinks}
-              renderRow={(r) =>
-                <View>
-                  <Table borderStyle={{borderWidth: 0}}>
-                    <Col data={r.ProductDisplayName1.length > 40? [r.ProductDisplayName1.slice(0, 25)+'...'] : [r.ProductDisplayName1]} textStyle={style.title}/>
-                    <Col data={[r.ShortUrlCode]} textStyle={style.subtitle}/>
-                  </Table>
-                  <View style={{height: 10}} />
-                </View>
-                }/>
-          </View>
-          
-          <View style={{height: 25}} />
+          <View // need another view for padding for scrolling to work
+              style={styles.global.scrollViewInsideView}>
+              {/* need to change formatting later using constants,
+                  need to change ListView to FlatList --> ListView is to be deprecated */}
+              
+              <Text style={style.header}>Top Links</Text>
+              <View style={{height: 10}} />
+              <View style={style.section}>
+                <ListView
+                  initialListSize={3}
+                  dataSource={this.state.allLinks}
+                  renderRow={(r) =>
+                    <View>
+                      <Table borderStyle={{borderWidth: 0}}>
+                        <Col data={r.ProductDisplayName1.length > 30? [r.ProductDisplayName1.slice(0, 29)+'...'] : [r.ProductDisplayName1]} textStyle={style.title}/>
+                        <Col data={[r.ShortUrlCode]} textStyle={style.subtitle}/>
+                      </Table>
+                      <View style={{height: 10}} />
+                    </View>
+                    }/>
+              </View>
+              
+              <View style={{height: 25}} />
 
-          <Text style={style.header}>Top Groups</Text>
-          <View style={{height: 10}} />
-          <View style={style.section}>
-            <ListView
-              initialListSize={3}
-              dataSource={this.state.allGroups}
-              renderRow={(r) =>
-                <View>
-                    <Table borderStyle={{borderWidth: 0}}>
-                      <Col data={r.Name.length > 40? [r.Name.slice(0, 25)+'...'] : [r.Name]} textStyle={style.title}/>
-                      <Col data={[r.Id]} textStyle={style.subtitle}/>
-                    </Table>
-                    <View style={{height: 10}} />
-                  </View>
-              }/>
+              <Text style={style.header}>Top Groups</Text>
+              <View style={{height: 10}} />
+              <View style={style.section}>
+                <ListView
+                  initialListSize={3}
+                  dataSource={this.state.allGroups}
+                  renderRow={(r) =>
+                    <View>
+                        <Table borderStyle={{borderWidth: 0}}>
+                          <Col data={r.Name.length > 30? [r.Name.slice(0, 29)+'...'] : [r.Name]} textStyle={style.title}/>
+                          <Col data={[r.Id]} textStyle={style.subtitle}/>
+                        </Table>
+                        <View style={{height: 10}} />
+                      </View>
+                  }/>
+              </View>
           </View>
         </ScrollView>
       </View>

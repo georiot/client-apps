@@ -17,7 +17,10 @@ export default class FacebookStatsScreen extends React.Component {
       <View style={styles.global.container}>
           <TopNavigation />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
-            <Text>This is the FACEBOOK stats screen</Text>
+            <View // need another view for padding for scrolling to work
+                style={styles.global.scrollViewInsideView}>
+              <Text>This is the FACEBOOK stats screen</Text>
+            </View>
           </ScrollView>
       </View>
     );
