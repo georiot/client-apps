@@ -14,15 +14,15 @@ import {
   Gravatar,
   GravatarApi
 } from 'react-native-gravatar';
-import UserSettingsScreenNavBar from '../navbars/UserSettingsScreenNavBar';
+import UserProfileScreenNavBar from '../navbars/UserProfileScreenNavBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-export default class UserSettingsScreen extends React.Component {
+export default class UserProfileScreen extends React.Component {
   render() {
     return (
       <View style={styles.global.container}>
-          <UserSettingsScreenNavBar />
+          <UserProfileScreenNavBar />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
               style={[styles.global.scrollViewInsideView, {alignContent:'center'}]}>
@@ -86,4 +86,4 @@ const style = StyleSheet.create({
     fontSize: 15,
     color: '#59595b'
   }
-})
+});

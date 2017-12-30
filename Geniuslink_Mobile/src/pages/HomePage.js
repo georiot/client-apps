@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GeniusStatsScreen from "../pages/GeniusStatsScreen";
 import FacebookStatsScreen from "../pages/FacebookStatsScreen";
 import LinksAndGroupsScreen from "../pages/LinksAndGroupsScreen";
-import UserSettingsScreen from "../pages/UserSettingsScreen";
+import UserProfileScreen from "../pages/UserProfileScreen";
 import BuildALinkScreen from "../pages/BuildALinkScreen";
 import {
   Image,
@@ -25,7 +25,7 @@ export default (MainScreenNavigator = TabNavigator(
     FacebookStats: { screen: FacebookStatsScreen },
     BuildALink: { screen: BuildALinkScreen },
     LinksAndGroups: { screen: LinksAndGroupsScreen },
-    UserSettings: { screen: UserSettingsScreen }
+    UserProfile: { screen: UserProfileScreen }
   },
   {
     tabBarPosition: "bottom",
@@ -66,7 +66,7 @@ export default (MainScreenNavigator = TabNavigator(
                       resizeMode='contain'
                   />
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserSettings")}>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserProfile")}>
                   <Image
                       style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
                       source={require('../../assets/images/user_lighttheme.png')}

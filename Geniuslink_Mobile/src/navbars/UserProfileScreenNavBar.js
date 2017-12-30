@@ -9,10 +9,7 @@ import {
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-const topButtonSideOffset = constants.topButtonSideOffset;
-const bottomButtonSideOffset = constants.bottomButtonSideOffset;
-
-export default class UserSettingsScreenNavBar extends React.Component {
+export default class UserProfileScreenNavBar extends React.Component {
 
   render() {
    
@@ -20,7 +17,7 @@ export default class UserSettingsScreenNavBar extends React.Component {
       <View>
         <View style={styles.navbar.topNavBar}>
             <Text style={style.header}>@natashapetrus</Text>
-            <Image style={[styles.button.topButtonMenu, {left: topButtonSideOffset}]} source={require('../../assets/images/options_lighttheme.png')} resizeMode='contain' />
+            <Image style={[styles.button.topButtonMenu, {left: constants.topButtonSideOffset}]} source={require('../../assets/images/options_lighttheme.png')} resizeMode='contain' />
         </View>
         <View style={styles.navbar.navSeparator} />
       </View>
@@ -36,6 +33,6 @@ const style = StyleSheet.create({
         fontFamily:'OpenSans_Regular',
         fontSize: 18,
         top:constants.buttonTopOffset,
-        left: -topButtonSideOffset
+        left: -constants.topButtonSideOffset
     }
   });
