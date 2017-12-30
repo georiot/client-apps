@@ -23,7 +23,7 @@ export class CreateSimpleLinkScreen extends React.Component {
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -69,6 +69,7 @@ export class CreateSimpleLinkScreen extends React.Component {
   }
 }
 
+let ABSplitIndex = 0;
 export class CreateSplitDestinationLinkScreen extends React.Component {
   static navigationOptions = {
     tabBarLabel: ({ tintColor }) => (
@@ -77,14 +78,42 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),
-  };
+  }
 
   constructor(props) {
     super(props);
-    this.state = { url: '' };
+    this.state = {
+      url: '', // still need to map each row to different url --> array?
+      rows: []
+    };
+    this._addRow = this._addRow.bind(this);
+  }
+
+  _addRow(){
+    this.state.rows.push(ABSplitIndex++);
+    this.setState({ rows: this.state.rows });
+    console.log(this.state.rows);
   }
 
   render() {
+    let rows = this.state.rows.map(() => {
+      return <View>
+          <View style={{height: 5}} />
+          <View style={style.textInputBox}>
+            <TextInput
+                style={style.textInput}
+                autoCorrect={false}
+                placeholder={'Paste a URL'}
+                placeholderTextColor={'#afafaf'}
+                underlineColorAndroid={'white'}
+                onChangeText={(url) => this.setState({url})}
+                value={this.state.url}
+                clearTextOnFocus
+              />
+          </View>
+        </View>
+    });
+
     return (
       <View style={styles.global.container}>
           <ScrollView style={styles.global.main}
@@ -107,6 +136,28 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
                     clearTextOnFocus
                   />
               </View>
+              <View style={{height: 5}} />
+              <View style={style.textInputBox}>
+                <TextInput
+                    style={style.textInput}
+                    autoCorrect={false}
+                    placeholder={'Paste a URL'}
+                    placeholderTextColor={'#afafaf'}
+                    underlineColorAndroid={'white'}
+                    onChangeText={(url) => this.setState({url})}
+                    value={this.state.url}
+                    clearTextOnFocus
+                  />
+              </View>
+
+              { rows }
+
+              <View style={{height: 5}} />
+              <TouchableWithoutFeedback onPress={ this._addRow }>
+                  <View style={style.textInputBox}>
+                    <Text style={[styles.button.generalButtonText, {color: '#afafaf'}]}>+</Text>
+                  </View>
+              </TouchableWithoutFeedback>
             </View>
           </ScrollView>
 
@@ -123,6 +174,7 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
   }
 }
 
+let UserChoiceIndex = 0;
 export class CreateUserChoiceLandingPageScreen extends React.Component {
   static navigationOptions = {
     tabBarLabel: ({ tintColor }) => (
@@ -131,14 +183,41 @@ export class CreateUserChoiceLandingPageScreen extends React.Component {
         style={[style.icon, {tintColor: tintColor}]}
       />
     ),
-  };
+  }
 
   constructor(props) {
     super(props);
-    this.state = { url: '' };
+    this.state = {
+      url: '', // still need to map each row to different url --> array?
+      rows: []
+    };
+    this._addRow = this._addRow.bind(this);
+  }
+
+  _addRow(){
+    this.state.rows.push(UserChoiceIndex++);
+    this.setState({ rows: this.state.rows });
   }
 
   render() {
+    let rows = this.state.rows.map(() => {
+      return <View>
+          <View style={{height: 5}} />
+          <View style={style.textInputBox}>
+            <TextInput
+                style={style.textInput}
+                autoCorrect={false}
+                placeholder={'Paste a URL'}
+                placeholderTextColor={'#afafaf'}
+                underlineColorAndroid={'white'}
+                onChangeText={(url) => this.setState({url})}
+                value={this.state.url}
+                clearTextOnFocus
+              />
+          </View>
+        </View>
+    });
+
     return (
       <View style={styles.global.container}>
           <ScrollView style={styles.global.main}
@@ -161,6 +240,28 @@ export class CreateUserChoiceLandingPageScreen extends React.Component {
                     clearTextOnFocus
                   />
               </View>
+              <View style={{height: 5}} />
+              <View style={style.textInputBox}>
+                <TextInput
+                    style={style.textInput}
+                    autoCorrect={false}
+                    placeholder={'Paste a URL'}
+                    placeholderTextColor={'#afafaf'}
+                    underlineColorAndroid={'white'}
+                    onChangeText={(url) => this.setState({url})}
+                    value={this.state.url}
+                    clearTextOnFocus
+                  />
+              </View>
+
+              { rows }
+
+              <View style={{height: 5}} />
+              <TouchableWithoutFeedback onPress={ this._addRow }>
+                  <View style={style.textInputBox}>
+                    <Text style={[styles.button.generalButtonText, {color: '#afafaf'}]}>+</Text>
+                  </View>
+              </TouchableWithoutFeedback>
             </View>
           </ScrollView>
 

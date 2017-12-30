@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     height: buttonSize,
     width: buttonSize
   },
-
+  
   general: {
     width: 200,
     height: 35,
