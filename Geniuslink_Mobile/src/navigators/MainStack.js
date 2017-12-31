@@ -1,16 +1,15 @@
-import React, { Component } from "react";
-import GeniusStatsScreen from "../pages/GeniusStatsScreen";
-import FacebookStatsScreen from "../pages/FacebookStatsScreen";
-import LinksAndGroupsScreen from "../pages/LinksAndGroupsScreen";
-import UserProfileScreen from "../pages/UserProfileScreen";
-import BuildALinkScreen from "../pages/BuildALinkScreen";
+import React, { Component } from 'react';
+import GeniusStatsScreen from '../pages/GeniusStatsScreen';
+import FacebookStatsScreen from '../pages/FacebookStatsScreen';
+import LinksAndGroupsScreen from '../pages/LinksAndGroupsScreen';
+import BuildALinkScreen from '../pages/BuildALinkScreen';
+import UserProfileAndSettingsNavigator from './UserProfileAndSettingsStack';
 import {
   Image,
   View,
   TouchableWithoutFeedback
 } from 'react-native';
 import { TabNavigator } from "react-navigation";
-import { Button, Text, Icon, Footer, FooterTab } from "native-base";
 
 import styles from '../styles/index';
 import * as constants from '../constants';
@@ -18,9 +17,8 @@ import * as constants from '../constants';
 const topButtonSideOffset = constants.topButtonSideOffset;
 const bottomButtonSideOffset = constants.bottomButtonSideOffset;
 
-export default (MainScreenNavigator = TabNavigator(
+export default MainScreenNavigator = TabNavigator(
   {
-    // do not change the order of the navigation
     GeniusStats: {
       screen: GeniusStatsScreen,
       navigationOptions: {
@@ -65,8 +63,8 @@ export default (MainScreenNavigator = TabNavigator(
         )
       }
     },
-    UserProfile: {
-      screen: UserProfileScreen,
+    UserProfileAndSettings: {
+      screen: UserProfileAndSettingsNavigator,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -141,7 +139,7 @@ export default (MainScreenNavigator = TabNavigator(
     //                   resizeMode='contain'
     //               />
     //             </TouchableWithoutFeedback>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserProfile")}>
+    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserProfileAndSettings")}>
     //               <Image
     //                   style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
     //                   source={require('../../assets/images/userButton.png')}
@@ -153,4 +151,4 @@ export default (MainScreenNavigator = TabNavigator(
     //   );
     // }
   }
-));
+);

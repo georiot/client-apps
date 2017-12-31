@@ -8,21 +8,35 @@ import {
   Linking,
   Clipboard,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
 import {
   Gravatar,
   GravatarApi
 } from 'react-native-gravatar';
-import UserProfileScreenNavBar from '../navbars/UserProfileScreenNavBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
 export default class UserProfileScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    header:
+      <View>
+          <View style={styles.navbar.topNavBar}>
+              <Text style={style.header}>@natashapetrus</Text>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('Settings')}
+                >
+                <Image style={[styles.button.topButtonMenu, {left: constants.topButtonSideOffset}]} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
+              </TouchableWithoutFeedback>
+          </View>
+          <View style={styles.navbar.navSeparator} />
+        </View>
+  });
+
   render() {
     return (
       <View style={styles.global.container}>
-          <UserProfileScreenNavBar />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
               style={[styles.global.scrollViewInsideView, {alignContent:'center'}]}>
@@ -33,7 +47,7 @@ export default class UserProfileScreen extends React.Component {
                   }}
                   style={style.round} />
                   <View style={{height: 25}} />
-                  <Text style={[style.header, {fontSize: 22}]}>Natasha Petrus</Text>
+                  <Text style={[style.heading, {fontSize: 22}]}>Natasha Petrus</Text>
                   <Text style={style.body}>np@geni.us</Text>
                   <Text style={style.body}>Power Plan, $499/mo.</Text>
                   <View style={{height: 10}} />
@@ -45,7 +59,7 @@ export default class UserProfileScreen extends React.Component {
                   </View>
 
                   <View style={{height: 25}} />
-                  <Text style={style.header}>Refer a friend</Text>
+                  <Text style={style.heading}>Refer a friend</Text>
                   <View style={{height: 5}} />
                   <TouchableOpacity
                     style={[styles.button.general, {backgroundColor: '#afafaf'}]}
@@ -74,6 +88,15 @@ const style = StyleSheet.create({
   },
 
   header: {
+    textAlign: 'left',
+    color: '#59595b',
+    fontFamily:'OpenSans_Regular',
+    fontSize: 18,
+    top:constants.buttonTopOffset,
+    left: -constants.topButtonSideOffset
+  },
+
+  heading: {
     textAlign: 'center',
     fontFamily: 'OpenSans_Semibold',
     fontSize: 18,

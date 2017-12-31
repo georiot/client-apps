@@ -22,7 +22,7 @@ export default class FacebookStatsScreenNavBar extends React.Component {
           <TouchableWithoutFeedback>
               <Image style={[styles.button.topButtonMenu, {opacity:0}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
           </TouchableWithoutFeedback>
-            <Image style={[styles.button.topButtonMenu, {left: topButtonSideOffset}]} source={require('../../assets/images/optionsButton.png')} resizeMode='contain' />
+            <Image style={[styles.button.topButtonMenu, {left: topButtonSideOffset}]} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
         </View>
         <View style={styles.navbar.navSeparator} />
       </View>

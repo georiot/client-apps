@@ -1,7 +1,7 @@
 import * as Expo from "expo";
 import React, { Component } from "react";
 import Login from './src/pages/LoginPage.js';
-import Home from './src/pages/HomePage.js';
+import Home from './src/navigators/MainStack.js';
 
 export default class App extends React.Component {
 
