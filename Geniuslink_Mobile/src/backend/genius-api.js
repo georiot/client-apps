@@ -42,21 +42,28 @@ export function listGroups(key, secret) {
 
 export function createSimpleLink(key,secret,url,tsid)
 {
+    
     var encodedUrl = encodeURI(url);
-    var payload =  "url="+encodedUrl+"&tsid="+tsid+"&bulkMode=0&domain=geni.us";
+    var payload =  {
+        'url':encodedUrl,
+        'tsid':tsid,
+        'domain':'geni.us'
+    };
+    
     const endpoint = '/v1/links/add';
     
         var url = baseUrl + endpoint;
         var options = 
         {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'X-Api-Key': key,
                 'X-Api-Secret': secret,
                 Accept: 'application/json',
+                'Content-Type': 'application/json'
             },
-            body : payload
+            body : JSON.stringify(payload)
         };
     
-        fetch(url, options).then(()=>alert("Link Created")); // Ideally this should be a proper inspection and answer or give back a user message.
+        fetch(url, options).then((response)=>alert(JSON.stringify(response))); // Ideally this should be a proper inspection and answer or give back a user message.
 }

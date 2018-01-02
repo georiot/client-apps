@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   View,
@@ -9,14 +9,22 @@ import {
 import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
+import {createSimpleLink} from '../backend/genius-api';
 import LinkCreationNavBar from '../navbars/LinkCreationNavBar'
 export default class BuildALinkScreen extends React.Component {
-
+ 
   state = { url: 'Update me with a real url'};
-  setUrl( t)
+
+
+  invokeCreateSimpleLink(theUrl)
   {
-    this.state.url = t;
+    var key = '';
+    var secret = '';
+    var defaultTsid = '2531'; //We need to download this and set it at some point maybe make a setting page
+    createSimpleLink(key,secret,theUrl, defaultTsid);
+    
   }
+
   render() {
     return (
       <View style={styles.global.container}>
@@ -31,7 +39,7 @@ export default class BuildALinkScreen extends React.Component {
             />
           <Button
             style={{fontSize: 20}}
-            onPress={() => alert("yey")} // <-- closed tag here
+            onPress={()=>this.invokeCreateSimpleLink(this.state.url)} // <-- closed tag here
             title="Create">
           </Button>
           
