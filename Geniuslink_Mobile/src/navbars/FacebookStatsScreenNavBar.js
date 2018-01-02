@@ -11,14 +11,14 @@ const topButtonSideOffset = constants.topButtonSideOffset;
 const bottomButtonSideOffset = constants.bottomButtonSideOffset;
 
 
-export default class TopNavigation extends React.Component {
+export default class FacebookStatsScreenNavBar extends React.Component {
 
   render() {
    
     return (
       <View>
         <View style={styles.navbar.topNavBar}>
-          <Image style={[styles.global.logo, {left: -topButtonSideOffset}]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' />
+          <Image style={[styles.global.logo, {opacity: 0, left: -topButtonSideOffset}]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' />
           <TouchableWithoutFeedback>
               <Image style={[styles.button.topButtonMenu, {opacity:0}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
           </TouchableWithoutFeedback>

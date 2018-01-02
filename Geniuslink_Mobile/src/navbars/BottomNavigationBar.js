@@ -18,15 +18,15 @@ export class BottomNavigation extends React.Component {
             <View style={styles.navbar.bottomNavBar}>
                 <Image
                     style={[styles.button.bottomButtonMenu, {left: -2*bottomButtonSideOffset}]}
-                    source={require('../images/button-placeholder.png')}
+                    source={require('../../assets/images/button-placeholder.png')}
                     resizeMode='contain'
                     //onPress={() => navigate('Links')}
                     //title="Go to Lucy's profile"
                 />
-                <Image style={[styles.button.bottomButtonMenu, {left: -1*bottomButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
-                <Image style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
-                <Image style={[styles.button.bottomButtonMenu, {left: 1*bottomButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
-                <Image style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]} source={require('../images/button-placeholder.png')} resizeMode='contain' />
+                <Image style={[styles.button.bottomButtonMenu, {left: -1*bottomButtonSideOffset}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
+                <Image style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
+                <Image style={[styles.button.bottomButtonMenu, {left: 1*bottomButtonSideOffset}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
+                <Image style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]} source={require('../../assets/images/button-placeholder.png')} resizeMode='contain' />
             </View>
       </View>
     );

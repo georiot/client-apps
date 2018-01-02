@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
   container: {
     top: 0,
     left: 0,
+    padding: 0,
+    margin: 0,
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
@@ -19,14 +21,17 @@ const styles = StyleSheet.create({
 
   main: {
     flex: 1,
-    padding: 35, // might need to remove this to enable scrolling
-    width: dimensions.width,
-    height: dimensions.height-(topNavBarHeight+bottomNavBarHeight)
+    width: dimensions.width
   },
 
   scrollViewMain: {
+    alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  scrollViewInsideView: {
+    padding: constants.padding
   },
 
   logo: {
