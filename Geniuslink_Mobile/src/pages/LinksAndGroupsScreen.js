@@ -30,7 +30,9 @@ export default class LinksAndGroupsScreen extends React.Component {
     // so user can tap anywhere on the header to bring up the search bar
       <View>
           <View style={styles.navbar.topNavBar}>
-          <TouchableWithoutFeedback onPress={() => this.searchBar.show()}>
+          <TouchableWithoutFeedback
+            //onPress={() => this.searchBar.show()} // add functionality later
+            >
             <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start', justifyContent: 'center', top: constants.buttonTopOffset}]}>
               <Image style={styles.button.topButtonMenu} source={require('../../assets/images/search-light.png')} resizeMode='contain' />
               <SearchBar
