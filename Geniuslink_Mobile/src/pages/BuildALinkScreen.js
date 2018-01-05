@@ -7,10 +7,11 @@ import {
   Text,
   TextInput,
   StyleSheet,
+  Platform,
   TouchableWithoutFeedback,
   Alert
 } from 'react-native';
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, TabBarTop } from "react-navigation";
 import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
@@ -22,12 +23,10 @@ export class CreateSimpleLinkScreen extends React.Component {
     tabBarLabel: ({ tintColor }) => (
       <Image
         source={require('../../assets/images/simpleLink.png')}
-        style={[style.icon, {tintColor: tintColor}]}
+        style={[style.icon, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarTopPosition : 0}]}
       />
     ),
   }
-
-
 
   constructor(props) {
     super(props);
@@ -39,9 +38,9 @@ export class CreateSimpleLinkScreen extends React.Component {
   
     invokeCreateSimpleLink(theUrl)
     {
-      var key = '';
-      var secret = '';
-      var defaultTsid = '2531'; //We need to download this and set it at some point maybe make a setting page
+      var key = '36f712e665aa475c889d3e3cae55eefa';
+      var secret = 'ed16131bc5764ff9bd4c8b147fc48f0c';
+      var defaultTsid = '33541'; //We need to download this and set it at some point maybe make a setting page
       createSimpleLink(key,secret,theUrl, defaultTsid);
     }
 
@@ -74,11 +73,10 @@ export class CreateSimpleLinkScreen extends React.Component {
 
           <View style={{height: 15}} />
           <View style={styles.button.general}>           
-          <Button
-            style={{fontSize: 20}}
-            onPress={()=>this.invokeCreateSimpleLink(this.state.url)} // <-- closed tag here
-            title="Create">
-          </Button>
+                <Text style={styles.button.generalButtonText}
+                    onPress={() => this.invokeCreateSimpleLink(this.state.url)}>
+                    Save
+                </Text>
           </View>
           <View style={{height: constants.padding}} />
       </View>
@@ -92,7 +90,7 @@ export class CreateSplitDestinationLinkScreen extends React.Component {
     tabBarLabel: ({ tintColor }) => (
       <Image
         source={require('../../assets/images/ABSplitLink.png')}
-        style={[style.icon, {tintColor: tintColor}]}
+        style={[style.icon, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarTopPosition: 0}]}
       />
     ),
   }
@@ -196,7 +194,7 @@ export class CreateUserChoiceLandingPageScreen extends React.Component {
     tabBarLabel: ({ tintColor }) => (
       <Image
         source={require('../../assets/images/userChoiceLink.png')}
-        style={[style.icon, {tintColor: tintColor}]}
+        style={[style.icon, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarTopPosition: 0}]}
       />
     ),
   }
@@ -304,6 +302,8 @@ export default (MainScreenNavigator = TabNavigator(
   {
     initialRouteName: 'SimpleLink',
     tabBarPosition: "top",
+    tabBarComponent: TabBarTop, // to ensure display of indicator in iOS
+    swipeEnabled: true,
     tabBarOptions: {
       showLabel: true,
       activeBackgroundColor: 'white',
@@ -315,7 +315,7 @@ export default (MainScreenNavigator = TabNavigator(
         backgroundColor: 'white',
         borderBottomColor: '#afafaf',
         borderBottomWidth: 0.5,
-        elevation: 0 // only for Android --> might need to remove for iOS
+        elevation: 0 // for Android
       },
       tabStyle: {
         top: constants.buttonTopOffset-2,
@@ -323,7 +323,7 @@ export default (MainScreenNavigator = TabNavigator(
         margin: 0,
         padding: 0
       },
-      indicatorStyle: { // not for iOS?
+      indicatorStyle: { // for Android
         backgroundColor: '#00b9ee'
       }
     }

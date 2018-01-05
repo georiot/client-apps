@@ -10,3 +10,5 @@ export const buttonTopOffset = 15;
 export const topButtonSideOffset = 35/100*dimensions.width-1.5*buttonSize;
 export const bottomButtonSideOffset = 20/100*dimensions.width-buttonSize;
 export const padding = 35;
+export const iOStabBarTopPosition = -5;
+export const iOStabBarBottomPosition = -12;

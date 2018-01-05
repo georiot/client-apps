@@ -7,6 +7,7 @@ import UserProfileAndSettingsNavigator from './UserProfileAndSettingsStack';
 import {
   Image,
   View,
+  Platform,
   TouchableWithoutFeedback
 } from 'react-native';
 import { TabNavigator } from "react-navigation";
@@ -25,7 +26,7 @@ export default MainScreenNavigator = TabNavigator(
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/geniusIcon.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
           />
         )
       }
@@ -36,7 +37,7 @@ export default MainScreenNavigator = TabNavigator(
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/facebookIcon.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
           />
         )
       }
@@ -47,7 +48,7 @@ export default MainScreenNavigator = TabNavigator(
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/plusButton.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
           />
         )
       }
@@ -58,7 +59,7 @@ export default MainScreenNavigator = TabNavigator(
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/simpleLink.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
           />
         )
       }
@@ -69,7 +70,7 @@ export default MainScreenNavigator = TabNavigator(
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/userButton.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
           />
         )
       }

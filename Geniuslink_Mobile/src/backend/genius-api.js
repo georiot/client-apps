@@ -40,7 +40,7 @@ export function getGroupsList(key, secret) {
         .then((responseJson) => responseJson.Groups);
 }
 
-export function createSimpleLink(key,secret,url,tsid)
+export function createSimpleLink(key, secret, url, tsid)
 {
     var encodedUrl = encodeURI(url);
     var payload =  {
