@@ -26,7 +26,7 @@ export default class FacebookStatsScreen extends React.Component {
               
               <View style={{alignItems:'center'}}>
                   <Image
-                      style={{width:constants.dimensions.width-5*constants.padding, top:-2*constants.padding}}
+                      style={{width:constants.dimensions.width*0.7, top:-2*constants.padding}}
                       resizeMethod='scale'
                       resizeMode='contain'
                       source={require('../../assets/images/facebook-placeholder.png')}
