@@ -15,6 +15,7 @@ import {
   Gravatar,
   GravatarApi
 } from 'react-native-gravatar';
+import { NavigationActions } from 'react-navigation';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
@@ -22,20 +23,38 @@ export default class SettingsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     header:
       <View>
-          <View style={[styles.navbar.topNavBar, {justifyContent:'flex-start'}]}>
-            <View style={{paddingLeft: constants.buttonSize/2, paddingRight: constants.buttonSize/2}}>
-              <TouchableWithoutFeedback
-                  onPress={() => navigation.navigate('UserProfile')}
-                  >
-                  <Image style={styles.button.topButtonMenu} source={require('../../assets/images/backButton-light.png')} resizeMode='contain' />
-                </TouchableWithoutFeedback>
-              </View>
-              <View style={{height: constants.buttonSize/2}} />
-              <Text style={style.header}>Options</Text>
+          <View style={styles.navbar.topNavBar}>
+            <View style={[styles.navbar.topNavBarSubComponent, {justifyContent: 'flex-start', alignItems: 'flex-end', flexDirection: 'row'}]}>
+                  <TouchableWithoutFeedback
+                    onPress={() => navigation.dispatch(NavigationActions.back({key: null}))}>
+                    <Image style={styles.button.topButtonMenu} source={require('../../assets/images/backButton-light.png')} resizeMode='contain' />
+                  </TouchableWithoutFeedback>
+                  <Text style={style.header}>Options</Text>
             </View>
+            <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-end'}]} />
+          </View>
           <View style={styles.navbar.navSeparator} />
         </View>
   });
+
+  // static navigationOptions = ({ navigation }) => ({
+  //   header:
+  //     <View>
+  //         <View style={[styles.navbar.topNavBar, {justifyContent:'flex-start'}]}>
+  //           <View style={{paddingLeft: constants.buttonSize/2, paddingRight: constants.buttonSize/2}}>
+  //           <TouchableWithoutFeedback
+  //                 onPress={() => navigation.dispatch(NavigationActions.back({key: null}))}
+  //                 >
+
+  //                 <Image style={styles.button.topButtonMenu} source={require('../../assets/images/backButton-light.png')} resizeMode='contain' />
+  //               </TouchableWithoutFeedback>
+  //             </View>
+  //             <View style={{height: constants.buttonSize/2}} />
+  //             <Text style={style.header}>Options</Text>
+  //           </View>
+  //         <View style={styles.navbar.navSeparator} />
+  //       </View>
+  // });
 
   render() {
     return (
@@ -62,8 +81,9 @@ const style = StyleSheet.create({
     textAlign: 'left',
     color: '#59595b',
     fontFamily:'OpenSans_Regular',
-    fontSize: 18,
-    top:constants.buttonTopOffset
+    fontSize: constants.screenHeaderTextFontSize,
+    top: constants.screenHeaderTextTopOffset,
+    marginLeft: 15
   },
 
   heading: {

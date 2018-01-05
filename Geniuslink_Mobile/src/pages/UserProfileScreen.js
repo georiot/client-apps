@@ -21,17 +21,21 @@ import * as constants from '../constants';
 export default class UserProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     header:
-      <View>
-          <View style={styles.navbar.topNavBar}>
-              <Text style={style.header}>@natashapetrus</Text>
-              <TouchableWithoutFeedback
+    <View>
+        <View style={styles.navbar.topNavBar}>
+          <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start'}]}>
+            <Text style={style.header}>@natashapetrus</Text>
+          </View>
+          <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('Settings')}
                 >
-                <Image style={[styles.button.topButtonMenu, {left: constants.topButtonSideOffset}]} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
-              </TouchableWithoutFeedback>
-          </View>
-          <View style={styles.navbar.navSeparator} />
+                <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-end'}]}>
+                  <Image style={styles.button.topButtonMenu} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
+                </View>
+          </TouchableWithoutFeedback>
         </View>
+        <View style={styles.navbar.navSeparator} />
+      </View>
   });
 
   render() {
@@ -91,9 +95,8 @@ const style = StyleSheet.create({
     textAlign: 'left',
     color: '#59595b',
     fontFamily:'OpenSans_Regular',
-    fontSize: 18,
-    top:constants.buttonTopOffset,
-    left: -constants.topButtonSideOffset
+    fontSize: constants.screenHeaderTextFontSize,
+    top: constants.screenHeaderTextTopOffset
   },
 
   heading: {

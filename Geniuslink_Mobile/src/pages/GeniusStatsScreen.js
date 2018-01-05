@@ -5,14 +5,33 @@ import {
   Image,
   Button,
   Text,
-  StyleSheet
+  StyleSheet,
+  TouchableWithoutFeedback
 } from 'react-native';
-import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 import { getReportsClicksTrendByResolution, getLinkErrors } from '../backend/genius-api.js';
 
 export default class GeniusStatsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    header:
+      <View>
+          <View style={styles.navbar.topNavBar}>
+          <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start', justifyContent: 'center', top: constants.buttonTopOffset}]}>
+            <Image style={[styles.global.logo]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' resizeMethod='scale' />
+          </View>
+          <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('Settings')}
+                >
+                <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-end'}]}>
+                  <Image style={styles.button.topButtonMenu} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
+                </View>
+          </TouchableWithoutFeedback>
+          </View>
+          <View style={styles.navbar.navSeparator} />
+        </View>
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -62,7 +81,6 @@ export default class GeniusStatsScreen extends React.Component {
 
     return (
       <View style={styles.global.container}>
-          <TopNavigation/>
           <ScrollView style={styles.global.main} scrollEnabled={false} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
               style={[styles.global.scrollViewInsideView, {alignContent:'center', alignSelf:'center', alignItems:'center', justifyContent:'center'}]}>

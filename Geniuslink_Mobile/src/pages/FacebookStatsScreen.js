@@ -4,20 +4,35 @@ import {
   View,
   Image,
   Text,
+  TouchableWithoutFeedback,
   StyleSheet
 } from 'react-native';
-import FacebookStatsScreenNavBar from '../navbars/FacebookStatsScreenNavBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-const topButtonSideOffset = constants.topButtonSideOffset;
-const bottomButtonSideOffset = constants.bottomButtonSideOffset;
-
 export default class FacebookStatsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    header:
+      <View>
+        <View style={styles.navbar.topNavBar}>
+          <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start', justifyContent: 'center', top: constants.buttonTopOffset}]}>
+            <Image style={[styles.global.logo, {opacity: 0}]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' resizeMethod='scale' />
+          </View>
+          <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('Settings')}
+                >
+                <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-end'}]}>
+                  <Image style={styles.button.topButtonMenu} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
+                </View>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={styles.navbar.navSeparator} />
+      </View>
+  });
+
   render() {
     return (
       <View style={styles.global.container}>
-          <FacebookStatsScreenNavBar />
           <ScrollView style={styles.global.main} contentContainerStyle={styles.global.scrollViewMain}>
             <View // need another view for padding for scrolling to work
                 style={styles.global.scrollViewInsideView}>

@@ -8,7 +8,7 @@ import SearchBar from 'react-native-searchbar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
-export default class LinksAndGroupsScreenNavBar extends React.Component {
+export default class LinksAndGroupsScreenSearchBar extends React.Component {
     render() {
       return (
         <View>

@@ -4,13 +4,15 @@ import FacebookStatsScreen from '../pages/FacebookStatsScreen';
 import LinksAndGroupsScreen from '../pages/LinksAndGroupsScreen';
 import BuildALinkScreen from '../pages/BuildALinkScreen';
 import UserProfileAndSettingsNavigator from './UserProfileAndSettingsStack';
+import GeniusStatsAndSettingsNavigator from './GeniusStatsAndSettingsStack';
+import FacebookStatsAndSettingsNavigator from './FacebookStatsAndSettingsStack';
 import {
   Image,
   View,
   Platform,
   TouchableWithoutFeedback
 } from 'react-native';
-import { TabNavigator } from "react-navigation";
+import { TabNavigator, TabBarBottom, NavigationActions } from "react-navigation";
 
 import styles from '../styles/index';
 import * as constants from '../constants';
@@ -21,62 +23,68 @@ const bottomButtonSideOffset = constants.bottomButtonSideOffset;
 export default MainScreenNavigator = TabNavigator(
   {
     GeniusStats: {
-      screen: GeniusStatsScreen,
+      screen: GeniusStatsAndSettingsNavigator,
+      index: 0,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/geniusIcon.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: constants.tabBarBottomPosition}]}
           />
         )
       }
     },
     FacebookStats: {
-      screen: FacebookStatsScreen,
+      screen: FacebookStatsAndSettingsNavigator,
+      index: 1,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/facebookIcon.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: constants.tabBarBottomPosition}]}
           />
         )
       }
     },
     BuildALink: {
       screen: BuildALinkScreen,
+      index: 2,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/plusButton.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: constants.tabBarBottomPosition}]}
           />
         )
       }
     },
     LinksAndGroups: {
       screen: LinksAndGroupsScreen,
+      index: 3,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/simpleLink.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: constants.tabBarBottomPosition}]}
           />
         )
       }
     },
     UserProfileAndSettings: {
       screen: UserProfileAndSettingsNavigator,
+      index: 4,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
             source={require('../../assets/images/userButton.png')}
-            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: Platform.OS == 'ios' ? constants.iOStabBarBottomPosition : 0}]}
+            style={[styles.button.bottomButtonMenu, {tintColor: tintColor, top: constants.tabBarBottomPosition}]}
           />
         )
       }
     }
   },
   {
+    tabBarComponent: TabBarBottom,
     tabBarPosition: "bottom",
     lazy: true,
     swipeEnabled: false,
@@ -104,52 +112,25 @@ export default MainScreenNavigator = TabNavigator(
       indicatorStyle: { // not for iOS?
         backgroundColor: 'white'
       }
-    }
-    // for custom icons --> can't use tinting & indicator feature
+    },
+    // UNCOMMENT LATER AFTER EVERYTHING HAS NAVIGATORS
     // tabBarComponent: props => {
-    //   return (
-    //     <View>
-    //         <View style={styles.navbar.navSeparator} />
-    //         <View style={styles.navbar.bottomNavBar}>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("GeniusStats")}>
-    //                 <Image
-    //                     style={[styles.button.bottomButtonMenu, {left: -2*bottomButtonSideOffset}]}
-    //                     source={require('../../assets/images/geniusIcon.png')}
-    //                     resizeMode='contain'
+    //   const {navigation, navigationState} = props
+      
+    //   const jumpToIndex = index => {
+    //     const lastPosition = navigationState.index
+    //     const tab = navigationState.routes[index]
+    //     const tabRoute = tab.routeName
+    //     const firstRoute = tab.routes[0].routeName
 
-    //                 />
-    //             </TouchableWithoutFeedback>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("FacebookStats")}>
-    //               <Image
-    //                   style={[styles.button.bottomButtonMenu, {left: -1*bottomButtonSideOffset}]}
-    //                   source={require('../../assets/images/facebookIcon.png')}
-    //                   resizeMode='contain'
-    //               />
-    //             </TouchableWithoutFeedback>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("BuildALink")}>
-    //               <Image
-    //                   style={[styles.button.bottomButtonMenu, {left: 0*bottomButtonSideOffset}]}
-    //                   source={require('../../assets/images/plusButton.png')}
-    //                   resizeMode='contain'
-    //               />
-    //             </TouchableWithoutFeedback>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("LinksAndGroups")}>
-    //               <Image
-    //                   style={[styles.button.bottomButtonMenu, {left: 1*bottomButtonSideOffset}]}
-    //                   source={require('../../assets/images/simpleLink.png')}
-    //                   resizeMode='contain'
-    //               />
-    //             </TouchableWithoutFeedback>
-    //             <TouchableWithoutFeedback onPress={() => props.navigation.navigate("UserProfileAndSettings")}>
-    //               <Image
-    //                   style={[styles.button.bottomButtonMenu, {left: 2*bottomButtonSideOffset}]}
-    //                   source={require('../../assets/images/userButton.png')}
-    //                   resizeMode='contain'
-    //               />
-    //             </TouchableWithoutFeedback>
-    //         </View>
-    //   </View>
-    //   );
+    //     const tabAction = NavigationActions.navigate({ routeName: tabRoute });
+    //     const firstScreenAction = NavigationActions.reset({ index: 0,
+    //       actions: [ NavigationActions.navigate({ routeName: firstRoute }) ]
+    //     });
+    //     navigation.dispatch(tabAction);
+    //     navigation.dispatch(firstScreenAction);
+    //   }
+    //   return <TabBarBottom {...props} jumpToIndex={jumpToIndex}/>
     // }
   }
 );

@@ -35,9 +35,7 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    position: 'relative',
-    width: '30%',
-    top: buttonTopOffset,
+    width: dimensions.width/3
   }
 });
 

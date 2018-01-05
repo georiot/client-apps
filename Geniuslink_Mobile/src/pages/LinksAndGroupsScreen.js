@@ -16,7 +16,7 @@ import {
   Cols,
   Cell
 } from 'react-native-table-component'
-import LinksAndGroupsScreenNavBar from '../navbars/LinksAndGroupsScreenNavBar';
+import LinksAndGroupsScreenSearchBar from '../topbars/LinksAndGroupsScreenSearchBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 import { getLinksList, getGroupsList } from '../backend/genius-api.js';
@@ -94,7 +94,7 @@ export default class LinksAndGroupsScreen extends React.Component {
 
     return (
       <View style={styles.global.container}>
-        <LinksAndGroupsScreenNavBar />
+        <LinksAndGroupsScreenSearchBar />
         <ScrollView style={styles.global.main} scrollEnabled={false}
         //contentContainerStyle={styles.global.scrollViewMain}
         >

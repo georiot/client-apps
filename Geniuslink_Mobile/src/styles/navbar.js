@@ -16,6 +16,14 @@ const styles = StyleSheet.create({
       height: topNavBarHeight,
       flexDirection:'row'
     },
+
+    topNavBarSubComponent: {
+      width: dimensions.width/2,
+      height: topNavBarHeight,
+      justifyContent: 'flex-end',
+      padding: 10,
+      paddingBottom: 10
+    },
   
     bottomNavBar: {
       backgroundColor: '#fff',

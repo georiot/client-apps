@@ -12,7 +12,6 @@ import {
   Alert
 } from 'react-native';
 import { TabNavigator, TabBarTop } from "react-navigation";
-import TopNavigation from '../navbars/TopNavigationBar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 
@@ -300,7 +299,6 @@ export default (MainScreenNavigator = TabNavigator(
     UserChoiceLandingPage: { screen: CreateUserChoiceLandingPageScreen }
   },
   {
-    initialRouteName: 'SimpleLink',
     tabBarPosition: "top",
     tabBarComponent: TabBarTop, // to ensure display of indicator in iOS
     swipeEnabled: true,
