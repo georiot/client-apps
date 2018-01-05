@@ -1,20 +1,25 @@
 import React from 'react';
-import {
-    CreateSimpleLinkScreen,
-    CreateSplitDestinationLinkScreen,
-    CreateUserChoiceLandingPageScreen
-} from '../pages/BuildALinkScreen';
+import CreateSimpleLinkScreen from '../pages/CreateSimpleLinkScreen';
+import CreateSplitDestinationLinkScreen from '../pages/CreateSplitDestinationLinkScreen';
+import CreateUserChoiceLandingPageLinkScreen from '../pages/CreateUserChoiceLandingPageLinkScreen';
 import { TabNavigator, TabBarTop } from "react-navigation";
 import * as constants from '../constants';
 
 export default LinkCreationScreensNavigator = TabNavigator(
     {
       // do not change the order of the navigation
-      SimpleLink: { screen: CreateSimpleLinkScreen },
-      SplitDestination: { screen: CreateSplitDestinationLinkScreen },
-      UserChoiceLandingPage: { screen: CreateUserChoiceLandingPageScreen }
+      SimpleLink: {
+        screen: CreateSimpleLinkScreen,
+      },
+      SplitDestination: {
+        screen: CreateSplitDestinationLinkScreen
+      },
+      UserChoiceLandingPage: {
+        screen: CreateUserChoiceLandingPageLinkScreen
+      }
     },
     {
+      initialRouteName: 'SimpleLink',
       tabBarPosition: "top",
       tabBarComponent: TabBarTop, // to ensure display of indicator in iOS
       swipeEnabled: true,

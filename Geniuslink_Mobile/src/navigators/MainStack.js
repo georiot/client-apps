@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import GeniusStatsScreen from '../pages/GeniusStatsScreen';
-import FacebookStatsScreen from '../pages/FacebookStatsScreen';
-import LinksAndGroupsScreen from '../pages/LinksAndGroupsScreen';
-import BuildALinkScreen from '../pages/BuildALinkScreen';
 import UserProfileAndSettingsNavigator from './UserProfileAndSettingsStack';
 import GeniusStatsAndSettingsNavigator from './GeniusStatsAndSettingsStack';
 import FacebookStatsAndSettingsNavigator from './FacebookStatsAndSettingsStack';
-import LinkCreationScreensNavigator from './LinkCreationScreensStack';
+import LinksAndGroupsScreenAndSettingsNavigator from './LinksAndGroupsScreenAndSettingsStack';
+import LinkCreationAndResultScreensNavigator from './LinkCreationAndResultScreensStack';
 import {
   Image,
   View,
@@ -25,7 +22,6 @@ export default MainScreenNavigator = TabNavigator(
   {
     GeniusStats: {
       screen: GeniusStatsAndSettingsNavigator,
-      index: 0,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -37,7 +33,6 @@ export default MainScreenNavigator = TabNavigator(
     },
     FacebookStats: {
       screen: FacebookStatsAndSettingsNavigator,
-      index: 1,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -48,8 +43,7 @@ export default MainScreenNavigator = TabNavigator(
       }
     },
     LinkCreation: {
-      screen: LinkCreationScreensNavigator,
-      index: 2,
+      screen: LinkCreationAndResultScreensNavigator,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -60,8 +54,7 @@ export default MainScreenNavigator = TabNavigator(
       }
     },
     LinksAndGroups: {
-      screen: LinksAndGroupsScreen,
-      index: 3,
+      screen: LinksAndGroupsScreenAndSettingsNavigator,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -73,7 +66,6 @@ export default MainScreenNavigator = TabNavigator(
     },
     UserProfileAndSettings: {
       screen: UserProfileAndSettingsNavigator,
-      index: 4,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
           <Image
@@ -114,24 +106,24 @@ export default MainScreenNavigator = TabNavigator(
         backgroundColor: 'white'
       }
     },
-    // UNCOMMENT LATER AFTER EVERYTHING HAS NAVIGATORS
-    // tabBarComponent: props => {
-    //   const {navigation, navigationState} = props
+    // to reset stack on tab icon press
+    tabBarComponent: props => {
+      const {navigation, navigationState} = props
       
-    //   const jumpToIndex = index => {
-    //     const lastPosition = navigationState.index
-    //     const tab = navigationState.routes[index]
-    //     const tabRoute = tab.routeName
-    //     const firstRoute = tab.routes[0].routeName
+      const jumpToIndex = index => {
+        const lastPosition = navigationState.index
+        const tab = navigationState.routes[index]
+        const tabRoute = tab.routeName
+        const firstRoute = tab.routes[0].routeName
 
-    //     const tabAction = NavigationActions.navigate({ routeName: tabRoute });
-    //     const firstScreenAction = NavigationActions.reset({ index: 0,
-    //       actions: [ NavigationActions.navigate({ routeName: firstRoute }) ]
-    //     });
-    //     navigation.dispatch(tabAction);
-    //     navigation.dispatch(firstScreenAction);
-    //   }
-    //   return <TabBarBottom {...props} jumpToIndex={jumpToIndex}/>
-    // }
+        const tabAction = NavigationActions.navigate({ routeName: tabRoute });
+        const firstScreenAction = NavigationActions.reset({ index: 0,
+          actions: [ NavigationActions.navigate({ routeName: firstRoute }) ]
+        });
+        navigation.dispatch(tabAction);
+        navigation.dispatch(firstScreenAction);
+      }
+      return <TabBarBottom {...props} jumpToIndex={jumpToIndex}/>
+    }
   }
 );

@@ -3,8 +3,10 @@ import {
   ListView,
   ScrollView,
   Text,
+  Image,
   View,
   ActivityIndicator,
+  TouchableWithoutFeedback,
   StyleSheet
 } from 'react-native';
 import {
@@ -15,13 +17,52 @@ import {
   Col,
   Cols,
   Cell
-} from 'react-native-table-component'
-import LinksAndGroupsScreenSearchBar from '../topbars/LinksAndGroupsScreenSearchBar';
+} from 'react-native-table-component';
+import SearchBar from 'react-native-searchbar';
 import styles from '../styles/index';
 import * as constants from '../constants';
 import { getLinksList, getGroupsList } from '../backend/genius-api.js';
 
 export default class LinksAndGroupsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    header:
+    // change later to no settings navigation (?) 
+    // so user can tap anywhere on the header to bring up the search bar
+      <View>
+          <View style={styles.navbar.topNavBar}>
+          <TouchableWithoutFeedback onPress={() => this.searchBar.show()}>
+            <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start', justifyContent: 'center', top: constants.buttonTopOffset}]}>
+              <Image style={styles.button.topButtonMenu} source={require('../../assets/images/search-light.png')} resizeMode='contain' />
+              <SearchBar
+                    // CONSIDER SWITCHING TO NATIVE-BASE INSTEAD OF USING REACT-NATIVE-SEARCHBAR !!
+                    ref={(ref) => this.searchBar = ref}
+                    data={null}
+                    width='100%'
+                    heightAdjust={-constants.buttonTopOffset}
+                    placeholder='Search by keyword or tag'
+                    //backButton={<Image style={[styles.button.topButtonMenu, {top:constants.buttonTopOffset-constants.buttonTopOffset-3}]} source={require('../../assets/images/back_lighttheme.png')} />}
+                    iconColor='#59595b'
+                    textColor='#59595b'
+                    backCloseSize={20}
+                    fontFamily='OpenSans_Regular'
+                    fontSize={15}
+                    animate={false}
+                    clearOnBlur
+                    />
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+                //onPress={() => navigation.navigate('Settings')} // messes with the search bar, need a fix
+                >
+                <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-end'}]}>
+                  <Image style={[styles.button.topButtonMenu, {opacity: 0}]} source={require('../../assets/images/optionsButton-light.png')} resizeMode='contain' />
+                </View>
+          </TouchableWithoutFeedback>
+          </View>
+          <View style={styles.navbar.navSeparator} />
+        </View>
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -94,7 +135,6 @@ export default class LinksAndGroupsScreen extends React.Component {
 
     return (
       <View style={styles.global.container}>
-        <LinksAndGroupsScreenSearchBar />
         <ScrollView style={styles.global.main} scrollEnabled={false}
         //contentContainerStyle={styles.global.scrollViewMain}
         >

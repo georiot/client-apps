@@ -18,7 +18,7 @@ export default class GeniusStatsScreen extends React.Component {
       <View>
           <View style={styles.navbar.topNavBar}>
           <View style={[styles.navbar.topNavBarSubComponent, {alignItems: 'flex-start', justifyContent: 'center', top: constants.buttonTopOffset}]}>
-            <Image style={[styles.global.logo]} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' resizeMethod='scale' />
+            <Image style={styles.global.logo} source={require('../../assets/images/geniuslink-light.png')} resizeMode='contain' resizeMethod='scale' />
           </View>
           <TouchableWithoutFeedback
                 onPress={() => navigation.navigate('Settings')}
