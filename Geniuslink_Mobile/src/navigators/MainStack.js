@@ -6,6 +6,7 @@ import BuildALinkScreen from '../pages/BuildALinkScreen';
 import UserProfileAndSettingsNavigator from './UserProfileAndSettingsStack';
 import GeniusStatsAndSettingsNavigator from './GeniusStatsAndSettingsStack';
 import FacebookStatsAndSettingsNavigator from './FacebookStatsAndSettingsStack';
+import LinkCreationScreensNavigator from './LinkCreationScreensStack';
 import {
   Image,
   View,
@@ -46,8 +47,8 @@ export default MainScreenNavigator = TabNavigator(
         )
       }
     },
-    BuildALink: {
-      screen: BuildALinkScreen,
+    LinkCreation: {
+      screen: LinkCreationScreensNavigator,
       index: 2,
       navigationOptions: {
         tabBarLabel: ({ tintColor }) => (
