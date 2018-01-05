@@ -84,7 +84,7 @@ const style = StyleSheet.create({
   round: {
     width:175,
     height:175,
-    borderRadius:125
+    borderRadius:175/2
   },
 
   header: {

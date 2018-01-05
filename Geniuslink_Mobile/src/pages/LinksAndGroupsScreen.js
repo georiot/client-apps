@@ -42,8 +42,8 @@ export default class LinksAndGroupsScreen extends React.Component {
 
         this.setState({
           isLoading: false,
-          allLinks: ds.cloneWithRows(values[0].slice(0,3)),
-          allGroups: ds.cloneWithRows(values[1].slice(0,3))
+          allLinks: ds.cloneWithRows(values[0].slice(0,7)),
+          allGroups: ds.cloneWithRows(values[1].slice(0,7))
         }, function() {});
       });
 
@@ -103,7 +103,7 @@ export default class LinksAndGroupsScreen extends React.Component {
               {/* need to change formatting later using constants,
                   need to change ListView to FlatList --> ListView is to be deprecated */}
               
-              <Text style={style.header}>Top Links</Text>
+              <Text style={style.header}>Recent Links</Text>
               <View style={{height: 10}} />
               <View style={style.section}>
                 {linksContent}
@@ -111,7 +111,7 @@ export default class LinksAndGroupsScreen extends React.Component {
               
               <View style={{height: 25}} />
 
-              <Text style={style.header}>Top Groups</Text>
+              <Text style={style.header}>Recent Groups</Text>
               <View style={{height: 10}} />
               <View style={style.section}>
                 {groupsContent}
