@@ -113,15 +113,15 @@ function createGeniusLink(url) {
     }
 
 
-    var client = new GeniusLinkServiceClient('https://api.geni.us/v2', localStorage['apiKey'], localStorage['apiSecret']);
-    client.postToService('shorturl', {
+    var client = new GeniusLinkServiceClient('https://api.geni.us/v3', localStorage['apiKey'], localStorage['apiSecret']);
+    client.postToService('shorturls', {
             GroupId: localStorage['defaultGroupId'],
             Domain: localStorage['selectedDomainName'],
             Url: url
         },
         function (data) {
 
-            newLink = data.NewLink;
+            newLink = data.ShortUrl.Domain + "/" + data.ShortUrl.BaseCode;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
             var createdLinks = parseInt(localStorage["createdLinks"]);
