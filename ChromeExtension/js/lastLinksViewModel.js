@@ -17,7 +17,7 @@ function lastLinksViewModel() {
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
-    client.getFromService('links/list' + '?groupid=' + localStorage['defaultGroupId'] + '&numberoflinks=5', {
+    client.getFromService('links/list' + '?groupid=' + localStorage['defaultGroupId'] + '&take=5', {
         format: 'jsv'
     }, function (resp) {
         var results = resp['Results'];
