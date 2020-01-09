@@ -1,6 +1,4 @@
 function lastLinksViewModel() {
-
-
     var self = this;
     self.loadingOption = ko.observable('Loading links...');
     self.details = ko.observable('');
@@ -11,9 +9,7 @@ function lastLinksViewModel() {
         chrome.tabs.create({
             url: event.target.href,
         });
-
     }
-
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
