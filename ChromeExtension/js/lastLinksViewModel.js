@@ -35,15 +35,14 @@ function lastLinksViewModel() {
 					baseUrl = current.Aliases[0].BaseCode;
                 }
                 
-                var ssl = false;
-                if (current['Domain'] == 'geni.us'){
-                    // todo: should add a force-refresh button so we can load domains
-                    // and know its SSL cert validity from the get-go
-                    // Right now, we're checking for domains + SSL whenever we visit the specific options
-                    // e.g. "View last 5 links" and "Select custom domain", which equals degraded performance
-                    // If we were to check from the first/home "page", we won't be able to refresh the
-                    // domains and links list, thus we need the force-refresh button implemented
-                    // For now, this shall do
+                var ssl = false
+                var domainsString = localStorage["customDomains"];
+                if (domainsString == undefined){
+                    domainsString = '[]';
+                }
+                var domains = JSON.parse(domainsString);
+                var currentInfo = domains.filter(x => x.name == current['Domain'])[0];
+                if (current['Domain'] == 'geni.us' || (domains != undefined && domains.length > 0 && currentInfo != undefined)){
                     ssl = true;
                 }
 

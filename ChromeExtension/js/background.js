@@ -2,7 +2,10 @@ chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason == "install") {
         localStorage.setItem("createdLinks", "0");
         localStorage.setItem("doneReview", "false");
-        localStorage.setItem("selectedDomainName", "geni.us");
+        localStorage.setItem("selectedDomain", JSON.stringify({
+            name: 'geni.us',
+            ssl: true
+        }));
         var dateobj = new Date();
 
         function pad(n) {
@@ -49,7 +52,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
+    var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
 
+    client.getFromService('custom-domains/domains', {
+        format: 'jsv'
+    }, function (resp) {
+        var ak = localStorage["selectedDomain"];
+        var selectedDomainExists = false;
+        var domains = [];
+
+        var result = resp['Domains'];
+        for (var i = 0; i < result.length; i++) {
+            var newItem = {
+                name: result[i]['Name'],
+                ssl: result[i]['HasValidSslCert'],
+                id: i
+            };
+            domains.push(newItem);
+
+            if (typeof ak !== 'undefined' && JSON.parse(ak)['name'] === result[i]['Name']) {
+                localStorage.setItem("selectedDomain", JSON.stringify(newItem));
+                selectedDomainExists = true;
+            }
+        }
+
+        if (typeof ak !== 'undefined' && !selectedDomainExists){
+            var selected = JSON.parse(ak);
+            selected.id = domains.length;
+            domains.push(selected);
+        }
+        
+        localStorage.setItem("customDomains", JSON.stringify(domains));
+    }, function (error) {
+        alert(error)
+    });
 
 });
 
@@ -116,7 +152,7 @@ function createGeniusLink(url) {
     var client = new GeniusLinkServiceClient('https://api.geni.us/v3', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturls', {
             GroupId: localStorage['defaultGroupId'],
-            Domain: localStorage['selectedDomainName'],
+            Domain: JSON.parse(localStorage['selectedDomain'])['Name'],
             Url: url
         },
         function (data) {

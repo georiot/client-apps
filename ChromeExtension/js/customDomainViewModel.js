@@ -1,48 +1,19 @@
 function customDomainViewModel() {
-
     var self = this;
-    self.selectedDomain = ko.observable();
-    self.domainArray = ko.observableArray();
+    self.selectedDomain = ko.observable(JSON.parse(localStorage["selectedDomain"]));
+    self.domainArray = ko.observableArray(JSON.parse(localStorage["customDomains"]));
 
     self.selectedDomain.subscribe(function (newValue) {
-        localStorage.setItem("selectedDomainName", newValue.name);
-    });
-
-    var client = new GeniusLinkServiceClient('https://api.geni.us/v1', localStorage['apiKey'], localStorage['apiSecret']);
-
-    client.getFromService('custom-domains/domains', {
-        format: 'jsv'
-    }, function (resp) {
-        var ak = localStorage["selectedDomainName"];
-
-        var result = resp['Domains'];
-        for (var i = 0; i < result.length; i++) {
-            var newItem = {
-                name: result[i]['Name'],
-                id: i
-            };
-            self.domainArray.push(newItem);
-
-            if (typeof ak !== 'undefined' && ak === result[i]['Name']) {
-                self.selectedDomain(newItem);
-
-            }
+        var old = localStorage["selectedDomain"];
+        if (old != undefined && JSON.parse(old)["name"] != newValue.name){
+            localStorage.setItem("selectedDomain", JSON.stringify(newValue));
         }
-
-    }, function (error) {
-        alert(error)
     });
-
-
-
-
 }
 
 $('#back').on('click', 'a', function () {
     window.location.href = window.history.back(1);
 });
-
-
 
 var customDomainModel = new customDomainViewModel();
 
