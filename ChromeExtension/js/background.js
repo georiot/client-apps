@@ -76,6 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // If geni.us domain (which is what we set as default) doesn't exist, add it
+        // This shouldn't happen ever, but just in case..
         if (typeof ak !== 'undefined' && !selectedDomainExists){
             var selected = JSON.parse(ak);
             selected.id = domains.length;
@@ -152,7 +154,7 @@ function createGeniusLink(url) {
     var client = new GeniusLinkServiceClient('https://api.geni.us/v3', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturls', {
             GroupId: localStorage['defaultGroupId'],
-            Domain: JSON.parse(localStorage['selectedDomain'])['Name'],
+            Domain: JSON.parse(localStorage['selectedDomain'])['name'],
             Url: url
         },
         function (data) {

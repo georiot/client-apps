@@ -1,12 +1,23 @@
 function customDomainViewModel() {
     var self = this;
-    self.selectedDomain = ko.observable(JSON.parse(localStorage["selectedDomain"]));
+    self.selectedDomain = ko.observable();
     self.domainArray = ko.observableArray(JSON.parse(localStorage["customDomains"]));
+
+    if (localStorage["selectedDomain"] != undefined){
+        self.selectedDomain(JSON.parse(localStorage["selectedDomain"]));
+    } else {
+        self.selectedDomain(self.domainArray[0]);
+    }
 
     self.selectedDomain.subscribe(function (newValue) {
         var old = localStorage["selectedDomain"];
-        if (old != undefined && JSON.parse(old)["name"] != newValue.name){
+        if (old == undefined){
             localStorage.setItem("selectedDomain", JSON.stringify(newValue));
+        }
+        else {
+            if (JSON.parse(old)["name"] != newValue["name"]){
+                localStorage.setItem("selectedDomain", JSON.stringify(newValue));
+            }
         }
     });
 }
