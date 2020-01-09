@@ -28,10 +28,11 @@
 
 <body id="body">
     <div style="padding: 20px; width: 300px">
+        <span data-bind="text: 'Selected domain: ' + selectedDomain().name"></span>
         <center>
             <p class="newlink-group">Select custom domain</p>
 
-            <select class="form-control" data-bind="options: domainArray,optionsText: 'name',  value: selectedDomain">
+            <select class="form-control" data-bind="options: domainArray, optionsText: 'name',  value: selectedDomain">
                       
             </select>
             <br>

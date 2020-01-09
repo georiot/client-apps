@@ -33,9 +33,21 @@ function lastLinksViewModel() {
 				{
 					urlToShow = current.Aliases[0].Code;
 					baseUrl = current.Aliases[0].BaseCode;
-				}
+                }
+                
+                var ssl = false
+                var domainsString = localStorage["customDomains"];
+                if (domainsString == undefined){
+                    domainsString = '[]';
+                }
+                var domains = JSON.parse(domainsString);
+                var currentInfo = domains.filter(x => x.name == current['Domain'])[0];
+                if (current['Domain'] == 'geni.us' || (domains != undefined && domains.length > 0 && currentInfo != undefined)){
+                    ssl = true;
+                }
+
                 self.resultsArray.push({
-                    url: 'http://' + current['Domain'] + '/' + urlToShow,
+                    url: (ssl? 'https://' : 'http://') + current['Domain'] + '/' + urlToShow,
                     totalClicks: current['TotalClicks'],
                     editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
                 });
