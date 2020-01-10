@@ -109,9 +109,7 @@ function createGeniusLink(url) {
                 action: "loading"
             }, function (response) {});
         });
-
     }
-
 
     var client = new GeniusLinkServiceClient('https://api.geni.us/v3', localStorage['apiKey'], localStorage['apiSecret']);
     client.postToService('shorturls', {
@@ -120,8 +118,16 @@ function createGeniusLink(url) {
             Url: url
         },
         function (data) {
-
-            newLink = data.ShortUrl.Domain + "/" + data.ShortUrl.BaseCode;
+            var domain = data.ShortUrl.Domain.toString();
+            if (domain.includes("geni.us")){ // for now, only force https for geni.us links
+                if (domain.startsWith("http://")){
+                    domain = domain.replace("http://", "https://");
+                }
+                if (!domain.startsWith("https://")){
+                    domain = "https://" + domain;
+                }                
+            }
+            newLink = domain + "/" + data.ShortUrl.BaseCode;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
             var createdLinks = parseInt(localStorage["createdLinks"]);
@@ -135,8 +141,6 @@ function createGeniusLink(url) {
                         action: "linkCreated"
                     }, function (response) {});
                 });
-
-
             }
 
             if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
@@ -155,13 +159,7 @@ function createGeniusLink(url) {
             }
 
         });
-
-
 }
-
-
-
-
 
 function CreateContentMenus() {
 
@@ -182,7 +180,6 @@ function CreateContentMenus() {
         });
     }
 }
-
 
 
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
