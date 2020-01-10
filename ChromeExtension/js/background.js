@@ -119,13 +119,17 @@ function createGeniusLink(url) {
         },
         function (data) {
             var domain = data.ShortUrl.Domain.toString();
-            if (domain.includes("geni.us")){ // for now, only force https for geni.us links
+            if (domain.includes("geni.us")){ // Only if geni.us link, force https
                 if (domain.startsWith("http://")){
                     domain = domain.replace("http://", "https://");
                 }
                 if (!domain.startsWith("https://")){
                     domain = "https://" + domain;
                 }                
+            } else { // Otherwise, for now, default the rest to using http
+                if (!domain.startsWith("http://") && !domain.startsWith("https://")){
+                    domain = "http://" + domain;
+                }
             }
             newLink = domain + "/" + data.ShortUrl.BaseCode;
             copyToClipBoard(newLink);
