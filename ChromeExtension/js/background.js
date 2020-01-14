@@ -131,7 +131,7 @@ function createGeniusLink(url) {
                     domain = "http://" + domain;
                 }
             }
-            newLink = domain + "/" + data.ShortUrl.BaseCode;
+            newLink = domain + "/" + data.ShortUrl.Code;
             copyToClipBoard(newLink);
             localStorage.setItem("lastCreatedLink", newLink);
             var createdLinks = parseInt(localStorage["createdLinks"]);
