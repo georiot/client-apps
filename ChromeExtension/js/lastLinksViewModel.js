@@ -28,6 +28,7 @@ function lastLinksViewModel() {
 				var baseUrl = current['ShortUrlCode'];
 				if(typeof(current.Aliases) != "undefined" && current.Aliases.length > 0)
 				{
+                    currentDomain = current.Aliases[0].Domain;
 					urlToShow = current.Aliases[0].Code;
 					baseUrl = current.Aliases[0].BaseCode;
 				}
