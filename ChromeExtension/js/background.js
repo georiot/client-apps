@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     } else {
         chrome.browserAction.setPopup({
-            popup: "groupsReview.html" // todo: change back to groups.html, only for testing
+            popup: "groups.html"
         });
 
     }
