@@ -32,21 +32,9 @@
 
 <body id="body">
     <div style="padding: 20px">
-        <div class="group-div">
-            <div class="text-left">
-                <p class="newlink-group newlink-select-review">Put new links in this group</p>
-                <select id="listOfGroups" class="form-control listOfGroups-review">
-                    <option id="loadingOption" value="Loading">Loading...</option>
-                </select>
-            </div>
-
-            <center>
-                <p style="margin-bottom: 5px;" id="result">&nbsp;</p>
-            </center>
-
-            <div id="dialog" title="Error">
-                <div id="networkError"></div>
-            </div>
+        <div style="text-align: center;">
+            <button class="btn-gl-blue" style="width: 250px; font-size: 13px; " data-bind="event: { click: createLinkFromButton }">New link from current page</button>
+            <p class="fine-print" style="position: relative; top: 8px;">Or, right-click a link and select "Create..."</p>
         </div>
         <hr class="hr-group">
         <div class="menu-group">
@@ -54,26 +42,32 @@
             <a href="apikeys.html" class="menu-item text-left">Change API Keys
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
-
-
-
-
             <a href="lastLinks.html" class="menu-item text-left">View last five links
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
-
-
             <a href="customDomain.html" class="menu-item text-left">Select a custom domain
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                           </a>
-
             <a href="help.html" class="menu-item text-left">How to use this plugin
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                           </a>
+        </div>
+        <hr class="hr-group">
+        <div class="group-div">
+            <div class="text-left">
+                <p class="newlink-group">Put new links in this group</p>
+                <select id="listOfGroups" class="form-control">
+                    <option id="loadingOption" value="Loading">Loading...</option>
+                </select>
+            </div>
 
+            <div style="text-align: center;">
+                <p style="margin-bottom: -20px;" id="result">&nbsp;</p>
+            </div>
 
-
-
+            <div id="dialog" title="Error">
+                <div id="networkError"></div>
+            </div>
         </div>
 
         <hr class="hr-group">
@@ -81,16 +75,12 @@
         <div class="review-text">
             <p>Thanks for using this extension. How has your experience been so far?</p>
             <div class="thumbs-up-down">
-                <center>
+                <div style="text-align: center;">
                     <span class="glyphicon glyphicon-thumbs-up thumbs-up" data-bind="click: thumbsup"></span>
                     <span class="glyphicon glyphicon-thumbs-down thumbs-down" data-bind="click: thumbsdown"></span>
-                </center>
+                </div>
             </div>
         </div>
-
-
     </div>
-
 </body>
-
 </html>
