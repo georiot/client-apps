@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
 
     "name": "Geniuslink | Intelligent Link Creator",
     "description": "Easily build geni.us links with the click of a button!",
@@ -19,9 +19,16 @@
         "js": ["js/openDialog.js"]
     }],
     "web_accessible_resources": [
-        "css/custom.css",
-        "js/frame.js",
-        "alertDoneInside.html", "alertLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
+        {
+            "resources": [
+                "css/custom.css",
+                "js/frame.js",
+                "alertDoneInside.html", "alertLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"        
+            ],
+            "matches": [
+              "*://*/*"
+            ]
+        }
     ],
 
     "background": {
@@ -33,11 +40,15 @@
 
     "permissions": [
         "activeTab",
-        "https://ajax.googleapis.com/",
         "contextMenus",
-        "https://api.geni.us/",
         "storage",
         "clipboardRead",
-        "tabs", "http://*/*", "https://*/*"
+        "tabs"
+    ],
+
+    "host_permissions": [
+        "https://ajax.googleapis.com/",
+        "https://api.geni.us/",
+        "http://*/*", "https://*/*"
     ]
 }
