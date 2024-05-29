@@ -1,4 +1,4 @@
-chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (window.location.href !== "chrome-extension://" + chrome.runtime.id + "/groups.html") {
         if (msg.action == 'loading') {
 

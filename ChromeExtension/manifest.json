@@ -5,7 +5,7 @@
     "description": "Easily build geni.us links with the click of a button!",
     "version": "1.0.5",
 
-    "browser_action": {
+    "action": {
         "default_icon": "images/icon.png",
         "default_popup": "apikeys.html"
     },

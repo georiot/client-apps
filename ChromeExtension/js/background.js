@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
     if (daysInstalled >= 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
 
-        chrome.browserAction.setPopup({
+        chrome.action.setPopup({
             popup: "groupsReview.html"
         });
 
     } else {
-        chrome.browserAction.setPopup({
+        chrome.action.setPopup({
             popup: "groups.html"
         });
 
@@ -66,7 +66,7 @@ function getCurrentTab() {
 
 
 function goTo(page) {
-    chrome.browserAction.setPopup({
+    chrome.action.setPopup({
         popup: page
     });
 };
@@ -186,7 +186,7 @@ function CreateContentMenus() {
 }
 
 
-chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.name == 'CreateContentMenus') {
         CreateContentMenus();
     }
@@ -194,7 +194,7 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
 
 
 if (localStorage['defaultGroup'] !== '' && typeof localStorage['defaultGroup'] !== 'undefined') {
-    chrome.browserAction.setPopup({
+    chrome.action.setPopup({
         popup: "groups.html"
     });
 }
