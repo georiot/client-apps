@@ -32,8 +32,7 @@
     ],
 
     "background": {
-        "scripts": ["js/background.js", "js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/utilities.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
-        "persistent": true
+        "service_worker": "loader.js"
     },
 
     "content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
