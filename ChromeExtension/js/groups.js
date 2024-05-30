@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 chrome.storage.local.set({'groups': JSON.stringify(groupsList)});
                 chrome.storage.local.set({'groupsIds': JSON.stringify(groupsIds)});
-                
+
                 var groups = groupsList;
                 var listId = groupsIds;
                 var x = document.getElementById('listOfGroups');
@@ -205,6 +205,13 @@ listOfGroups.addEventListener('change', function () {
 
 var groupsModel = new groupsViewModel();
 if (typeof testModel === 'undefined') {
+    var options = {
+        attribute: "data-bind",        // default "data-sbind"
+        globals: window,               // default {}
+        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
+        noVirtualElements: false       // default true
+     };
+     ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
     ko.applyBindings(groupsModel);
 } else {
     testModel = groupsModel;

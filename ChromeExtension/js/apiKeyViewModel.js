@@ -21,7 +21,7 @@ function apiKeyViewModel() {
                 self.apiKey(ak);
             }
         });
-        
+
         chrome.storage.local.get(["apiSecret"]).then((asa) => {
             if (typeof asa !== 'undefined') {
                 self.apiSecret(asa);
@@ -61,6 +61,13 @@ $('#back').on('click', 'a', function () {
 var apiModel = new apiKeyViewModel();
 apiModel.loadKey();
 if (typeof testModel === 'undefined') {
+    var options = {
+        attribute: "data-bind",        // default "data-sbind"
+        globals: window,               // default {}
+        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
+        noVirtualElements: false       // default true
+    };
+    ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
     ko.applyBindings(apiModel);
 } else {
     testModel = apiModel;

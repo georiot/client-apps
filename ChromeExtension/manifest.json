@@ -3,7 +3,7 @@
 
     "name": "Geniuslink | Intelligent Link Creator",
     "description": "Easily build geni.us links with the click of a button!",
-    "version": "1.0.5",
+    "version": "1.0.6",
 
     "action": {
         "default_icon": "images/icon.png",
@@ -32,7 +32,7 @@
     ],
 
     "background": {
-        "service_worker": "loader.js"
+        "service_worker": "js/loader.js"
     },
 
     "content_security_policy": {

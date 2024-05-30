@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //sources for parseDate and daydiff to http://stackoverflow.com/questions/542938/how-do-i-get-the-number-of-days-between-two-dates-in-javascript
     function parseDate(str) {
-        var mdy = str.split('/');
+        var mdy = str.toString().split('/');
         return new Date(mdy[2], mdy[0] - 1, mdy[1]);
     }
 
@@ -185,15 +185,22 @@ function CreateContentMenus() {
             chrome.contextMenus.create({
                 title: 'Create geni.us link from current tab',
                 contexts: ['page'],
-                id: 'child1',
-                onclick: createGeniusCurrentTab
+                id: 'child1'
             });
 
             chrome.contextMenus.create({
                 title: 'Create geni.us link from selected URL',
                 contexts: ['link'],
-                id: 'child2',
-                onclick: createGeniusCurrentLink
+                id: 'child2'
+            });
+
+            chrome.contextMenus.onClicked.addListener(function(info, tab) {
+                if (info.id === "child1") {
+                    createGeniusCurrentTab
+                }
+                if (info.id === "child2") {
+                    createGeniusCurrentLink
+                }
             });
         }
     });
