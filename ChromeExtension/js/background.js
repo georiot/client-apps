@@ -1,15 +1,16 @@
 chrome.runtime.onInstalled.addListener(function (details) {
     if (details.reason == "install") {
-        localStorage.setItem("createdLinks", "0");
-        localStorage.setItem("doneReview", "false");
-        localStorage.setItem("selectedDomainName", "geni.us");
-        var dateobj = new Date();
+        chrome.storage.local.set({"createdLinks": "0"});
+        chrome.storage.local.set({"doneReview": "false"});
+        chrome.storage.local.set({"selectedDomainName": "geni.us"});
 
+        var dateobj = new Date();
         function pad(n) {
             return n < 10 ? "0" + n : n;
         }
+
         var result = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
-        localStorage.setItem("installDate", result);
+        chrome.storage.local.set({"installDate": result});
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
@@ -34,23 +35,23 @@ document.addEventListener('DOMContentLoaded', function () {
         return Math.round((second - first) / (1000 * 60 * 60 * 24));
     }
 
-    var installDate = localStorage["installDate"];
-    var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
-    if (daysInstalled >= 14 && localStorage["createdLinks"] > 3 && localStorage["doneReview"] === "false") {
+    chrome.storage.local.get(["installDate"]).then((installDate) => {
+        var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
 
-        chrome.action.setPopup({
-            popup: "groupsReview.html"
+        chrome.storage.local.get(["createdLinks"]).then((createdLinks) => {
+            chrome.storage.local.get(["doneReview"]).then((doneReview) => {
+                if (daysInstalled >= 14 && createdLinks > 3 && doneReview === "false") {
+                    chrome.action.setPopup({
+                        popup: "groupsReview.html"
+                    });
+                } else {
+                    chrome.action.setPopup({
+                        popup: "groups.html"
+                    });
+                }
+            });
         });
-
-    } else {
-        chrome.action.setPopup({
-            popup: "groups.html"
-        });
-
-    }
-
-
-
+    });    
 });
 
 function getCurrentTab() {
@@ -100,91 +101,103 @@ function createGeniusCurrentLink(e) {
 
 function createGeniusLink(url) {
     var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
-    if (window.location.href !== groupsUrl && localStorage["wrongKeys"] === "false") {
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                action: "loading"
-            }, function (response) {});
-        });
-    }
+    chrome.storage.local.get(["wrongKeys"]).then((wrongKeys) => {
+        if (window.location.href !== groupsUrl && wrongKeys === "false") {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "loading"
+                }, function (response) {});
+            });
+        }
 
-    var client = new GeniusLinkServiceClient('https://api.geni.us/v3', localStorage['apiKey'], localStorage['apiSecret']);
-    client.postToService('shorturls', {
-            GroupId: localStorage['defaultGroupId'],
-            Domain: localStorage['selectedDomainName'],
-            Url: url
-        },
-        function (data) {
-            var domain = data.ShortUrl.Domain.toString();
-            if (domain.includes("geni.us")){ // Only if geni.us link, force https
-                if (domain.startsWith("http://")){
-                    domain = domain.replace("http://", "https://");
-                }
-                if (!domain.startsWith("https://")){
-                    domain = "https://" + domain;
-                }                
-            } else { // Otherwise, for now, default the rest to using http
-                if (!domain.startsWith("http://") && !domain.startsWith("https://")){
-                    domain = "http://" + domain;
-                }
-            }
-            newLink = domain + "/" + data.ShortUrl.Code;
-            copyToClipBoard(newLink);
-            localStorage.setItem("lastCreatedLink", newLink);
-            var createdLinks = parseInt(localStorage["createdLinks"]);
-            localStorage.setItem("createdLinks", createdLinks + 1);
-            if (window.location.href != groupsUrl) {
-                chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                }, function (tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        action: "linkCreated"
-                    }, function (response) {});
+        chrome.storage.local.get(["apiKey"]).then((apiKey) => {
+            chrome.storage.local.get(["apiSecret"]).then((apiSecret) => {
+                var client = new GeniusLinkServiceClient('https://api.geni.us/v3', apiKey, apiSecret);
+
+                chrome.storage.local.get(["defaultGroupId"]).then((defaultGroupId) => {
+                    chrome.storage.local.get(["selectedDomainName"]).then((selectedDomainName) => {
+                        client.postToService('shorturls', {
+                            GroupId: defaultGroupId,
+                            Domain: selectedDomainName,
+                            Url: url
+                        },
+                        function (data) {
+                            var domain = data.ShortUrl.Domain.toString();
+
+                            if (domain.includes("geni.us")){ // Only if geni.us link, force https
+                                if (domain.startsWith("http://")){
+                                    domain = domain.replace("http://", "https://");
+                                }
+                                if (!domain.startsWith("https://")){
+                                    domain = "https://" + domain;
+                                }                
+                            } else { // Otherwise, for now, default the rest to using http
+                                if (!domain.startsWith("http://") && !domain.startsWith("https://")){
+                                    domain = "http://" + domain;
+                                }
+                            }
+
+                            newLink = domain + "/" + data.ShortUrl.Code;
+                            copyToClipBoard(newLink);
+                            chrome.storage.local.set({"lastCreatedLink": newLink});
+                            chrome.storage.local.get(["createdLinks"]).then((createdLinks) => {
+                                chrome.storage.local.set({"createdLinks": parseInt(createdLinks) + 1});
+                            });
+
+                            if (window.location.href != groupsUrl) {
+                                chrome.tabs.query({
+                                    active: true,
+                                    currentWindow: true
+                                }, function (tabs) {
+                                    chrome.tabs.sendMessage(tabs[0].id, {
+                                        action: "linkCreated"
+                                    }, function (response) {});
+                                });
+                            }
+        
+                            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
+                                window.location.href = "alertDoneInside.html";
+                            }
+                        },
+                        function (error) {
+                            var parseError = JSV.parse(error);
+                            var error401 = parseError.ResponseStatus.ErrorCode;
+                            if (error401 == 'AuthenticationException') {
+                                alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
+                            } else {
+                                alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');
+                            }
+                        });
+                    });
                 });
-            }
-
-            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
-
-                window.location.href = "alertDoneInside.html";
-
-            }
-        },
-        function (error) {
-            var parseError = JSV.parse(error);
-            var error401 = parseError.ResponseStatus.ErrorCode;
-            if (error401 == 'AuthenticationException') {
-                alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
-            } else {
-                alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');
-            }
-
+            });
         });
+    });
 }
 
 function CreateContentMenus() {
+    chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
+        if (defaultGroup != null && defaultGroup != '') {
+            chrome.contextMenus.removeAll()
+            chrome.contextMenus.create({
+                title: 'Create geni.us link from current tab',
+                contexts: ['page'],
+                id: 'child1',
+                onclick: createGeniusCurrentTab
+            });
 
-    if (localStorage['defaultGroup'] != null && localStorage['defaultGroup'] != '') {
-        chrome.contextMenus.removeAll()
-        chrome.contextMenus.create({
-            title: 'Create geni.us link from current tab',
-            contexts: ['page'],
-            id: 'child1',
-            onclick: createGeniusCurrentTab
-        });
-
-        chrome.contextMenus.create({
-            title: 'Create geni.us link from selected URL',
-            contexts: ['link'],
-            id: 'child2',
-            onclick: createGeniusCurrentLink
-        });
-    }
+            chrome.contextMenus.create({
+                title: 'Create geni.us link from selected URL',
+                contexts: ['link'],
+                id: 'child2',
+                onclick: createGeniusCurrentLink
+            });
+        }
+    });
 }
-
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.name == 'CreateContentMenus') {
@@ -192,10 +205,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
+chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
+    if (defaultGroup !== '' && typeof defaultGroup !== 'undefined') {
+        chrome.action.setPopup({
+            popup: "groups.html"
+        });
+    }
+});
 
-if (localStorage['defaultGroup'] !== '' && typeof localStorage['defaultGroup'] !== 'undefined') {
-    chrome.action.setPopup({
-        popup: "groups.html"
-    });
-}
 CreateContentMenus();

@@ -21,6 +21,7 @@ function apiKeyViewModel() {
                 self.apiKey(ak);
             }
         });
+        
         chrome.storage.local.get(["apiSecret"]).then((asa) => {
             if (typeof asa !== 'undefined') {
                 self.apiSecret(asa);
