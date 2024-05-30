@@ -35,8 +35,10 @@
         "service_worker": "loader.js"
     },
 
-    "content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
-
+    "content_security_policy": {
+        "extension_pages": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'"
+    },
+    
     "permissions": [
         "activeTab",
         "contextMenus",
