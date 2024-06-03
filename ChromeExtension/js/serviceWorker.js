@@ -28,3 +28,57 @@ async function createOffscreen() {
 chrome.runtime.onStartup.addListener(createOffscreen);
 self.onmessage = e => {}; // keepAlive
 createOffscreen();
+
+function CreateContextMenus() {
+    chrome.storage.local.get(["defaultGroup"]).then((r1) => {
+        var defaultGroup = r1.defaultGroup;
+        if (defaultGroup != null && defaultGroup != '') {
+            chrome.contextMenus.removeAll()
+            chrome.contextMenus.create({
+                title: 'Create geni.us link from current tab',
+                contexts: ['page'],
+                id: 'child1'
+            });
+
+            chrome.contextMenus.create({
+                title: 'Create geni.us link from selected URL',
+                contexts: ['link'],
+                id: 'child2'
+            });
+
+            chrome.contextMenus.onClicked.addListener(function(info, tab) {
+                if (info.id === "child1") {
+                    alert("DO I GET HERE?");
+                    chrome.tabs.sendMessage(tab.id, {
+                        action: "createGeniusCurrentTab"
+                    }, function (response) {});
+                }
+
+                if (info.id === "child2") {
+                    chrome.tabs.sendMessage(tab.id, {
+                        action: "createGeniusCurrentLink"
+                    }, function (response) {});
+                }
+            });
+        }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (msg.action == 'CreateContextMenus') {
+        CreateContextMenus();
+    }
+
+    sendResponse();
+});
+
+chrome.storage.local.get(["defaultGroup"]).then((result) => {
+    var defaultGroup = result.defaultGroup;
+    if (defaultGroup !== '' && typeof defaultGroup !== 'undefined') {
+        chrome.action.setPopup({
+            popup: "groups.html"
+        });
+    }
+});
+
+CreateContextMenus();

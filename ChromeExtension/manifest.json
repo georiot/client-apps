@@ -9,15 +9,18 @@
         "default_icon": "images/icon.png",
         "default_popup": "apikeys.html"
     },
+
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     },
+
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*", "*://*/*"],
-        "js": ["js/openDialog.js"]
+        "js": ["js/openDialog.js", "js/background.js"]
     }],
+    
     "web_accessible_resources": [
         {
             "resources": [

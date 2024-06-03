@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     $('#listOfGroups option[id="' + defaultGroup + '"]').attr('selected', true);
 
                     chrome.runtime.sendMessage({
-                        name: 'CreateContextMenus',
+                        action: 'CreateContextMenus',
                     }, function (response) {});
                 });
             }, function (error) {

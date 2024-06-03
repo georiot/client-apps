@@ -58,12 +58,6 @@ function getCurrentTab() {
     });
 }
 
-function goTo(page) {
-    chrome.action.setPopup({
-        popup: page
-    });
-};
-
 //sources for copyToClipboard function: 
 //http://www.is-beer-a-vegetable.com/wiki/index.php/Copy_text_to_clipboard_using_Javascript_(Chrome) 
 //http://stackoverflow.com/questions/25622359/clipboard-copy-paste-on-content-script-chrome-extension 
@@ -175,49 +169,14 @@ function createGeniusLink(url) {
     });
 }
 
-function CreateContextMenus() {
-    chrome.storage.local.get(["defaultGroup"]).then((r1) => {
-        var defaultGroup = r1.defaultGroup;
-        if (defaultGroup != null && defaultGroup != '') {
-            chrome.contextMenus.removeAll()
-            chrome.contextMenus.create({
-                title: 'Create geni.us link from current tab',
-                contexts: ['page'],
-                id: 'child1'
-            });
-
-            chrome.contextMenus.create({
-                title: 'Create geni.us link from selected URL',
-                contexts: ['link'],
-                id: 'child2'
-            });
-
-            chrome.contextMenus.onClicked.addListener(function(info, tab) {
-                if (info.id === "child1") {
-                    createGeniusCurrentTab
-                }
-
-                if (info.id === "child2") {
-                    createGeniusCurrentLink
-                }
-            });
-        }
-    });
-}
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.name == 'CreateContextMenus') {
-        CreateContextMenus();
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {    
+    if (msg.action === "createGeniusCurrentTab") {
+        createGeniusCurrentTab();
     }
-});
 
-chrome.storage.local.get(["defaultGroup"]).then((result) => {
-    var defaultGroup = result.defaultGroup;
-    if (defaultGroup !== '' && typeof defaultGroup !== 'undefined') {
-        chrome.action.setPopup({
-            popup: "groups.html"
-        });
+    if (msg.action === "createGeniusCurrentLink") {
+        createGeniusLink();
     }
-});
 
-CreateContextMenus();
+    sendResponse();
+});
