@@ -175,7 +175,7 @@ function createGeniusLink(url) {
     });
 }
 
-function CreateContentMenus() {
+function CreateContextMenus() {
     chrome.storage.local.get(["defaultGroup"]).then((r1) => {
         var defaultGroup = r1.defaultGroup;
         if (defaultGroup != null && defaultGroup != '') {
@@ -206,8 +206,8 @@ function CreateContentMenus() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.name == 'CreateContentMenus') {
-        CreateContentMenus();
+    if (request.name == 'CreateContextMenus') {
+        CreateContextMenus();
     }
 });
 
@@ -220,4 +220,4 @@ chrome.storage.local.get(["defaultGroup"]).then((result) => {
     }
 });
 
-CreateContentMenus();
+CreateContextMenus();
