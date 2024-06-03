@@ -1,54 +1,48 @@
-function customDomainViewModel() {
-    var self = this;
-    self.selectedDomain = ko.observable();
-    self.domainArray = ko.observableArray();
+var customDomainModel = {
+    selectedDomain: ko.observable(),
+    domainArray: ko.observableArray()
+};
 
-    self.selectedDomain.subscribe(function (newValue) {
-        chrome.storage.local.set({"selectedDomainName": newValue.name});
-    });
+customDomainModel.selectedDomain.subscribe(function (newValue) {
+    chrome.storage.local.set({"selectedDomainName": newValue.name});
+});
 
-    chrome.storage.local.get(["apiKey"]).then((apiKey) => {
-        chrome.storage.local.get(["apiSecret"]).then((apiSecret) => {
-            var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
+chrome.storage.local.get(["apiKey"]).then((r1) => {
+    var apiKey = r1.apiKey;
+    chrome.storage.local.get(["apiSecret"]).then((r2) => {
+        var apiSecret = r2.apiSecret;
+        var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
 
-            client.getFromService('custom-domains/domains', {
-                format: 'jsv'
-            }, function (resp) {
-                chrome.storage.local.get(["selectedDomainName"]).then((ak) => {
-                    var result = resp['Domains'];
-                    for (var i = 0; i < result.length; i++) {
-                        var newItem = {
-                            name: result[i]['Name'],
-                            id: i
-                        };
-            
-                        self.domainArray.push(newItem);
-            
-                        if (typeof ak !== 'undefined' && ak === result[i]['Name']) {
-                            self.selectedDomain(newItem);
-                        }
+        client.getFromService('custom-domains/domains', {
+            format: 'jsv'
+        }, function (resp) {
+            chrome.storage.local.get(["selectedDomainName"]).then((r3) => {
+                var domain = r3.selectedDomainName;
+                var result = resp['Domains'];
+                for (var i = 0; i < result.length; i++) {
+                    var newItem = {
+                        name: result[i]['Name'],
+                        id: i
+                    };
+        
+                    customDomainModel.domainArray.push(newItem);
+        
+                    if (typeof domain !== 'undefined' && domain === result[i]['Name']) {
+                        customDomainModel.selectedDomain(newItem);
                     }
-                });
-            }, function (error) {
-                alert(error)
+                }
             });
+        }, function (error) {
+            alert(error)
         });
     });
-}
+});
 
 $('#back').on('click', 'a', function () {
     window.location.href = window.history.back(1);
 });
 
-var customDomainModel = new customDomainViewModel();
 if (typeof testModel === 'undefined') {
-    var options = {
-        attribute: "data-bind",        // default "data-sbind"
-        globals: window,               // default {}
-        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
-        noVirtualElements: false       // default true
-     };
-     ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
     ko.applyBindings(customDomainModel);
 } else {
     testModel = customDomainModel;

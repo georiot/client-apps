@@ -1,22 +1,11 @@
-chrome.runtime.onInstalled.addListener(function (details) {
-    if (details.reason == "install") {
-        chrome.storage.local.set({"createdLinks": "0"});
-        chrome.storage.local.set({"doneReview": "false"});
-        chrome.storage.local.set({"selectedDomainName": "geni.us"});
-
-        var dateobj = new Date();
-        function pad(n) {
-            return n < 10 ? "0" + n : n;
-        }
-
-        var result = pad(dateobj.getMonth() + 1) + "/" + pad(dateobj.getDate()) + "/" + dateobj.getFullYear();
-        chrome.storage.local.set({"installDate": result});
-    } else if (details.reason == "update") {
-        var thisVersion = chrome.runtime.getManifest().version;
-        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
-    }
-});
 document.addEventListener('DOMContentLoaded', function () {
+    var options = {
+        attribute: "data-bind",        // default "data-sbind"
+        globals: window,               // default {}
+        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
+        noVirtualElements: false       // default true
+    };
+    ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
 
     var dateobj = new Date();
 
@@ -35,11 +24,15 @@ document.addEventListener('DOMContentLoaded', function () {
         return Math.round((second - first) / (1000 * 60 * 60 * 24));
     }
 
-    chrome.storage.local.get(["installDate"]).then((installDate) => {
+    chrome.storage.local.get(["installDate"]).then((r1) => {
+        var installDate = r1.installDate;
+        if (installDate == undefined || installDate === "") installDate = today;
         var daysInstalled = daydiff(parseDate(installDate), parseDate(today));
 
-        chrome.storage.local.get(["createdLinks"]).then((createdLinks) => {
-            chrome.storage.local.get(["doneReview"]).then((doneReview) => {
+        chrome.storage.local.get(["createdLinks"]).then((r2) => {
+            var createdLinks = r2.createdLinks;
+            chrome.storage.local.get(["doneReview"]).then((r3) => {
+                var doneReview = r3.doneReview;
                 if (daysInstalled >= 14 && createdLinks > 3 && doneReview === "false") {
                     chrome.action.setPopup({
                         popup: "groupsReview.html"
@@ -65,13 +58,11 @@ function getCurrentTab() {
     });
 }
 
-
 function goTo(page) {
     chrome.action.setPopup({
         popup: page
     });
 };
-
 
 //sources for copyToClipboard function: 
 //http://www.is-beer-a-vegetable.com/wiki/index.php/Copy_text_to_clipboard_using_Javascript_(Chrome) 
@@ -101,7 +92,8 @@ function createGeniusCurrentLink(e) {
 
 function createGeniusLink(url) {
     var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
-    chrome.storage.local.get(["wrongKeys"]).then((wrongKeys) => {
+    chrome.storage.local.get(["wrongKeys"]).then((r1) => {
+        var wrongKeys = r1.wrongKeys;
         if (window.location.href !== groupsUrl && wrongKeys === "false") {
             chrome.tabs.query({
                 active: true,
@@ -113,12 +105,16 @@ function createGeniusLink(url) {
             });
         }
 
-        chrome.storage.local.get(["apiKey"]).then((apiKey) => {
-            chrome.storage.local.get(["apiSecret"]).then((apiSecret) => {
+        chrome.storage.local.get(["apiKey"]).then((r2) => {
+            var apiKey = r2.apiKey;
+            chrome.storage.local.get(["apiSecret"]).then((r3) => {
+                var apiSecret = r3.apiSecret;
                 var client = new GeniusLinkServiceClient('https://api.geni.us/v3', apiKey, apiSecret);
 
-                chrome.storage.local.get(["defaultGroupId"]).then((defaultGroupId) => {
-                    chrome.storage.local.get(["selectedDomainName"]).then((selectedDomainName) => {
+                chrome.storage.local.get(["defaultGroupId"]).then((r4) => {
+                    var defaultGroupId = r4.defaultGroupId;
+                    chrome.storage.local.get(["selectedDomainName"]).then((r5) => {
+                        var selectedDomainName = r5.selectedDomainName;
                         client.postToService('shorturls', {
                             GroupId: defaultGroupId,
                             Domain: selectedDomainName,
@@ -143,7 +139,8 @@ function createGeniusLink(url) {
                             newLink = domain + "/" + data.ShortUrl.Code;
                             copyToClipBoard(newLink);
                             chrome.storage.local.set({"lastCreatedLink": newLink});
-                            chrome.storage.local.get(["createdLinks"]).then((createdLinks) => {
+                            chrome.storage.local.get(["createdLinks"]).then((r6) => {
+                                var createdLinks = r6.createdLinks;
                                 chrome.storage.local.set({"createdLinks": parseInt(createdLinks) + 1});
                             });
 
@@ -179,7 +176,8 @@ function createGeniusLink(url) {
 }
 
 function CreateContentMenus() {
-    chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
+    chrome.storage.local.get(["defaultGroup"]).then((r1) => {
+        var defaultGroup = r1.defaultGroup;
         if (defaultGroup != null && defaultGroup != '') {
             chrome.contextMenus.removeAll()
             chrome.contextMenus.create({
@@ -198,6 +196,7 @@ function CreateContentMenus() {
                 if (info.id === "child1") {
                     createGeniusCurrentTab
                 }
+
                 if (info.id === "child2") {
                     createGeniusCurrentLink
                 }
@@ -212,7 +211,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
+chrome.storage.local.get(["defaultGroup"]).then((result) => {
+    var defaultGroup = result.defaultGroup;
     if (defaultGroup !== '' && typeof defaultGroup !== 'undefined') {
         chrome.action.setPopup({
             popup: "groups.html"

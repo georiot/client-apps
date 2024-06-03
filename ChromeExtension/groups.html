@@ -8,32 +8,12 @@
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
-
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/utilities.js"></script>
-    <script type="text/javascript" src="js/servicestack.js"></script>
-    <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
-    <script type="text/javascript" src="js/knockout.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/bootbox.min.js"></script>
-    <script type="text/javascript" src="js/background.js"></script>
-    <script type="text/javascript" src="js/groups.js" defer="defer"></script>
-    <script type="text/javascript" src="js/knockout-secure-binding.js"></script>
 </head>
 
 <body id="body">
     <div style="padding: 20px">
         <div style="text-align: center;">
-                <button class="btn-gl-blue" style="width: 250px; font-size: 13px;" data-bind="click: createLinkFromButton">New link from current page</button>
+            <button class="btn-gl-blue" style="width: 250px; font-size: 13px;" data-bind="click: createLinkFromButton">New link from current page</button>
             
             <p class="fine-print" style="position: relative; top: 8px;">Or, right-click a link and select "Create..."</p>
         </div>
@@ -44,13 +24,9 @@
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
 
-
-
-
             <a href="lastLinks.html" class="menu-item text-left">View last five links
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
-
 
             <a href="customDomain.html" class="menu-item text-left">Select a custom domain
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
@@ -59,9 +35,6 @@
             <a href="help.html" class="menu-item text-left">How to use this plugin
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                           </a>
-
-
-
 
         </div>
         <hr class="hr-group">
@@ -83,6 +56,24 @@
         </div>
     </div>
 
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootbox.min.js"></script>
+    <script type="text/javascript" src="js/knockout.js"></script>
+    <script type="text/javascript" src="js/knockout-secure-binding.min.js"></script>
+    <script type="text/javascript" src="js/knockout-binding-handler.js"></script>
+    <script type="text/javascript" src="js/utilities.js"></script>
+    <script type="text/javascript" src="js/servicestack.js"></script>
+    <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
+    <script type="text/javascript" src="js/background.js"></script>
+    <script type="text/javascript" src="js/groups.js"></script>
 </body>
 
 </html>

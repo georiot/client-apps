@@ -44,7 +44,8 @@
         "contextMenus",
         "storage",
         "clipboardRead",
-        "tabs"
+        "tabs",
+        "offscreen"
     ],
 
     "host_permissions": [

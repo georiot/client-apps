@@ -2,14 +2,11 @@ var groupsList = [];
 
 var groupsIds = [];
 
-function groupsViewModel() {
-    var self = this;
-
-    self.createLinkFromButton = function () {
+var groupsModel = {
+    createLinkFromButton: function () {
         window.location.href = "alertLoadingInside.html";
-    }
-
-    self.thumbsup = function () {
+    },
+    thumbsup: function () {
         bootbox.confirm({
             size: "large",
             title: "Great to hear!",
@@ -40,12 +37,10 @@ function groupsViewModel() {
                 setTimeout(function () {
                     window.location.href = "groups.html";
                 }, 500);
-
             }
-        })
-    }
-
-    self.thumbsdown = function () {
+        });
+    },
+    thumbsdown: function () {
         bootbox.confirm({
             size: "large",
             title: "Sorry to hear that!",
@@ -76,15 +71,16 @@ function groupsViewModel() {
                 setTimeout(function () {
                     window.location.href = "groups.html";
                 }, 500);
-
             }
-        })
+        });
     }
-}
+};
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get(["apiKey"]).then((apiKey) => {
-        chrome.storage.local.get(["apiSecret"]).then((apiSecret) => {
+    chrome.storage.local.get(["apiKey"]).then((r1) => {
+        var apiKey = r1.apiKey;
+        chrome.storage.local.get(["apiSecret"]).then((r2) => {
+            var apiSecret = r2.apiSecret;
             var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
 
             client.getFromService('groups/list', {
@@ -106,31 +102,35 @@ document.addEventListener('DOMContentLoaded', function () {
                         groupsList.push(groups[i]['Name']);
                         groupsIds.push(groups[i]['Id']);
                     }
-
-                    chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
-                        if (defaultGroup == null) {
-                            chrome.storage.local.set({'defaultGroup': groups[0]['Name']});
-                            chrome.storage.local.set({'defaultGroupId': groups[0]['Id']});
-                        }
-                    });
                 }
+
+                var defaultGroupName = groups[0]['Name'];
+                var defaultGroupId = groups[0]['Id'];
+                chrome.storage.local.get(["defaultGroup"]).then((r3) => {
+                    var defaultGroup = r3.defaultGroup;
+                    if (defaultGroup == null) {
+                        chrome.storage.local.set({'defaultGroup': defaultGroupName});
+                        chrome.storage.local.set({'defaultGroupId': defaultGroupId});
+                    }
+                });
                 
                 chrome.storage.local.set({'groups': JSON.stringify(groupsList)});
                 chrome.storage.local.set({'groupsIds': JSON.stringify(groupsIds)});
 
-                var groups = groupsList;
+                var groupsLst = groupsList;
                 var listId = groupsIds;
                 var x = document.getElementById('listOfGroups');
 
-                for (var i = 0; i < groups.length; i++) {
+                for (var i = 0; i < groupsLst.length; i++) {
                     var c = document.createElement('option')
-                    c.id = groups[i];
+                    c.id = groupsLst[i];
                     c.value = listId[i];
-                    c.text = groups[i];
+                    c.text = groupsLst[i];
                     x.options.add(c, i);
                 }
 
-                chrome.storage.local.get(["defaultGroup"]).then((defaultGroup) => {
+                chrome.storage.local.get(["defaultGroup"]).then((r4) => {
+                    var defaultGroup = r4.defaultGroup;
                     $('#loadingOption').remove();
                     $('#listOfGroups option[id="' + defaultGroup + '"]').attr('selected', true);
 
@@ -203,15 +203,7 @@ listOfGroups.addEventListener('change', function () {
     });
 });
 
-var groupsModel = new groupsViewModel();
 if (typeof testModel === 'undefined') {
-    var options = {
-        attribute: "data-bind",        // default "data-sbind"
-        globals: window,               // default {}
-        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
-        noVirtualElements: false       // default true
-     };
-     ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
     ko.applyBindings(groupsModel);
 } else {
     testModel = groupsModel;

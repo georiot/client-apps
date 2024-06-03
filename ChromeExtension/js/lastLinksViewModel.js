@@ -1,79 +1,73 @@
-function lastLinksViewModel() {
-    var self = this;
-    self.loadingOption = ko.observable('Loading links...');
-    self.details = ko.observable('');
-    self.resultsArray = ko.observableArray('');
-    self.tableHeader = ko.observable('');
-    self.openTab = function (data, event) {
+var lastLinksModel = {
+    loadingOption: ko.observable('Loading links...'),
+    details: ko.observable(''),
+    resultsArray: ko.observableArray(),
+    tableHeader: ko.observable(''),
+    openTab: function (data, event) {
         chrome.tabs.create({
             url: event.target.href,
         });
     }
+};
 
-    chrome.storage.local.get(["apiKey"]).then((apiKey) => {
-        chrome.storage.local.get(["apiSecret"]).then((apiSecret) => {
-            var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
-            chrome.storage.local.get(["defaultGroupId"]).then((defaultGroupId) => {
-                client.getFromService('links/list' + '?groupid=' + defaultGroupId + '&take=5', {
-                    format: 'jsv'
-                }, function (resp) {
-                    var results = resp['Results'];
-                    if (results.length === 0) {
-                        self.loadingOption('You don\'t have links in this group. Go ahead and add a lot!');
-                    } else {
-            
-                        for (var i = 0; i < results.length; i++) {
-                            var current = results[i];
-                            var currentDomain = current['Domain'];
-                            var urlToShow = current['ShortUrlCode'];
-                            var baseUrl = current['ShortUrlCode'];
-                            if(typeof(current.Aliases) != "undefined" && current.Aliases.length > 0)
-                            {
-                                currentDomain = current.Aliases[0].Domain;
-                                urlToShow = current.Aliases[0].Code;
-                                baseUrl = current.Aliases[0].BaseCode;
-                            }
-                            self.resultsArray.push({
-                                url: (currentDomain == 'geni.us'? 'https://' : 'http://') + currentDomain + '/' + urlToShow,
-                                totalClicks: current['TotalClicks'],
-                                editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
-                            });
+chrome.storage.local.get(["apiKey"]).then((r1) => {
+    var apiKey = r1.apiKey;
+    chrome.storage.local.get(["apiSecret"]).then((r2) => {
+        var apiSecret = r2.apiSecret;
+        var client = new GeniusLinkServiceClient('https://api.geni.us/v1', apiKey, apiSecret);
+        chrome.storage.local.get(["defaultGroupId"]).then((r3) => {
+            var defaultGroupId = r3.defaultGroupId;        
+            client.getFromService('links/list' + '?groupid=' + defaultGroupId + '&take=5', {
+                format: 'jsv'
+            }, function (resp) {
+                var results = resp['Results'];
+                if (results.length === 0) {
+                    lastLinksModel.loadingOption('You don\'t have links in this group. Go ahead and add a lot!');
+                } else {
+        
+                    for (var i = 0; i < results.length; i++) {
+                        var current = results[i];
+                        var currentDomain = current['Domain'];
+                        var urlToShow = current['ShortUrlCode'];
+                        var baseUrl = current['ShortUrlCode'];
+                        if(typeof(current.Aliases) != "undefined" && current.Aliases.length > 0)
+                        {
+                            currentDomain = current.Aliases[0].Domain;
+                            urlToShow = current.Aliases[0].Code;
+                            baseUrl = current.Aliases[0].BaseCode;
                         }
-            
-                        self.loadingOption('');
-                        self.tableHeader('\
-                                          <th>Links</th>\
-                                          <th>Clicks</th>\
-                                          ');
+                        lastLinksModel.resultsArray.push({
+                            url: (currentDomain == 'geni.us'? 'https://' : 'http://') + currentDomain + '/' + urlToShow,
+                            totalClicks: current['TotalClicks'],
+                            editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
+                        });
                     }
-                }, function (error) {
-            
-                    $('#loadingOption').remove();
-                    $('#dialog').dialog({
-                        draggable: false,
-                        modal: true
-                    });
-            
-                    $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
-                    console.error('Error: ', error);
+        
+                    lastLinksModel.loadingOption('');
+                    lastLinksModel.tableHeader('\
+                                      <th>Links</th>\
+                                      <th>Clicks</th>\
+                                      ');
+                }
+            }, function (error) {        
+                $('#loadingOption').remove();
+                $('#dialog').dialog({
+                    draggable: false,
+                    modal: true
                 });
+        
+                $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
+                console.error('Error: ', error);
             });
         });
     });
-}
+});
+
 $('#back').on('click', 'a', function () {
     window.location.href = window.history.back(1);
 });
 
-var lastLinksModel = new lastLinksViewModel();
 if (typeof testModel === 'undefined') {
-    var options = {
-        attribute: "data-bind",        // default "data-sbind"
-        globals: window,               // default {}
-        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
-        noVirtualElements: false       // default true
-     };
-     ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
     ko.applyBindings(lastLinksModel);
 } else {
     testModel = lastLinksModel;
