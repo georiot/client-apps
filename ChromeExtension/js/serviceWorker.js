@@ -48,7 +48,6 @@ function CreateContextMenus() {
 
             chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 if (info.id === "child1") {
-                    alert("DO I GET HERE?");
                     chrome.tabs.sendMessage(tab.id, {
                         action: "createGeniusCurrentTab"
                     }, function (response) {});
