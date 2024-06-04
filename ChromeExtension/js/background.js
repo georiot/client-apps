@@ -70,6 +70,32 @@ function createGeniusCurrentTab() {
     })
 }
 
+function tryHandleSuccess(newLink) {
+    try {
+        if (window.location.href != "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "linkCreated"
+                }, function (response) {});
+            });
+        }
+
+        if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
+            window.location.href = "alertDoneInside.html";
+        }
+
+        copyToClipBoard(newLink);
+    } catch (e) {
+        // User doesn't have the extension popup open, and we can't programatically open/modify it in Manifest V3
+        // so find another way to alert user that the link creation is successful..
+
+        // TODO!!!
+    }    
+}
+
 function createGeniusLink(url) {
     var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
     chrome.storage.local.get(["wrongKeys"]).then((r1) => {
@@ -125,22 +151,7 @@ function createGeniusLink(url) {
                                 chrome.storage.local.set({"createdLinks": parseInt(createdLinks) + 1});
                             });
 
-                            if (window.location.href != groupsUrl) {
-                                chrome.tabs.query({
-                                    active: true,
-                                    currentWindow: true
-                                }, function (tabs) {
-                                    chrome.tabs.sendMessage(tabs[0].id, {
-                                        action: "linkCreated"
-                                    }, function (response) {});
-                                });
-                            }
-
-                            if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
-                                window.location.href = "alertDoneInside.html";
-                            }
-
-                            copyToClipBoard(newLink);
+                            tryHandleSuccess(newLink);
                         },
                         function (error) {
                             var parseError = JSV.parse(error);

@@ -73,9 +73,9 @@ function createGeniusCurrentTab() {
     })
 }
 
-function createGeniusCurrentLink(e) {
-    if (e.linkUrl) {
-        sendMessageToCreateLink(e.linkUrl);
+function createGeniusCurrentLink(url) {
+    if (url != undefined && url !== "") {
+        sendMessageToCreateLink(url);
     }
 }
 
@@ -98,11 +98,11 @@ function CreateContextMenus() {
 
             chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 if (info.menuItemId === "child1") {
-                    createGeniusCurrentTab();                    
+                    createGeniusCurrentTab();
                 }
 
                 if (info.menuItemId === "child2") {
-                    createGeniusCurrentLink();
+                    createGeniusCurrentLink(info.linkUrl);
                 }
             });
         }
