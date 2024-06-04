@@ -1,4 +1,4 @@
-chrome.runtime.onInstalled.addListener(function (details) {
+chrome.runtime.onInstalled.addListener(async function (details) {
     if (details.reason == "install") {
         chrome.storage.local.set({"createdLinks": "0"});
         chrome.storage.local.set({"doneReview": "false"});
@@ -15,6 +15,20 @@ chrome.runtime.onInstalled.addListener(function (details) {
         var thisVersion = chrome.runtime.getManifest().version;
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
     }
+
+    for (const cs of chrome.runtime.getManifest().content_scripts) {
+        for (const tab of await chrome.tabs.query({url: cs.matches})) {
+          if (tab.url.match(/(chrome|chrome-extension):\/\//gi)) {
+            continue;
+          }
+
+          chrome.scripting.executeScript({
+            files: cs.js,
+            target: {tabId: tab.id, allFrames: cs.all_frames},
+            injectImmediately: cs.run_at === 'document_start',
+          });
+        }
+    }
 });
 
 async function createOffscreen() {
@@ -28,6 +42,42 @@ async function createOffscreen() {
 chrome.runtime.onStartup.addListener(createOffscreen);
 self.onmessage = e => {}; // keepAlive
 createOffscreen();
+
+function sendMessageToCreateLink(url) {
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            action: "createGeniusLink",
+            url: url
+        }, function (response) {});
+    });
+}
+
+function getCurrentTab() {
+    return new Promise(function (resolve, reject) {
+        chrome.tabs.query({
+            active: true, // Select active tabs
+            lastFocusedWindow: true // In the current window
+        }, function (tabs) {
+            resolve(tabs[0]);
+        });
+    });
+}
+
+function createGeniusCurrentTab() {
+    getCurrentTab().then(function (tab) {
+        var url = tab.url;
+        sendMessageToCreateLink(url);
+    })
+}
+
+function createGeniusCurrentLink(e) {
+    if (e.linkUrl) {
+        sendMessageToCreateLink(e.linkUrl);
+    }
+}
 
 function CreateContextMenus() {
     chrome.storage.local.get(["defaultGroup"]).then((r1) => {
@@ -47,16 +97,14 @@ function CreateContextMenus() {
             });
 
             chrome.contextMenus.onClicked.addListener(function(info, tab) {
-                if (info.id === "child1") {
-                    chrome.tabs.sendMessage(tab.id, {
-                        action: "createGeniusCurrentTab"
-                    }, function (response) {});
+                console.log("context menu clicked with: " + JSON.stringify(info));
+
+                if (info.menuItemId === "child1") {
+                    createGeniusCurrentTab();                    
                 }
 
-                if (info.id === "child2") {
-                    chrome.tabs.sendMessage(tab.id, {
-                        action: "createGeniusCurrentLink"
-                    }, function (response) {});
+                if (info.menuItemId === "child2") {
+                    createGeniusCurrentLink();
                 }
             });
         }

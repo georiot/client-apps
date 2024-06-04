@@ -78,12 +78,6 @@ function createGeniusCurrentTab() {
     })
 }
 
-function createGeniusCurrentLink(e) {
-    if (e.linkUrl) {
-        createGeniusLink(e.linkUrl);
-    }
-}
-
 function createGeniusLink(url) {
     var groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
     chrome.storage.local.get(["wrongKeys"]).then((r1) => {
@@ -103,19 +97,34 @@ function createGeniusLink(url) {
             var apiKey = r2.apiKey;
             chrome.storage.local.get(["apiSecret"]).then((r3) => {
                 var apiSecret = r3.apiSecret;
-                var client = new GeniusLinkServiceClient('https://api.geni.us/v3', apiKey, apiSecret);
 
                 chrome.storage.local.get(["defaultGroupId"]).then((r4) => {
                     var defaultGroupId = r4.defaultGroupId;
                     chrome.storage.local.get(["selectedDomainName"]).then((r5) => {
                         var selectedDomainName = r5.selectedDomainName;
-                        client.postToService('shorturls', {
-                            GroupId: defaultGroupId,
-                            Domain: selectedDomainName,
-                            Url: url
-                        },
-                        function (data) {
-                            var domain = data.ShortUrl.Domain.toString();
+                        
+                        fetch("https://api.geni.us/v3/shorturls", {
+                            method: 'POST',
+                            headers: {
+                                'X-Api-Key': apiKey,
+                                'X-Api-Secret': apiSecret,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                GroupId: defaultGroupId,
+                                Domain: selectedDomainName,
+                                Url: url
+                            })
+                          }).then(response => {
+                            alert(JSON.stringify(response));
+                            if (!response.ok) {
+                                throw Error(response.status);
+                            }
+                            
+                            return response.json();
+                        }).then(data => {
+                            alert(JSON.stringify(data));
+                            var domain = data.shortUrl.domain.toString();
 
                             if (domain.includes("geni.us")){ // Only if geni.us link, force https
                                 if (domain.startsWith("http://")){
@@ -130,8 +139,7 @@ function createGeniusLink(url) {
                                 }
                             }
 
-                            newLink = domain + "/" + data.ShortUrl.Code;
-                            copyToClipBoard(newLink);
+                            newLink = domain + "/" + data.shortUrl.code;
                             chrome.storage.local.set({"lastCreatedLink": newLink});
                             chrome.storage.local.get(["createdLinks"]).then((r6) => {
                                 var createdLinks = r6.createdLinks;
@@ -152,11 +160,10 @@ function createGeniusLink(url) {
                             if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
                                 window.location.href = "alertDoneInside.html";
                             }
-                        },
-                        function (error) {
-                            var parseError = JSV.parse(error);
-                            var error401 = parseError.ResponseStatus.ErrorCode;
-                            if (error401 == 'AuthenticationException') {
+                            
+                            copyToClipBoard(newLink);
+                        }).catch(error => {
+                            if (error.message == '401') {
                                 alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
                             } else {
                                 alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');
@@ -169,13 +176,9 @@ function createGeniusLink(url) {
     });
 }
 
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {    
-    if (msg.action === "createGeniusCurrentTab") {
-        createGeniusCurrentTab();
-    }
-
-    if (msg.action === "createGeniusCurrentLink") {
-        createGeniusLink();
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (msg.action === "createGeniusLink" && msg.url != undefined && msg.url !== "") {
+        createGeniusLink(msg.url);
     }
 
     sendResponse();
