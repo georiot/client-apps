@@ -391,8 +391,16 @@ JSV.containsAny_ = function(str, tests)
 };
 
 /* Closure Library StringBuffer for efficient string concatenation */
-var hasScriptEngine = 'ScriptEngine' in window;
-var HAS_JSCRIPT = hasScriptEngine && window['ScriptEngine']() == 'JScript';
+var hasScriptEngine = false;
+var HAS_JSCRIPT = false;
+try {
+    hasScriptEngine = 'ScriptEngine' in window;
+    HAS_JSCRIPT = hasScriptEngine && window['ScriptEngine']() == 'JScript';
+} catch (e) {
+    // if calling from service worker (we don't have access to the DOM)..
+    hasScriptEngine = true;
+    HAS_JSCRIPT = true;
+}
 
 StringBuffer = function(opt_a1, var_args) {
   this.buffer_ = HAS_JSCRIPT ? [] : '';

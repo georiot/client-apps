@@ -1,12 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var options = {
-        attribute: "data-bind",        // default "data-sbind"
-        globals: window,               // default {}
-        bindings: ko.bindingHandlers,  // default ko.bindingHandlers
-        noVirtualElements: false       // default true
-    };
-    ko.bindingProvider.instance = new ko.secureBindingsProvider(options);
-
     var dateobj = new Date();
 
     function pad(n) {
@@ -98,33 +90,20 @@ function createGeniusLink(url) {
             chrome.storage.local.get(["apiSecret"]).then((r3) => {
                 var apiSecret = r3.apiSecret;
 
+                var client = new GeniusLinkServiceClient('https://api.geni.us/v3', apiKey, apiSecret);
+
                 chrome.storage.local.get(["defaultGroupId"]).then((r4) => {
                     var defaultGroupId = r4.defaultGroupId;
                     chrome.storage.local.get(["selectedDomainName"]).then((r5) => {
                         var selectedDomainName = r5.selectedDomainName;
                         
-                        fetch("https://api.geni.us/v3/shorturls", {
-                            method: 'POST',
-                            headers: {
-                                'X-Api-Key': apiKey,
-                                'X-Api-Secret': apiSecret,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                GroupId: defaultGroupId,
-                                Domain: selectedDomainName,
-                                Url: url
-                            })
-                          }).then(response => {
-                            alert(JSON.stringify(response));
-                            if (!response.ok) {
-                                throw Error(response.status);
-                            }
-                            
-                            return response.json();
-                        }).then(data => {
-                            alert(JSON.stringify(data));
-                            var domain = data.shortUrl.domain.toString();
+                        client.postToService('shorturls', {
+                            GroupId: defaultGroupId,
+                            Domain: selectedDomainName,
+                            Url: url
+                        },
+                        function (data) {
+                            var domain = data.ShortUrl.Domain.toString();
 
                             if (domain.includes("geni.us")){ // Only if geni.us link, force https
                                 if (domain.startsWith("http://")){
@@ -139,7 +118,7 @@ function createGeniusLink(url) {
                                 }
                             }
 
-                            newLink = domain + "/" + data.shortUrl.code;
+                            newLink = domain + "/" + data.ShortUrl.Code;
                             chrome.storage.local.set({"lastCreatedLink": newLink});
                             chrome.storage.local.get(["createdLinks"]).then((r6) => {
                                 var createdLinks = r6.createdLinks;
@@ -156,14 +135,17 @@ function createGeniusLink(url) {
                                     }, function (response) {});
                                 });
                             }
-        
+
                             if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
                                 window.location.href = "alertDoneInside.html";
                             }
-                            
+
                             copyToClipBoard(newLink);
-                        }).catch(error => {
-                            if (error.message == '401') {
+                        },
+                        function (error) {
+                            var parseError = JSV.parse(error);
+                            var error401 = parseError.ResponseStatus.ErrorCode;
+                            if (error401 == 'AuthenticationException') {
                                 alert('Oops! Those keys don\'t appear to be right. Please double check your API Key and Secret.');
                             } else {
                                 alert('Hmm.. looks like we\'re having trouble connecting. Try again, or email help@geni.us to let us know.');

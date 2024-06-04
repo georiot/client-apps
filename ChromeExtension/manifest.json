@@ -18,7 +18,7 @@
 
     "content_scripts": [{
         "matches": ["http://*/*", "https://*/*", "*://*/*"],
-        "js": ["js/openDialog.js", "js/background.js"]
+        "js": ["js/jquery.min.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js", "js/openDialog.js", "js/background.js"]
     }],
     
     "web_accessible_resources": [

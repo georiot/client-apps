@@ -1,9 +1,6 @@
 GeniusLinkServiceClient.prototype = JsvServiceClient.prototype;
 
-
-
 function GeniusLinkServiceClient(baseUrl, apiKey, apiSecret) {
-
     var that = this;
     JsvServiceClient.call(this, baseUrl);
     that.baseSyncReplyUri = baseUrl;
@@ -24,11 +21,9 @@ function GeniusLinkServiceClient(baseUrl, apiKey, apiSecret) {
     };
 
     that.postToService = function (url, objectToProcess, callback, error) {
-
         objectToProcess.apiKey = that.apiKey;
         objectToProcess.apiSecret = that.apiSecret;
         GeniusLinkServiceClient.prototype.postFormDataToService.call(this, url + '?apiKey=' + that.apiKey + '&apiSecret=' + that.apiSecret + '&format=jsv', objectToProcess,
             callback, error);
-    };
-    
+    };    
 }
