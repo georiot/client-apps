@@ -97,8 +97,6 @@ function CreateContextMenus() {
             });
 
             chrome.contextMenus.onClicked.addListener(function(info, tab) {
-                console.log("context menu clicked with: " + JSON.stringify(info));
-
                 if (info.menuItemId === "child1") {
                     createGeniusCurrentTab();                    
                 }
