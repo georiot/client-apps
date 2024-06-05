@@ -72,6 +72,8 @@ function createGeniusCurrentTab() {
 
 function tryHandleSuccess(newLink) {
     try {
+        copyToClipBoard(newLink);
+
         if (window.location.href != "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {
             chrome.tabs.query({
                 active: true,
@@ -86,13 +88,10 @@ function tryHandleSuccess(newLink) {
         if (window.location.href === "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html") {        
             window.location.href = "alertDoneInside.html";
         }
-
-        copyToClipBoard(newLink);
     } catch (e) {
         // User doesn't have the extension popup open, and we can't programatically open/modify it in Manifest V3
-        // so find another way to alert user that the link creation is successful..
-
-        // TODO!!!
+        // so we need to find another way to alert user that the link creation is successful..
+        alert(`Done! ${newLink} is copied to your clipboard and can be managed in your Genius Link dashboard.`)
     }    
 }
 
