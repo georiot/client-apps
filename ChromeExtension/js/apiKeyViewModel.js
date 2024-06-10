@@ -57,7 +57,7 @@ $('#back').on('click', 'a', function () {
 });
 
 apiKeyViewModel.loadKey();
-if (typeof testModel === 'undefined') {
+if (testModel == undefined) {
     ko.applyBindings(apiKeyViewModel);
 } else {
     testModel = apiModel;

@@ -203,7 +203,7 @@ listOfGroups.addEventListener('change', function () {
     });
 });
 
-if (typeof testModel === 'undefined') {
+if (testModel == undefined) {
     ko.applyBindings(groupsModel);
 } else {
     testModel = groupsModel;
