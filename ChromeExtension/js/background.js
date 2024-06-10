@@ -96,12 +96,12 @@ function tryHandleSuccess(newLink) {
 }
 
 async function createGeniusLink(url) {
-    let groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
-    let wrongKeys = (await chrome.storage.local.get(["wrongKeys"])).wrongKeys;
-    let apiKey = (await chrome.storage.local.get(["apiKey"])).apiKey;
-    let apiSecret = (await chrome.storage.local.get(["apiSecret"])).apiSecret;
-    let defaultGroupId = (await chrome.storage.local.get(["defaultGroupId"])).defaultGroupId;
-    let selectedDomainName = (await chrome.storage.local.get(["selectedDomainName"])).selectedDomainName;
+    const groupsUrl = "chrome-extension://" + chrome.runtime.id + "/alertLoadingInside.html";
+    const wrongKeys = (await chrome.storage.local.get(["wrongKeys"])).wrongKeys;
+    const apiKey = (await chrome.storage.local.get(["apiKey"])).apiKey;
+    const apiSecret = (await chrome.storage.local.get(["apiSecret"])).apiSecret;
+    const defaultGroupId = (await chrome.storage.local.get(["defaultGroupId"])).defaultGroupId;
+    const  selectedDomainName = (await chrome.storage.local.get(["selectedDomainName"])).selectedDomainName;
 
     if (window.location.href !== groupsUrl && wrongKeys === "false") {
         chrome.tabs.query({
