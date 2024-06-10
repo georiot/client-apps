@@ -16,7 +16,7 @@ apiKeyViewModel.apiSecret.subscribe(function (newValue) {
 });
 
 chrome.storage.local.get(["defaultGroup"]).then((group) => {
-    if (group != null && group != "") {
+    if (group) {
         apiKeyViewModel.showBackLink(true);
         apiKeyViewModel.showHelpLink(false);
         apiKeyViewModel.newInstall(false);
