@@ -48,7 +48,6 @@
         "storage",
         "clipboardRead",
         "tabs",
-        "offscreen",
         "scripting"
     ],
 

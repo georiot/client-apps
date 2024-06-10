@@ -31,18 +31,6 @@ chrome.runtime.onInstalled.addListener(async function (details) {
     }
 });
 
-async function createOffscreen() {
-    await chrome.offscreen.createDocument({
-        url: 'offscreen.html',
-        reasons: ['BLOBS'],
-        justification: 'keep service worker running',
-    }).catch(() => {});
-}
-
-chrome.runtime.onStartup.addListener(createOffscreen);
-self.onmessage = e => {}; // keepAlive
-createOffscreen();
-
 function sendMessageToCreateLink(url) {
     chrome.tabs.query({
         active: true,
