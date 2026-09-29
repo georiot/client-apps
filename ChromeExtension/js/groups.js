@@ -32,7 +32,7 @@ function groupsViewModel() {
 
                 }
                 localStorage.setItem("doneReview", true);
-                chrome.browserAction.setPopup({
+                chrome.action.setPopup({
                     popup: "groups.html"
                 });
 
@@ -68,7 +68,7 @@ function groupsViewModel() {
 
                 }
                 localStorage.setItem("doneReview", true);
-                chrome.browserAction.setPopup({
+                chrome.action.setPopup({
                     popup: "groups.html"
                 });
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#loadingOption').remove();
 		$('#listOfGroups option[id="' + localStorage['defaultGroup']  + '"]').attr('selected', true);     
 
-        chrome.extension.sendMessage({
+        chrome.runtime.sendMessage({
                 name: 'CreateContentMenus',
             },
             function (response) {});
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var error401 = parseError.ResponseStatus.ErrorCode;
         localStorage.setItem("wrongKeys", true);
         if (error401 == 'AuthenticationException' || error401 == 'Unauthorized') {
-            chrome.browserAction.setPopup({
+            chrome.action.setPopup({
                 popup: "apikeys.html"
             });
             bootbox.confirm({

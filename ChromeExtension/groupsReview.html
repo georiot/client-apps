@@ -23,6 +23,7 @@
     <script type="text/javascript" src="js/servicestack.js"></script>
     <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
+    <script src="js/bindings.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootbox.min.js"></script>
     <script type="text/javascript" src="js/background.js"></script>
@@ -33,7 +34,7 @@
 <body id="body">
     <div style="padding: 20px">
         <div style="text-align: center;">
-            <button class="btn-gl-blue" style="width: 250px; font-size: 13px; " data-bind="event: { click: createLinkFromButton }">New link from current page</button>
+            <button class="btn-gl-blue" style="width: 250px; font-size: 13px; " data-bind-key="createLink">New link from current page</button>
             <p class="fine-print" style="position: relative; top: 8px;">Or, right-click a link and select "Create..."</p>
         </div>
         <hr class="hr-group">
@@ -42,7 +43,7 @@
             <a href="apikeys.html" class="menu-item text-left">Change API Keys
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
-            <a href="lastLinks.html" class="menu-item text-left">View last five links
+            <a href="lastlinks.html" class="menu-item text-left">View last five links
                         <span class="glyphicon glyphicon-chevron-right pull-right menu-icons" aria-hidden="true"></span>
                          </a>
             <a href="customDomain.html" class="menu-item text-left">Select a custom domain
@@ -76,8 +77,8 @@
             <p>Thanks for using this extension. How has your experience been so far?</p>
             <div class="thumbs-up-down">
                 <div style="text-align: center;">
-                    <span class="glyphicon glyphicon-thumbs-up thumbs-up" data-bind="click: thumbsup"></span>
-                    <span class="glyphicon glyphicon-thumbs-down thumbs-down" data-bind="click: thumbsdown"></span>
+                    <span class="glyphicon glyphicon-thumbs-up thumbs-up" data-bind-key="thumbsup"></span>
+                    <span class="glyphicon glyphicon-thumbs-down thumbs-down" data-bind-key="thumbsdown"></span>
                 </div>
             </div>
         </div>

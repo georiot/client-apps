@@ -43,15 +43,9 @@ function apiKeyViewModel() {
         if (self.apiKey() !== null && self.apiSecret() !== null && self.apiKey() !== Empty && self.apiSecret() !== Empty) {
             localStorage.setItem("apiKey", self.apiKey());
             localStorage.setItem("apiSecret", self.apiSecret());
-
-
+            window.location.href = 'groups.html';
         } else {
-            $("#dialog").dialog({
-                draggable: false,
-                modal: true
-            });
-
-            $("#networkError").html("Oops! Those keys don't appear to be right. Please double check your API Key and Secret.");
+            alert("Please enter both your API Key and Secret.");
 
 
         }
