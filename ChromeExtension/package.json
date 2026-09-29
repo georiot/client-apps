@@ -4,7 +4,8 @@
   "description": "Easily build geni.us links with the click of a button!",
   "main": "popup.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test tests/*.test.cjs",
+    "test:mv3": "node tests/browser-smoke.cjs"
   },
   "repository": {
     "type": "git",

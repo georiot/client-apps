@@ -1,43 +1,62 @@
 {
-    "manifest_version": 2,
-
+    "manifest_version": 3,
     "name": "Geniuslink | Intelligent Link Creator",
     "description": "Easily build geni.us links with the click of a button!",
     "version": "1.0.5",
-
-    "browser_action": {
-        "default_icon": "images/icon.png",
-        "default_popup": "apikeys.html"
-    },
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     },
-    "content_scripts": [{
-        "matches": ["http://*/*", "https://*/*", "*://*/*"],
-        "js": ["js/openDialog.js"]
-    }],
-    "web_accessible_resources": [
-        "css/custom.css",
-        "js/frame.js",
-        "alertDoneInside.html", "alertLoadingInside.html", "alertDoneOutside.html", "alertLoadingOutside.html", "css/vsprites.svg", "css/main.css", "js/bootstrap.min.js"
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "js": [
+                "js/openDialog.js"
+            ]
+        }
     ],
-
+    "web_accessible_resources": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "resources": [
+                "css/custom.css",
+                "js/frame.js",
+                "alertDoneInside.html",
+                "alertLoadingInside.html",
+                "alertDoneOutside.html",
+                "alertLoadingOutside.html",
+                "css/vsprites.svg",
+                "css/main.css",
+                "js/bootstrap.min.js"
+            ]
+        }
+    ],
     "background": {
-        "scripts": ["js/background.js", "js/jquery.min.js", "js/jquery-ui.min.js", "js/bootstrap.min.js", "js/bootbox.min.js", "js/utilities.js", "js/servicestack.js", "js/GeniusLinkServiceClient.js"],
-        "persistent": true
+        "service_worker": "js/service-worker.js"
     },
-
-    "content_security_policy": "script-src  'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
-
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
     "permissions": [
         "activeTab",
-        "https://ajax.googleapis.com/",
         "contextMenus",
-        "https://api.geni.us/",
         "storage",
-        "clipboardRead",
-        "tabs", "http://*/*", "https://*/*"
+        "clipboardWrite",
+        "offscreen"
+    ],
+    "minimum_chrome_version": "116",
+    "action": {
+        "default_icon": "images/icon.png",
+        "default_popup": "apikeys.html"
+    },
+    "host_permissions": [
+        "https://api.geni.us/*"
     ]
 }

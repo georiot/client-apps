@@ -5,7 +5,7 @@ function customDomainViewModel() {
     self.domainArray = ko.observableArray();
 
     self.selectedDomain.subscribe(function (newValue) {
-        localStorage.setItem("selectedDomainName", newValue.name);
+        if (newValue) localStorage.setItem("selectedDomainName", newValue.name);
 
     });
 
