@@ -35,7 +35,7 @@ function lastLinksViewModel() {
                 self.resultsArray.push({
                     url: (currentDomain == 'geni.us'? 'https://' : 'http://') + currentDomain + '/' + urlToShow,
                     totalClicks: current['TotalClicks'],
-                    editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
+                    editUrl: 'https://my.geniuslink.com/links#!editlink=' + baseUrl
                 });
             }
 

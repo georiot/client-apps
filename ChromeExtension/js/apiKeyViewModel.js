@@ -35,7 +35,7 @@ function apiKeyViewModel() {
         self.showBackLink(true);
         self.showHelpLink(false);
         self.newInstall(false);
-        self.UrlApiKeys = ('https://my.geni.us/tools#api-section');
+        self.UrlApiKeys = ('https://my.geniuslink.com/tools#api-section');
     }
 
     self.saveKeys = function () {
