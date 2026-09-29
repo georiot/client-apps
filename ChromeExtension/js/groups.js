@@ -32,7 +32,7 @@ function groupsViewModel() {
 
                 }
                 localStorage.setItem("doneReview", true);
-                chrome.browserAction.setPopup({
+                chrome.action.setPopup({
                     popup: "groups.html"
                 });
 
@@ -68,7 +68,7 @@ function groupsViewModel() {
 
                 }
                 localStorage.setItem("doneReview", true);
-                chrome.browserAction.setPopup({
+                chrome.action.setPopup({
                     popup: "groups.html"
                 });
 
@@ -88,50 +88,47 @@ document.addEventListener('DOMContentLoaded', function () {
     client.getFromService('groups/list', {
         format: 'jsv'
     }, function (data) {
-        var resp = data;
-        var groups = resp['Groups'];
-        localStorage.setItem("wrongKeys", false);
-        if (groups.length === 0) {
-            $('#dialog').dialog({
-                draggable: false,
-                modal: true
-            });
-            $('#networkError').html('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
-
-
-        }
-        for (var i = 0; i < groups.length; i++) {
-            if (groups[i]['Enabled'] == 1) {
-                groupsList.push(groups[i]['Name']);
-                groupsIds.push(groups[i]['Id']);
-            }
-
-            if (localStorage['defaultGroup'] == null) {
-                localStorage.setItem('defaultGroup', groups[0]['Name']);
-                localStorage.setItem('defaultGroupId', groups[0]['Id']);
-            }
-        }
-
+        var groups = data.Groups.filter(function (group) {
+            return group.Enabled == 1;
+        }).sort(function (a, b) {
+            return a.Name.localeCompare(b.Name, undefined, { sensitivity: 'base' });
+        });
+        localStorage.setItem('wrongKeys', false);
+        groupsList = groups.map(function (group) { return group.Name; });
+        groupsIds = groups.map(function (group) { return group.Id; });
         localStorage.setItem('groups', JSON.stringify(groupsList));
         localStorage.setItem('groupsIds', JSON.stringify(groupsIds));
 
-        var groups = JSON.parse(localStorage['groups']);
-        var listId = JSON.parse(localStorage['groupsIds']);
-        var x = document.getElementById('listOfGroups');
-
-        for (var i = 0; i < groups.length; i++) {
-            var c = document.createElement('option')
-            c.id = groups[i];
-            c.value = listId[i];
-            c.text = groups[i];
-            x.options.add(c, i);
-
-
+        var list = document.getElementById('listOfGroups');
+        list.options.length = 0;
+        list.disabled = groups.length === 0;
+        if (groups.length === 0) {
+            $('#dialog').dialog({ draggable: false, modal: true });
+            $('#networkError').text('Hmm.. we couldn\'t find any groups in your account. Create a new one, or email help@geni.us and we can take a look.');
+            return;
         }
-        $('#loadingOption').remove();
-		$('#listOfGroups option[id="' + localStorage['defaultGroup']  + '"]').attr('selected', true);     
 
-        chrome.extension.sendMessage({
+        var savedId = localStorage['defaultGroupId'];
+        var savedName = localStorage['defaultGroup'];
+        // IDs preserve the user's choice even if the group has been renamed.
+        // Older settings may have only the name, so support that fallback too.
+        var selected = groups.find(function (group) {
+            return savedId ? String(group.Id) === savedId : group.Name === savedName;
+        }) || groups.find(function (group) {
+            return group.Name.toLowerCase() === 'default';
+        }) || groups[0];
+
+        groups.forEach(function (group) {
+            var option = document.createElement('option');
+            option.value = group.Id;
+            option.text = group.Name;
+            list.options.add(option);
+        });
+        list.value = String(selected.Id);
+        localStorage.setItem('defaultGroup', selected.Name);
+        localStorage.setItem('defaultGroupId', selected.Id);
+
+        chrome.runtime.sendMessage({
                 name: 'CreateContentMenus',
             },
             function (response) {});
@@ -142,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var error401 = parseError.ResponseStatus.ErrorCode;
         localStorage.setItem("wrongKeys", true);
         if (error401 == 'AuthenticationException' || error401 == 'Unauthorized') {
-            chrome.browserAction.setPopup({
+            chrome.action.setPopup({
                 popup: "apikeys.html"
             });
             bootbox.confirm({
@@ -161,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 callback: function (result) {
                     if (!result) {
-                        var url = "https://my.geni.us/tools#api-section";
+                        var url = "https://my.geniuslink.com/tools#api-section";
                         chrome.tabs.create({
                             url: url
                         });

@@ -23,6 +23,7 @@
     <script type="text/javascript" src="js/servicestack.js"></script>
     <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
+    <script src="js/bindings.js"></script>
     <script type="text/javascript" src="js/customDomainViewModel.js" defer="defer"></script>
 </head>
 
@@ -31,7 +32,7 @@
         <center>
             <p class="newlink-group">Select custom domain</p>
 
-            <select class="form-control" data-bind="options: domainArray,optionsText: 'name',  value: selectedDomain">
+            <select class="form-control" data-bind-key="domains">
                       
             </select>
             <br>

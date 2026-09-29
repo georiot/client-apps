@@ -18,6 +18,7 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/utilities.js"></script>
     <script type="text/javascript" src="js/knockout.js"></script>
+    <script src="js/bindings.js"></script>
     <script type="text/javascript" src="js/servicestack.js"></script>
     <script type="text/javascript" src="js/GeniusLinkServiceClient.js"></script>
     <script type="text/javascript" src="js/lastLinksViewModel.js" defer="defer"></script>
@@ -32,25 +33,25 @@
         </center>
         <div>
             <p class="text-center">
-                <b data-bind="text: loadingOption"></b>
+                <b data-bind-key="loading"></b>
             </p>
         </div>
         <div>
 
             <table width="300">
                 <thead>
-                    <tr data-bind="html: tableHeader"></tr>
+                    <tr data-bind-key="tableHeader"></tr>
                 </thead>
-                <tbody data-bind="foreach: resultsArray">
+                <tbody data-bind-key="results">
                     <tr>
                         <td>
-                            <a class="pull-left" data-bind="text:url, attr:{href:url}, click: $parent.openTab"></a>
+                            <a class="pull-left" data-bind-key="resultLink"></a>
                         </td>
                         <td>
-                            <center><span data-bind="text:totalClicks"></span></center>
+                            <center><span data-bind-key="clicks"></span></center>
                         </td>
                         <td>
-                            <a data-bind="attr:{href:editUrl}, click: $parent.openTab, text: 'Edit'"></a>
+                            <a data-bind-key="editLink"></a>
                         </td>
                     </tr>
                 </tbody>

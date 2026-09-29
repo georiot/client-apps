@@ -2,7 +2,7 @@ function lastLinksViewModel() {
     var self = this;
     self.loadingOption = ko.observable('Loading links...');
     self.details = ko.observable('');
-    self.resultsArray = ko.observableArray('');
+    self.resultsArray = ko.observableArray([]);
     self.tableHeader = ko.observable('');
     self.openTab = function (data, event) {
 
@@ -35,7 +35,7 @@ function lastLinksViewModel() {
                 self.resultsArray.push({
                     url: (currentDomain == 'geni.us'? 'https://' : 'http://') + currentDomain + '/' + urlToShow,
                     totalClicks: current['TotalClicks'],
-                    editUrl: 'https://my.geni.us/links#!editlink=' + baseUrl
+                    editUrl: 'https://my.geniuslink.com/links#!editlink=' + baseUrl
                 });
             }
 
