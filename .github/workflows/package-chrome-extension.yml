@@ -1,0 +1,40 @@
+name: Package Chrome Extension
+
+on:
+  push:
+    tags:
+      - "chrome-v*"
+  workflow_dispatch: {}
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ChromeExtension
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read version from manifest
+        id: manifest
+        run: echo "version=$(node -p "require('./manifest.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Build package
+        run: |
+          zip -r "../geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}.zip" . \
+            -x ".vscode/*" \
+            -x "tests/*" \
+            -x "bower_components/*" \
+            -x "README.md" \
+            -x "package.json" \
+            -x "package-lock.json" \
+            -x ".DS_Store" \
+            -x "**/.DS_Store"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}
+          path: geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}.zip
+          if-no-files-found: error
