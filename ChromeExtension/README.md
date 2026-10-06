@@ -46,13 +46,27 @@ real Geniuslink credentials or create real links.
 ### Packaging for the Chrome Web Store
 
 The [Package Chrome Extension](../.github/workflows/package-chrome-extension.yml)
-GitHub Action builds a versioned upload zip. Trigger it either by pushing a tag
-matching `chrome-v*` (e.g. `chrome-v1.0.5`) or manually via the **Run workflow**
-button on the Actions tab. The resulting
-`geniuslink-chrome-extension-v<version>.zip` (version read from `manifest.json`)
-is attached to the run as a downloadable artifact — upload it to the Chrome Web
-Store Developer Dashboard manually.
+GitHub Action builds a versioned upload zip. To release, push a tag matching
+`chrome-v<version>` from `master`:
 
+```sh
+git tag chrome-v1.0.8
+git push origin chrome-v1.0.8
+```
+
+The tag is the source of truth for the version: the workflow writes it into
+`manifest.json` before zipping, so you do not need to edit the manifest by hand.
+The workflow fails if the tag is not a valid Chrome version or is not greater
+than every existing `chrome-v*` tag. It does not check the Chrome Web Store, so
+always release through a tag; a manual upload from another branch leaves the
+repo unaware of the published version.
+
+Running the workflow manually via the **Run workflow** button on the Actions tab
+packages the version currently in `manifest.json`; use this for test builds.
+
+The resulting `geniuslink-chrome-extension-v<version>.zip` is attached to the run
+as a downloadable artifact — upload it to the Chrome Web Store Developer
+Dashboard manually.
 
 ## Unit Testing
 The project is set to use the jasmine framework : http://jasmine.github.io/2.5/introduction.html
