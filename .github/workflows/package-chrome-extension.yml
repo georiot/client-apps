@@ -19,19 +19,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Read version from manifest
+      # On a chrome-v* tag, the tag is the source of truth: it must be newer than
+      # every previous chrome-v* tag and is written into manifest.json. Manual
+      # runs package the manifest version as-is.
+      - name: Resolve version
         id: manifest
-        run: echo "version=$(node -p "require('./manifest.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Verify tag matches manifest version
-        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          tag_version="${GITHUB_REF_NAME#chrome-v}"
-          manifest_version="${{ steps.manifest.outputs.version }}"
-          if [ "$tag_version" != "$manifest_version" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME does not match manifest version $manifest_version"
-            exit 1
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            version="${GITHUB_REF_NAME#chrome-v}"
+            if ! [[ "$version" =~ ^[0-9]+(\.[0-9]+){0,3}$ ]]; then
+              echo "::error::Tag $GITHUB_REF_NAME is not a valid Chrome extension version"
+              exit 1
+            fi
+
+            latest=$(git ls-remote --tags --refs origin 'chrome-v*' \
+              | sed 's#.*refs/tags/chrome-v##' \
+              | grep -vxF "$version" \
+              | sort -V | tail -n1 || true)
+            if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -n1)" != "$version" ]; then
+              echo "::error::Version $version must be greater than the latest released version $latest"
+              exit 1
+            fi
+
+            node -e '
+              const fs = require("fs");
+              const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
+              manifest.version = process.argv[1];
+              fs.writeFileSync("manifest.json", JSON.stringify(manifest, null, 4) + "\n");
+            ' "$version"
+          else
+            version=$(node -p "require('./manifest.json').version")
           fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Build package
         run: |
