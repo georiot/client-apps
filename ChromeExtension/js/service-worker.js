@@ -23,14 +23,17 @@ async function offscreen(operation, data) {
 var LEGACY_SETTINGS = ['apiKey', 'apiSecret', 'defaultGroup', 'defaultGroupId', 'selectedDomainName',
     'createdLinks', 'doneReview', 'installDate', 'wrongKeys', 'lastCreatedLink', 'groups', 'groupsIds'];
 async function migrateLegacySettings(fromV106) {
-    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated'));
+    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated', 'legacySettingsOverwrite'));
     if (stored.legacySettingsMigrated) return;
+    // Only onInstalled knows the update came from 1.0.6; remember it so a retry still overwrites.
+    if (fromV106 && !stored.legacySettingsOverwrite) await chrome.storage.local.set({ legacySettingsOverwrite: true });
+    var overwrite = Boolean(fromV106 || stored.legacySettingsOverwrite);
     var values = {};
     LEGACY_SETTINGS.forEach(function (key) {
         // 1.0.6 could store createdLinks as NaN, which chrome.storage returns as null.
         if (stored[key] !== undefined && stored[key] !== null) values[key] = String(stored[key]);
     });
-    if (Object.keys(values).length) await offscreen('migrate', { values: values, overwrite: fromV106 });
+    if (Object.keys(values).length) await offscreen('migrate', { values: values, overwrite: overwrite });
     await chrome.storage.local.set({ legacySettingsMigrated: true });
 }
 

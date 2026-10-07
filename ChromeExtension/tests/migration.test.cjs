@@ -5,7 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 // Runs the real service worker and offscreen document against in-memory storage.
-function setup({ local = {}, chromeStorage = {}, failMigrate = false } = {}) {
+function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
     const localStorage = new Map(Object.entries(local));
     const storage = { ...chromeStorage };
     const popups = [];
@@ -37,7 +37,7 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = false } = {}) {
     });
     vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/service-worker.js'), 'utf8'), context);
     context.offscreen = (operation, data) => {
-        if (operation === 'migrate' && failMigrate) return Promise.reject(new Error('offscreen unavailable'));
+        if (operation === 'migrate' && failMigrate-- > 0) return Promise.reject(new Error('offscreen unavailable'));
         return new Promise((resolve) => {
             offscreenListener({ target: 'offscreen', operation, ...data }, { id: 'ext' }, resolve);
         });
@@ -152,10 +152,18 @@ test('migration runs once and never overwrites settings saved afterwards', async
     assert.equal(localStorage.get('defaultGroupId'), '3');
 });
 
-test('a failed migration does not block configuration and is retried', async () => {
-    const env = setup({ local: v105, chromeStorage: v106, failMigrate: true });
+test('a failed migration does not block configuration and the retry keeps the 1.0.6 overwrite', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
     await env.update('1.0.6');
     assert.deepEqual(env.popups, ['groups.html']);
     assert.equal(env.storage.legacySettingsMigrated, undefined);
     assert.equal(env.localStorage.get('apiKey'), 'old-key');
+
+    // Later retries come from startup or a popup, which do not know the previous version.
+    await env.context.configure();
+    assert.equal(env.storage.legacySettingsMigrated, true);
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
+    assert.equal(env.localStorage.get('apiSecret'), 'new-secret');
+    assert.equal(env.localStorage.get('defaultGroupId'), '2');
+    assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
 });
