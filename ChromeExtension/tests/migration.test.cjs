@@ -98,11 +98,33 @@ test('updating straight from 1.0.6: 1.0.6 values replace stale 1.0.5 values; nul
 });
 
 test('updating from 1.0.7: settings re-saved in 1.0.7 are kept and only gaps are filled', async () => {
-    const saved = { ...v107Defaults, apiKey: 'resaved-key', apiSecret: 'resaved-secret', defaultGroup: 'Picked', defaultGroupId: '9' };
+    const saved = { ...v107Defaults, apiKey: 'new-key', apiSecret: 'new-secret', defaultGroup: 'Picked', defaultGroupId: '9' };
     const { localStorage, update } = setup({ local: saved, chromeStorage: v106 });
     await update('1.0.7');
     for (const [key, value] of Object.entries(saved)) assert.equal(localStorage.get(key), value);
     assert.equal(localStorage.get('groupsIds'), '[2]');
+});
+
+test('updating from 1.0.7: a partly entered key for another account is not mixed with 1.0.6 settings', async () => {
+    const { localStorage, popups, update } = setup({
+        local: { ...v107Defaults, apiKey: 'other-account-key' }, chromeStorage: { ...v106, lastCreatedLink: 'https://geni.us/x' }
+    });
+    await update('1.0.7');
+    assert.equal(localStorage.get('apiKey'), 'other-account-key');
+    for (const key of ['apiSecret', 'defaultGroup', 'defaultGroupId', 'groups', 'groupsIds', 'wrongKeys']) {
+        assert.equal(localStorage.has(key), false, key);
+    }
+    assert.equal(localStorage.get('selectedDomainName'), 'geni.us');
+    assert.equal(localStorage.get('lastCreatedLink'), 'https://geni.us/x');
+    assert.deepEqual(popups, ['apikeys.html']);
+});
+
+test('updating from 1.0.7: a partly entered key for the same account is completed from 1.0.6', async () => {
+    const { localStorage, popups, update } = setup({ local: { ...v107Defaults, apiKey: 'new-key' }, chromeStorage: v106 });
+    await update('1.0.7');
+    assert.equal(localStorage.get('apiSecret'), 'new-secret');
+    assert.equal(localStorage.get('defaultGroupId'), '2');
+    assert.deepEqual(popups, ['groups.html']);
 });
 
 test('updating from 1.0.7: stale 1.0.5 values are kept (accepted limitation)', async () => {

@@ -29,9 +29,18 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             // 1.0.7 shipped without this migration, so its users may have re-saved settings since.
             // Keep those and only fill gaps, unless updating straight from 1.0.6 or no API key was
             // ever saved here (then localStorage holds only 1.0.7's defaults).
-            var overwrite = message.overwrite || !localStorage.getItem('apiKey');
+            var savedKey = localStorage.getItem('apiKey');
+            var overwrite = message.overwrite || !savedKey;
+            // The popup saves apiKey as it is typed, so it may belong to another account.
+            // Never fill that account's secret, group, or domain from 1.0.6.
+            var sameAccount = savedKey === message.values.apiKey;
+            var accountSettings = ['apiSecret', 'defaultGroup', 'defaultGroupId', 'selectedDomainName',
+                'groups', 'groupsIds', 'wrongKeys'];
             Object.keys(message.values).forEach(function (key) {
-                if (overwrite || localStorage.getItem(key) === null) localStorage.setItem(key, message.values[key]);
+                if (overwrite || (localStorage.getItem(key) === null &&
+                    (sameAccount || accountSettings.indexOf(key) === -1))) {
+                    localStorage.setItem(key, message.values[key]);
+                }
             });
             sendResponse({ ok: true });
         }

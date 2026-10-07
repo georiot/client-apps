@@ -31,7 +31,8 @@ reading them. On the first run after an update, the service worker copies them o
 into localStorage through the offscreen document (`migrateLegacySettings` in
 `js/service-worker.js`). Updates straight from 1.0.6, and users with no saved API
 key, take the 1.0.6 values; other 1.0.7 users keep their values and only missing
-settings are filled.
+settings are filled. Account settings (secret, group, domain) are filled only when
+the saved API key matches the 1.0.6 key, so credentials are never mixed.
 Explicit bindings in `js/bindings.js` avoid script evaluation disallowed by MV3.
 Link creation uses the v3 JSON API with `X-Api-Key` and `X-Api-Secret` headers and
 reports API error details with credentials redacted.
