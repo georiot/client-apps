@@ -1,0 +1,139 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+
+// Runs the real service worker and offscreen document against in-memory storage.
+function setup({ local = {}, chromeStorage = {}, failMigrate = false } = {}) {
+    const localStorage = new Map(Object.entries(local));
+    const storage = { ...chromeStorage };
+    const popups = [];
+    const listeners = {};
+    const event = (name) => ({ addListener(fn) { listeners[name] = fn; } });
+
+    let offscreenListener;
+    const offscreenContext = vm.createContext({
+        localStorage: {
+            getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null),
+            setItem: (key, value) => localStorage.set(key, String(value))
+        },
+        document: { getElementById: () => ({ select() {} }), execCommand: () => true },
+        chrome: { runtime: { id: 'ext', onMessage: { addListener(fn) { offscreenListener = fn; } } } }
+    });
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/offscreen.js'), 'utf8'), offscreenContext);
+
+    const context = vm.createContext({
+        URL, AbortSignal, console: { ...console, error() {} },
+        chrome: {
+            runtime: { onInstalled: event('installed'), onStartup: event(), onMessage: event() },
+            contextMenus: { onClicked: event(), removeAll: async () => {}, create() {} },
+            action: { setPopup: async ({ popup }) => { popups.push(popup); } },
+            storage: { local: {
+                get: async (keys) => Object.fromEntries(keys.filter((k) => k in storage).map((k) => [k, storage[k]])),
+                set: async (values) => { Object.assign(storage, values); }
+            } }
+        }
+    });
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/service-worker.js'), 'utf8'), context);
+    context.offscreen = (operation, data) => {
+        if (operation === 'migrate' && failMigrate) return Promise.reject(new Error('offscreen unavailable'));
+        return new Promise((resolve) => {
+            offscreenListener({ target: 'offscreen', operation, ...data }, { id: 'ext' }, resolve);
+        });
+    };
+    // Fire the real onInstalled listener, as Chrome does after an update.
+    const update = async (previousVersion) => {
+        listeners.installed({ reason: 'update', previousVersion });
+        await context.configuring;
+    };
+    return { context, localStorage, storage, popups, update };
+}
+
+const v105 = {
+    apiKey: 'old-key', apiSecret: 'old-secret', defaultGroup: 'Old group', defaultGroupId: '1',
+    selectedDomainName: 'geni.us', createdLinks: '7', doneReview: 'true', installDate: '1/2/2020'
+};
+const v106 = {
+    apiKey: 'new-key', apiSecret: 'new-secret', defaultGroup: 'New group', defaultGroupId: '2',
+    selectedDomainName: 'example.link', doneReview: true, wrongKeys: false,
+    groups: '["New group"]', groupsIds: '[2]'
+};
+// What 1.0.7 writes on its first run for a user with nothing in localStorage.
+const v107Defaults = { createdLinks: '0', doneReview: 'false', selectedDomainName: 'geni.us', installDate: '10/7/2026' };
+
+test('1.0.5 users without 1.0.6 settings keep their localStorage settings', async () => {
+    const { localStorage, storage, popups, update } = setup({ local: v105 });
+    await update('1.0.7');
+    for (const [key, value] of Object.entries(v105)) assert.equal(localStorage.get(key), value);
+    assert.equal(storage.legacySettingsMigrated, true);
+    assert.deepEqual(popups, ['groups.html']);
+});
+
+test('updating straight from 1.0.6: fresh 1.0.6 installs get all settings copied', async () => {
+    const { localStorage, popups, update } = setup({
+        chromeStorage: { ...v106, createdLinks: '3', installDate: '05/06/2025' }
+    });
+    await update('1.0.6');
+    assert.equal(localStorage.get('apiKey'), 'new-key');
+    assert.equal(localStorage.get('apiSecret'), 'new-secret');
+    assert.equal(localStorage.get('defaultGroupId'), '2');
+    assert.equal(localStorage.get('selectedDomainName'), 'example.link');
+    assert.equal(localStorage.get('createdLinks'), '3');
+    assert.equal(localStorage.get('installDate'), '05/06/2025');
+    assert.equal(localStorage.get('doneReview'), 'true');
+    assert.equal(localStorage.get('wrongKeys'), 'false');
+    assert.equal(localStorage.get('groupsIds'), '[2]');
+    assert.deepEqual(popups, ['groups.html']);
+});
+
+test('updating straight from 1.0.6: 1.0.6 values replace stale 1.0.5 values; nulls are skipped', async () => {
+    const { localStorage, update } = setup({ local: v105, chromeStorage: { ...v106, createdLinks: null } });
+    await update('1.0.6');
+    assert.equal(localStorage.get('apiKey'), 'new-key');
+    assert.equal(localStorage.get('defaultGroup'), 'New group');
+    assert.equal(localStorage.get('defaultGroupId'), '2');
+    assert.equal(localStorage.get('createdLinks'), '7');
+    assert.equal(localStorage.get('installDate'), '1/2/2020');
+});
+
+test('updating from 1.0.7: settings re-saved in 1.0.7 are kept and only gaps are filled', async () => {
+    const saved = { ...v107Defaults, apiKey: 'resaved-key', apiSecret: 'resaved-secret', defaultGroup: 'Picked', defaultGroupId: '9' };
+    const { localStorage, update } = setup({ local: saved, chromeStorage: v106 });
+    await update('1.0.7');
+    for (const [key, value] of Object.entries(saved)) assert.equal(localStorage.get(key), value);
+    assert.equal(localStorage.get('groupsIds'), '[2]');
+});
+
+test('updating from 1.0.7: stale 1.0.5 values are kept (accepted limitation)', async () => {
+    const { localStorage, update } = setup({ local: v105, chromeStorage: v106 });
+    await update('1.0.7');
+    assert.equal(localStorage.get('apiKey'), 'old-key');
+    assert.equal(localStorage.get('defaultGroupId'), '1');
+});
+
+test('updating from 1.0.7 without saved API keys: 1.0.6 values replace 1.0.7 defaults', async () => {
+    const { localStorage, popups, update } = setup({ local: v107Defaults, chromeStorage: { ...v106, installDate: '05/06/2025' } });
+    await update('1.0.7');
+    assert.equal(localStorage.get('apiKey'), 'new-key');
+    assert.equal(localStorage.get('defaultGroupId'), '2');
+    assert.equal(localStorage.get('selectedDomainName'), 'example.link');
+    assert.equal(localStorage.get('installDate'), '05/06/2025');
+    assert.deepEqual(popups, ['groups.html']);
+});
+
+test('migration runs once and never overwrites settings saved afterwards', async () => {
+    const { context, localStorage, update } = setup({ chromeStorage: v106 });
+    await update('1.0.6');
+    localStorage.set('defaultGroupId', '3');
+    await context.configure();
+    assert.equal(localStorage.get('defaultGroupId'), '3');
+});
+
+test('a failed migration does not block configuration and is retried', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: true });
+    await env.update('1.0.6');
+    assert.deepEqual(env.popups, ['groups.html']);
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    assert.equal(env.localStorage.get('apiKey'), 'old-key');
+});

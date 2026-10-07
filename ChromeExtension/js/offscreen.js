@@ -25,6 +25,15 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             var copied = document.execCommand('copy');
             input.value = '';
             sendResponse({ copied: copied });
+        } else if (message.operation === 'migrate') {
+            // 1.0.7 shipped without this migration, so its users may have re-saved settings since.
+            // Keep those and only fill gaps, unless updating straight from 1.0.6 or no API key was
+            // ever saved here (then localStorage holds only 1.0.7's defaults).
+            var overwrite = message.overwrite || !localStorage.getItem('apiKey');
+            Object.keys(message.values).forEach(function (key) {
+                if (overwrite || localStorage.getItem(key) === null) localStorage.setItem(key, message.values[key]);
+            });
+            sendResponse({ ok: true });
         }
     } catch (error) { sendResponse({ error: error.message }); }
 });

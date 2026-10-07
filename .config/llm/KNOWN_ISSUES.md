@@ -26,15 +26,29 @@ Confirm dashboard v2's supported editor route before replacing the fragment; ver
 
 ## Release version check has no baseline until the first tagged Chrome release
 
-- **Symptom:** A `chrome-v*` tag at or below `1.0.6` passes the packaging workflow,
-  but the Chrome Web Store rejects the zip with "Invalid version number in manifest".
+- **Symptom:** A `chrome-v*` tag at or below the published version passes the packaging
+  workflow, but the Chrome Web Store rejects the zip with "Invalid version number in manifest".
 - **Cause:** The "Resolve version" step in `.github/workflows/package-chrome-extension.yml`
   compares the tag only against existing `chrome-v*` git tags; it does not query the Web Store.
-  Version `1.0.6` was uploaded manually from the `manifest-v3` branch and never tagged,
-  and no `chrome-v*` tags existed when the check was added (GL-2448).
-- **Workaround:** Release `1.0.7` or later. Tagging `origin/manifest-v3` as `chrome-v1.0.6`
-  was considered and intentionally skipped.
-- **Deferred fix:** None needed. Remove this entry once a `chrome-v*` tag at `1.0.7` or later
-  exists; that tag becomes the baseline for the check.
-- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at `1.0.7`
-  or later is listed.
+  Version `1.0.6` was uploaded manually from the `manifest-v3` branch, and `1.0.7` was published
+  without pushing a `chrome-v1.0.7` tag (GL-2448), so no `chrome-v*` tags exist yet.
+- **Workaround:** Check the version on the Web Store listing and release a higher one.
+  Tagging `origin/manifest-v3` as `chrome-v1.0.6` was considered and intentionally skipped.
+- **Deferred fix:** None needed. Remove this entry once any `chrome-v*` tag at or above the
+  published version exists; that tag becomes the baseline for the check.
+- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at or above
+  the published version is listed.
+
+## Users updated to 1.0.7 may still use stale 1.0.5 settings
+
+- **Symptom:** After updating, a user who changed API keys, group, or domain in 1.0.6 creates
+  links with the credentials, group, or domain they had saved in 1.0.5 or earlier.
+- **Cause:** 1.0.6 stored settings in `chrome.storage.local`; 1.0.7 reads only `localStorage`
+  and shipped without a migration (GL-2619). `migrateLegacySettings` in
+  `ChromeExtension/js/service-worker.js` and the `migrate` operation in
+  `ChromeExtension/js/offscreen.js` cannot tell stale 1.0.5 values from values re-saved in 1.0.7,
+  so for users already on 1.0.7 they keep existing values and only fill missing ones.
+- **Workaround:** Re-save API keys, group, and domain in the extension popup.
+- **Deferred fix:** None planned. Overwriting would revert settings users changed in 1.0.7.
+- **Validation:** Covered by `ChromeExtension/tests/migration.test.cjs`; run `npm test` in
+  `ChromeExtension`.

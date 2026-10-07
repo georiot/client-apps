@@ -18,10 +18,28 @@ async function offscreen(operation, data) {
     return result;
 }
 
+// 1.0.6 kept settings in chrome.storage.local. Copy them once into the popup's localStorage;
+// the originals stay in chrome.storage.local. See migrate in offscreen.js for which values win.
+var LEGACY_SETTINGS = ['apiKey', 'apiSecret', 'defaultGroup', 'defaultGroupId', 'selectedDomainName',
+    'createdLinks', 'doneReview', 'installDate', 'wrongKeys', 'lastCreatedLink', 'groups', 'groupsIds'];
+async function migrateLegacySettings(fromV106) {
+    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated'));
+    if (stored.legacySettingsMigrated) return;
+    var values = {};
+    LEGACY_SETTINGS.forEach(function (key) {
+        // 1.0.6 could store createdLinks as NaN, which chrome.storage returns as null.
+        if (stored[key] !== undefined && stored[key] !== null) values[key] = String(stored[key]);
+    });
+    if (Object.keys(values).length) await offscreen('migrate', { values: values, overwrite: fromV106 });
+    await chrome.storage.local.set({ legacySettingsMigrated: true });
+}
+
 var configuring = Promise.resolve();
-function configure() {
+function configure(fromV106) {
     // Serialize menu rebuilds when several popup pages request an update.
     configuring = configuring.catch(function () {}).then(async function () {
+        // A failed migration is retried on the next configure instead of blocking the extension.
+        await migrateLegacySettings(fromV106).catch(console.error);
         var settings = (await offscreen('settings')).settings;
         var configured = settings.apiKey && settings.apiSecret && settings.defaultGroupId;
         var reviewDue = Date.now() - new Date(settings.installDate).getTime() >= 14 * 86400000 &&
@@ -99,7 +117,10 @@ async function createLink(url, tabId, outside) {
     return { url: link, copied: result.copied };
 }
 
-chrome.runtime.onInstalled.addListener(function () { configure().catch(console.error); });
+chrome.runtime.onInstalled.addListener(function (details) {
+    // Users updating straight from 1.0.6 never saved settings in 1.0.7, so their 1.0.6 values are newest.
+    configure(details.reason === 'update' && details.previousVersion === '1.0.6').catch(console.error);
+});
 chrome.runtime.onStartup.addListener(function () { configure().catch(console.error); });
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     if (info.menuItemId !== 'child1' && info.menuItemId !== 'child2') return;

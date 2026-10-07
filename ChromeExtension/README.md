@@ -26,6 +26,12 @@ For more information, refer to the Confluence doc: [Load and Test the Geniuslink
 
 The service worker handles context menus and link creation. An offscreen document
 reads the existing popup localStorage settings and performs clipboard copying.
+Version 1.0.6 stored settings in `chrome.storage.local`, and 1.0.7 shipped without
+reading them. On the first run after an update, the service worker copies them once
+into localStorage through the offscreen document (`migrateLegacySettings` in
+`js/service-worker.js`). Updates straight from 1.0.6, and users with no saved API
+key, take the 1.0.6 values; other 1.0.7 users keep their values and only missing
+settings are filled.
 Explicit bindings in `js/bindings.js` avoid script evaluation disallowed by MV3.
 Link creation uses the v3 JSON API with `X-Api-Key` and `X-Api-Secret` headers and
 reports API error details with credentials redacted.
@@ -60,6 +66,19 @@ The workflow fails if the tag is not a valid Chrome version or is not greater
 than every existing `chrome-v*` tag. It does not check the Chrome Web Store, so
 always release through a tag; a manual upload from another branch leaves the
 repo unaware of the published version.
+
+Before tagging, test the update path from the version currently on the Chrome Web
+Store, not only from `master`. Releases have been published from other branches
+(1.0.6 came from `manifest-v3`), so the published code can differ from `master`:
+
+1. Check the version on the Chrome Web Store listing and find the matching
+   `chrome-v*` tag or branch.
+2. Load that version unpacked, enter API credentials, select a group and a custom
+   domain, and create a link.
+3. Replace the folder contents with the new build and click **Reload** on
+   `chrome://extensions`; this runs the same update path as a store update.
+4. Confirm the popup opens on the groups page with the same group and domain,
+   and that creating a link still works.
 
 Running the workflow manually via the **Run workflow** button on the Actions tab
 packages the version currently in `manifest.json`; use this for test builds.
