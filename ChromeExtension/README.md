@@ -57,12 +57,17 @@ GitHub Action builds the versioned upload zip and tags the release. To release:
    Web Store Developer Dashboard manually.
 
 `manifest.json` is the source of truth for the version. The workflow runs on
-`master` when `manifest.json` or the workflow file changes, and releases only a
-version that has no `chrome-v<version>` tag yet. It fails without tagging if the
-version is not a valid Chrome version or is not greater than every existing
-`chrome-v*` tag. It does not check the Chrome Web Store, so always release through
-`master`; an upload built from another branch leaves the repo unaware of the
-published version.
+`master` when `manifest.json` changes and releases only when `version` differs
+from the previous commit; other manifest edits never release or tag. It fails
+without tagging if the version is not a valid Chrome version or is not greater
+than every existing `chrome-v*` tag. It does not check the Chrome Web Store, so
+always release through `master`; an upload built from another branch leaves the
+repo unaware of the published version.
+
+If a release run fails, fix the cause and use **Re-run jobs** on that run; it
+compares the same commits, so it releases the same version. The workflow never
+creates tags for versions released earlier; create a missing tag by hand on the
+commit that was published.
 
 Running the workflow manually via the **Run workflow** button on the Actions tab
 builds a zip of the selected branch without tagging; use this for test builds,

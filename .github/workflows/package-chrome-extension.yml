@@ -6,7 +6,6 @@ on:
       - master
     paths:
       - "ChromeExtension/manifest.json"
-      - ".github/workflows/package-chrome-extension.yml"
   workflow_dispatch: {}
 
 permissions:
@@ -29,11 +28,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # manifest.json is the source of truth. On master, a version without a
-      # chrome-v<version> tag is a new release: it must be newer than every
-      # previous chrome-v* tag. Manual runs are test builds and never tag.
+      # manifest.json is the source of truth. On master, a push that changes
+      # `version` is a release, and the new version must be newer than every
+      # chrome-v* tag. Other manifest edits never release, and a missing tag for
+      # an older version is never created here. Manual runs are test builds and
+      # never tag.
       - name: Resolve version
         id: manifest
+        env:
+          BEFORE: ${{ github.event.before }}
         run: |
           version=$(node -p "require('./manifest.json').version")
           if ! [[ "$version" =~ ^[0-9]+(\.[0-9]+){0,3}$ ]]; then
@@ -44,13 +47,24 @@ jobs:
 
           release=false
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-            if git ls-remote --exit-code --tags origin "refs/tags/chrome-v$version" > /dev/null; then
-              echo "chrome-v$version already exists; nothing to release."
+            if ! git fetch --quiet --depth=1 origin "$BEFORE"; then
+              echo "::error::Could not fetch the previous master commit $BEFORE to compare manifest versions"
+              exit 1
+            fi
+            previous=$(git show "$BEFORE:ChromeExtension/manifest.json" \
+              | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+
+            if [ "$previous" = "$version" ]; then
+              echo "Version unchanged ($version); nothing to release."
+            elif [ "$(git ls-remote origin "refs/tags/chrome-v$version" | cut -f1)" = "$GITHUB_SHA" ]; then
+              # A re-run after this commit was already tagged.
+              echo "chrome-v$version already points at this commit; nothing to release."
             else
               latest=$(git ls-remote --tags --refs origin 'chrome-v*' \
                 | sed 's#.*refs/tags/chrome-v##' \
                 | sort -V | tail -n1 || true)
-              if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -n1)" != "$version" ]; then
+              if [ -n "$latest" ] && { [ "$latest" = "$version" ] ||
+                [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -n1)" != "$version" ]; }; then
                 echo "::error::Version $version must be greater than the latest released version $latest"
                 exit 1
               fi
