@@ -23,18 +23,3 @@ Check `ChromeExtension/js/lastLinksViewModel.js` and `ChromeExtension/js/utiliti
 which still append this legacy fragment to `https://my.geniuslink.com`.
 Open the matching link's editor manually from the links page until a fix is available.
 Confirm dashboard v2's supported editor route before replacing the fragment; verify the target editor opens.
-
-## Release version check has no baseline until the first tagged Chrome release
-
-- **Symptom:** A `chrome-v*` tag at or below `1.0.6` passes the packaging workflow,
-  but the Chrome Web Store rejects the zip with "Invalid version number in manifest".
-- **Cause:** The "Resolve version" step in `.github/workflows/package-chrome-extension.yml`
-  compares the tag only against existing `chrome-v*` git tags; it does not query the Web Store.
-  Version `1.0.6` was uploaded manually from the `manifest-v3` branch and never tagged,
-  and no `chrome-v*` tags existed when the check was added (GL-2448).
-- **Workaround:** Release `1.0.7` or later. Tagging `origin/manifest-v3` as `chrome-v1.0.6`
-  was considered and intentionally skipped.
-- **Deferred fix:** None needed. Remove this entry once a `chrome-v*` tag at `1.0.7` or later
-  exists; that tag becomes the baseline for the check.
-- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at `1.0.7`
-  or later is listed.
