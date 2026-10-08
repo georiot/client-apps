@@ -2,16 +2,26 @@ name: Package Chrome Extension
 
 on:
   push:
-    tags:
-      - "chrome-v*"
+    branches:
+      - master
+    paths:
+      - "ChromeExtension/manifest.json"
+      - ".github/workflows/package-chrome-extension.yml"
   workflow_dispatch: {}
 
 permissions:
   contents: read
 
+# Never let two runs tag the same version.
+concurrency:
+  group: package-chrome-extension
+  cancel-in-progress: false
+
 jobs:
   package:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: ChromeExtension
@@ -19,40 +29,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # On a chrome-v* tag, the tag is the source of truth: it must be newer than
-      # every previous chrome-v* tag and is written into manifest.json. Manual
-      # runs package the manifest version as-is.
+      # manifest.json is the source of truth. On master, a version without a
+      # chrome-v<version> tag is a new release: it must be newer than every
+      # previous chrome-v* tag. Manual runs are test builds and never tag.
       - name: Resolve version
         id: manifest
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            version="${GITHUB_REF_NAME#chrome-v}"
-            if ! [[ "$version" =~ ^[0-9]+(\.[0-9]+){0,3}$ ]]; then
-              echo "::error::Tag $GITHUB_REF_NAME is not a valid Chrome extension version"
-              exit 1
-            fi
-
-            latest=$(git ls-remote --tags --refs origin 'chrome-v*' \
-              | sed 's#.*refs/tags/chrome-v##' \
-              | grep -vxF "$version" \
-              | sort -V | tail -n1 || true)
-            if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -n1)" != "$version" ]; then
-              echo "::error::Version $version must be greater than the latest released version $latest"
-              exit 1
-            fi
-
-            node -e '
-              const fs = require("fs");
-              const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
-              manifest.version = process.argv[1];
-              fs.writeFileSync("manifest.json", JSON.stringify(manifest, null, 4) + "\n");
-            ' "$version"
-          else
-            version=$(node -p "require('./manifest.json').version")
+          version=$(node -p "require('./manifest.json').version")
+          if ! [[ "$version" =~ ^[0-9]+(\.[0-9]+){0,3}$ ]]; then
+            echo "::error::manifest.json version $version is not a valid Chrome extension version"
+            exit 1
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+          release=false
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            if git ls-remote --exit-code --tags origin "refs/tags/chrome-v$version" > /dev/null; then
+              echo "chrome-v$version already exists; nothing to release."
+            else
+              latest=$(git ls-remote --tags --refs origin 'chrome-v*' \
+                | sed 's#.*refs/tags/chrome-v##' \
+                | sort -V | tail -n1 || true)
+              if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$version" | sort -V | tail -n1)" != "$version" ]; then
+                echo "::error::Version $version must be greater than the latest released version $latest"
+                exit 1
+              fi
+              release=true
+            fi
+          fi
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+
       - name: Build package
+        if: steps.manifest.outputs.release == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           zip -r "../geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}.zip" . \
             -x ".vscode/*" \
@@ -65,8 +73,17 @@ jobs:
             -x "**/.DS_Store"
 
       - name: Upload artifact
+        if: steps.manifest.outputs.release == 'true' || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}
           path: geniuslink-chrome-extension-v${{ steps.manifest.outputs.version }}.zip
           if-no-files-found: error
+
+      # Tagged here rather than in a separate workflow: tags pushed with
+      # GITHUB_TOKEN do not trigger other workflows.
+      - name: Tag release
+        if: steps.manifest.outputs.release == 'true'
+        run: |
+          git tag "chrome-v${{ steps.manifest.outputs.version }}" "$GITHUB_SHA"
+          git push origin "chrome-v${{ steps.manifest.outputs.version }}"
