@@ -24,21 +24,6 @@ which still append this legacy fragment to `https://my.geniuslink.com`.
 Open the matching link's editor manually from the links page until a fix is available.
 Confirm dashboard v2's supported editor route before replacing the fragment; verify the target editor opens.
 
-## Release version check has no baseline until the first tagged Chrome release
-
-- **Symptom:** A `chrome-v*` tag at or below the published version passes the packaging
-  workflow, but the Chrome Web Store rejects the zip with "Invalid version number in manifest".
-- **Cause:** The "Resolve version" step in `.github/workflows/package-chrome-extension.yml`
-  compares the tag only against existing `chrome-v*` git tags; it does not query the Web Store.
-  Version `1.0.6` was uploaded manually from the `manifest-v3` branch, and `1.0.7` was published
-  without pushing a `chrome-v1.0.7` tag (GL-2448), so no `chrome-v*` tags exist yet.
-- **Workaround:** Check the version on the Web Store listing and release a higher one.
-  Tagging `origin/manifest-v3` as `chrome-v1.0.6` was considered and intentionally skipped.
-- **Deferred fix:** None needed. Remove this entry once any `chrome-v*` tag at or above the
-  published version exists; that tag becomes the baseline for the check.
-- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at or above
-  the published version is listed.
-
 ## Users updated to 1.0.7 may still use stale 1.0.5 settings
 
 - **Symptom:** After updating, a user who changed API keys, group, or domain in 1.0.6 creates

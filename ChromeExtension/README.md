@@ -53,24 +53,36 @@ real Geniuslink credentials or create real links.
 ### Packaging for the Chrome Web Store
 
 The [Package Chrome Extension](../.github/workflows/package-chrome-extension.yml)
-GitHub Action builds a versioned upload zip. To release, push a tag matching
-`chrome-v<version>` from `master`:
+GitHub Action builds the versioned upload zip and tags the release. To release:
 
-```sh
-git tag chrome-v1.0.8
-git push origin chrome-v1.0.8
-```
+1. In your PR, raise `version` in `manifest.json` above the version on the
+   Chrome Web Store listing.
+2. Merge the PR to `master`. The workflow builds
+   `geniuslink-chrome-extension-v<version>.zip` and pushes the
+   `chrome-v<version>` tag on the merge commit.
+3. Download the zip from the workflow run's artifacts and upload it to the Chrome
+   Web Store Developer Dashboard manually.
 
-The tag is the source of truth for the version: the workflow writes it into
-`manifest.json` before zipping, so you do not need to edit the manifest by hand.
-The workflow fails if the tag is not a valid Chrome version or is not greater
+`manifest.json` is the source of truth for the version. The workflow runs on
+`master` when `manifest.json` changes and releases only when `version` differs
+from the previous commit; other manifest edits never release or tag. It fails
+without tagging if the version is not a valid Chrome version or is not greater
 than every existing `chrome-v*` tag. It does not check the Chrome Web Store, so
-always release through a tag; a manual upload from another branch leaves the
+always release through `master`; an upload built from another branch leaves the
 repo unaware of the published version.
 
-Before tagging, test the update path from the version currently on the Chrome Web
-Store, not only from `master`. Releases have been published from other branches
-(1.0.6 came from `manifest-v3`), so the published code can differ from `master`:
+If a release run fails for a temporary reason, such as a GitHub outage, or because
+of a repository setting, such as tag protection, fix that and use **Re-run jobs**
+on the run. A re-run uses the original commit and workflow file, so it cannot pick
+up a code, manifest, or workflow fix; merge such a fix in a PR that raises the
+version again, which releases the next version instead. The workflow never creates
+tags for versions released earlier; create a missing tag by hand on the commit
+that was published.
+
+Before merging a version change, test the update path from the version currently
+on the Chrome Web Store, not only from `master`. Releases have been published from
+other branches (1.0.6 came from `manifest-v3`), so the published code can differ
+from `master`:
 
 1. Check the version on the Chrome Web Store listing and find the matching
    `chrome-v*` tag or branch.
@@ -82,11 +94,8 @@ Store, not only from `master`. Releases have been published from other branches
    and that creating a link still works.
 
 Running the workflow manually via the **Run workflow** button on the Actions tab
-packages the version currently in `manifest.json`; use this for test builds.
-
-The resulting `geniuslink-chrome-extension-v<version>.zip` is attached to the run
-as a downloadable artifact — upload it to the Chrome Web Store Developer
-Dashboard manually.
+builds a zip of the selected branch without tagging; use this for test builds,
+not for Web Store uploads.
 
 ## Unit Testing
 The project is set to use the jasmine framework : http://jasmine.github.io/2.5/introduction.html
