@@ -11,11 +11,6 @@ on:
 permissions:
   contents: read
 
-# Never let two runs tag the same version.
-concurrency:
-  group: package-chrome-extension
-  cancel-in-progress: false
-
 jobs:
   package:
     runs-on: ubuntu-latest
@@ -95,7 +90,9 @@ jobs:
           if-no-files-found: error
 
       # Tagged here rather than in a separate workflow: tags pushed with
-      # GITHUB_TOKEN do not trigger other workflows.
+      # GITHUB_TOKEN do not trigger other workflows. The push is not forced, so
+      # it fails if the tag already exists. That, not a concurrency group, keeps
+      # runs from tagging the same version; a group would cancel pending releases.
       - name: Tag release
         if: steps.manifest.outputs.release == 'true'
         run: |
