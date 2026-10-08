@@ -26,7 +26,7 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
     const context = vm.createContext({
         URL, AbortSignal, console: { ...console, error() {} },
         chrome: {
-            runtime: { onInstalled: event('installed'), onStartup: event(), onMessage: event() },
+            runtime: { onInstalled: event('installed'), onStartup: event('startup'), onMessage: event() },
             contextMenus: { onClicked: event(), removeAll: async () => {}, create() {} },
             action: { setPopup: async ({ popup }) => { popups.push(popup); } },
             storage: { local: {
@@ -42,12 +42,16 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
             offscreenListener({ target: 'offscreen', operation, ...data }, { id: 'ext' }, resolve);
         });
     };
-    // Fire the real onInstalled listener, as Chrome does after an update.
+    // Fire the real listeners, as Chrome does after an update or at browser start.
     const update = async (previousVersion) => {
-        listeners.installed({ reason: 'update', previousVersion });
+        await listeners.installed({ reason: 'update', previousVersion });
         await context.configuring;
     };
-    return { context, localStorage, storage, popups, update };
+    const startup = async () => {
+        listeners.startup();
+        await context.configuring;
+    };
+    return { context, localStorage, storage, popups, update, startup };
 }
 
 const v105 = {
@@ -166,4 +170,35 @@ test('a failed migration does not block configuration and the retry keeps the 1.
     assert.equal(env.localStorage.get('apiSecret'), 'new-secret');
     assert.equal(env.localStorage.get('defaultGroupId'), '2');
     assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
+});
+
+test('an update applied at browser start still overwrites when onStartup fires before onInstalled', async () => {
+    const env = setup({ local: v105, chromeStorage: v106 });
+    // onStartup alone must not decide the migration.
+    await env.startup();
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    assert.equal(env.localStorage.get('apiKey'), 'old-key');
+    await env.update('1.0.6');
+    assert.equal(env.storage.legacySettingsMigrated, true);
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
+    assert.equal(env.localStorage.get('defaultGroupId'), '2');
+});
+
+test('popups and startup never migrate before onInstalled has decided', async () => {
+    const { context, localStorage, storage, startup } = setup({ local: v105, chromeStorage: v106 });
+    await startup();
+    await context.configure();
+    assert.equal(storage.legacySettingsMigrated, undefined);
+    assert.equal(storage.legacySettingsPending, undefined);
+    assert.equal(localStorage.get('apiKey'), 'old-key');
+});
+
+test('a later update does not replace a pending 1.0.6 decision before the migration succeeds', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 2 });
+    await env.update('1.0.6');
+    await env.update('1.0.8');
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    await env.context.configure();
+    assert.equal(env.storage.legacySettingsMigrated, true);
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
 });
