@@ -18,24 +18,12 @@ async function offscreen(operation, data) {
     return result;
 }
 
-// 1.0.6 kept settings in chrome.storage.local. Copy them once into the popup's localStorage;
-// the originals stay in chrome.storage.local. See migrate in offscreen.js for which values win.
-var LEGACY_SETTINGS = ['apiKey', 'apiSecret', 'defaultGroup', 'defaultGroupId', 'selectedDomainName',
-    'createdLinks', 'doneReview', 'installDate', 'wrongKeys', 'lastCreatedLink', 'groups', 'groupsIds'];
+// Copy 1.0.6 settings into the popup's localStorage once; see js/legacy-settings.js.
+importScripts('legacy-settings.js');
 async function migrateLegacySettings() {
-    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated', 'legacySettingsPending',
-        'legacySettingsBaseline'));
-    // Only onInstalled knows the previous version, so wait for its decision (see the listener below).
-    if (stored.legacySettingsMigrated || !stored.legacySettingsPending) return;
-    var values = {};
-    LEGACY_SETTINGS.forEach(function (key) {
-        // 1.0.6 could store createdLinks as NaN, which chrome.storage returns as null.
-        if (stored[key] !== undefined && stored[key] !== null) values[key] = String(stored[key]);
-    });
-    if (Object.keys(values).length) {
-        await offscreen('migrate', { values: values, overwrite: stored.legacySettingsPending.overwrite,
-            baseline: stored.legacySettingsBaseline });
-    }
+    var pending = pendingLegacySettings(await chrome.storage.local.get(LEGACY_SETTINGS.concat(LEGACY_STATE)));
+    if (!pending) return;
+    if (Object.keys(pending.values).length) await offscreen('migrate', pending);
     await chrome.storage.local.set({ legacySettingsMigrated: true });
 }
 

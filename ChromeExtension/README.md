@@ -27,12 +27,13 @@ For more information, refer to the Confluence doc: [Load and Test the Geniuslink
 The service worker handles context menus and link creation. An offscreen document
 reads the existing popup localStorage settings and performs clipboard copying.
 Version 1.0.6 stored settings in `chrome.storage.local`, and 1.0.7 shipped without
-reading them. On the first run after an update, the service worker copies them once
-into localStorage through the offscreen document (`migrateLegacySettings` in
-`js/service-worker.js`). Updates straight from 1.0.6, and users with no saved API
-key, take the 1.0.6 values; other 1.0.7 users keep their values and only missing
-settings are filled. Account settings (secret, group, domain) are filled only when
-the saved API key matches the 1.0.6 key, so credentials are never mixed.
+reading them. After an update, `onInstalled` decides how to copy them once into
+localStorage, and the service worker does so through the offscreen document. If that
+fails, the next popup page to open finishes the copy and reloads before settings can
+be edited (`js/legacy-settings.js`). Updates straight from 1.0.6, and users with no
+saved API key, take the 1.0.6 values; other 1.0.7 users keep their values and only
+missing settings are filled. Account settings (secret, group, domain) are filled
+only when the saved API key matches the 1.0.6 key, so credentials are never mixed.
 Explicit bindings in `js/bindings.js` avoid script evaluation disallowed by MV3.
 Link creation uses the v3 JSON API with `X-Api-Key` and `X-Api-Secret` headers and
 reports API error details with credentials redacted.

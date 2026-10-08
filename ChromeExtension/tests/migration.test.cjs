@@ -4,8 +4,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-// Runs the real service worker and offscreen document against in-memory storage.
-function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
+const load = (context, file) => vm.runInContext(fs.readFileSync(path.join(__dirname, '../js', file), 'utf8'), context);
+
+// Runs the real service worker, offscreen document, and popup page code against in-memory storage.
+function setup({ local = {}, chromeStorage = {}, failMigrate = 0, failSetItem } = {}) {
     const localStorage = new Map(Object.entries(local));
     const storage = { ...chromeStorage };
     const popups = [];
@@ -16,15 +18,21 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
     const offscreenContext = vm.createContext({
         localStorage: {
             getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null),
-            setItem: (key, value) => localStorage.set(key, String(value))
+            setItem: (key, value) => {
+                // Simulate one failed write, such as a full storage quota.
+                if (key === failSetItem) { failSetItem = undefined; throw new Error('QuotaExceededError'); }
+                localStorage.set(key, String(value));
+            }
         },
         document: { getElementById: () => ({ select() {} }), execCommand: () => true },
         chrome: { runtime: { id: 'ext', onMessage: { addListener(fn) { offscreenListener = fn; } } } }
     });
-    vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/offscreen.js'), 'utf8'), offscreenContext);
+    load(offscreenContext, 'legacy-settings.js');
+    load(offscreenContext, 'offscreen.js');
 
     const context = vm.createContext({
         URL, AbortSignal, console: { ...console, error() {} },
+        importScripts: (file) => load(context, file),
         chrome: {
             runtime: { onInstalled: event('installed'), onStartup: event('startup'), onMessage: event() },
             contextMenus: { onClicked: event(), removeAll: async () => {}, create() {} },
@@ -35,12 +43,14 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
             } }
         }
     });
-    vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/service-worker.js'), 'utf8'), context);
-    context.offscreen = (operation, data) => {
-        if (operation === 'migrate' && failMigrate-- > 0) return Promise.reject(new Error('offscreen unavailable'));
-        return new Promise((resolve) => {
+    load(context, 'service-worker.js');
+    context.offscreen = async (operation, data) => {
+        if (operation === 'migrate' && failMigrate-- > 0) throw new Error('offscreen unavailable');
+        const result = await new Promise((resolve) => {
             offscreenListener({ target: 'offscreen', operation, ...data }, { id: 'ext' }, resolve);
         });
+        if (result.error) throw new Error(result.error);
+        return result;
     };
     // Fire the real listeners, as Chrome does after an update or at browser start.
     const update = async (previousVersion) => {
@@ -51,22 +61,21 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
         listeners.startup();
         await context.configuring;
     };
-    // Load a popup page's shared utilities.js, which shares localStorage with the offscreen document.
+    // Open a popup page: it loads js/legacy-settings.js and shares localStorage with the offscreen document.
+    const page = { reloaded: false };
     const openPopup = async () => {
-        const keys = () => [...localStorage.keys()];
-        const page = vm.createContext({
-            location: { pathname: '/groups.html' },
+        load(vm.createContext({
+            console: { ...console, error() {} },
+            location: { reload: () => { page.reloaded = true; } },
             localStorage: {
-                get length() { return keys().length; },
-                key: (i) => keys()[i] ?? null,
-                getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null)
+                getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null),
+                setItem: (key, value) => localStorage.set(key, String(value))
             },
             chrome: { storage: context.chrome.storage }
-        });
-        vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/utilities.js'), 'utf8'), page);
+        }), 'legacy-settings.js');
         await new Promise((resolve) => setTimeout(resolve, 0));
     };
-    return { context, localStorage, storage, popups, update, startup, openPopup };
+    return { context, localStorage, storage, popups, update, startup, openPopup, page };
 }
 
 const v105 = {
@@ -218,42 +227,45 @@ test('a later update does not replace a pending 1.0.6 decision before the migrat
     assert.equal(env.localStorage.get('apiKey'), 'new-key');
 });
 
-test('after a failed 1.0.6 migration, credentials saved before the retry are kept', async () => {
+test('after a failed 1.0.6 migration, opening a popup completes it before settings can be changed', async () => {
     const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
     await env.update('1.0.6');
-    await env.openPopup();
-    env.localStorage.set('apiKey', 'typed-key');
-    env.localStorage.set('apiSecret', 'typed-secret');
-    env.localStorage.set('defaultGroupId', '8');
-    await env.context.configure();
-    assert.equal(env.storage.legacySettingsMigrated, true);
-    assert.equal(env.localStorage.get('apiKey'), 'typed-key');
-    assert.equal(env.localStorage.get('apiSecret'), 'typed-secret');
-    assert.equal(env.localStorage.get('defaultGroupId'), '8');
-    assert.equal(env.localStorage.get('defaultGroup'), 'Old group');
-    assert.equal(env.localStorage.get('selectedDomainName'), 'geni.us');
-});
-
-test('after a failed 1.0.6 migration, a group picked before the retry keeps the whole account', async () => {
-    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
-    await env.update('1.0.6');
-    await env.openPopup();
-    env.localStorage.set('defaultGroupId', '8');
-    await env.context.configure();
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
     assert.equal(env.localStorage.get('apiKey'), 'old-key');
-    assert.equal(env.localStorage.get('apiSecret'), 'old-secret');
-    assert.equal(env.localStorage.get('defaultGroupId'), '8');
-    assert.equal(env.localStorage.get('doneReview'), 'true');
-});
 
-test('after a failed 1.0.6 migration, untouched settings still take the 1.0.6 values', async () => {
-    const env = setup({ local: { ...v105, doneReview: 'false' }, chromeStorage: v106, failMigrate: 1 });
-    await env.update('1.0.6');
     await env.openPopup();
-    assert.ok(env.storage.legacySettingsBaseline);
-    await env.context.configure();
+    assert.equal(env.page.reloaded, true);
+    assert.equal(env.storage.legacySettingsMigrated, true);
     assert.equal(env.localStorage.get('apiKey'), 'new-key');
     assert.equal(env.localStorage.get('defaultGroupId'), '2');
     assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
-    assert.equal(env.localStorage.get('doneReview'), 'true');
+
+    // Settings saved on the reloaded page are never overwritten afterwards.
+    env.localStorage.set('apiKey', 'typed-key');
+    env.localStorage.set('defaultGroupId', '8');
+    await env.context.configure();
+    assert.equal(env.localStorage.get('apiKey'), 'typed-key');
+    assert.equal(env.localStorage.get('defaultGroupId'), '8');
+});
+
+test('popup pages do nothing until onInstalled has decided', async () => {
+    const env = setup({ local: v105, chromeStorage: v106 });
+    await env.openPopup();
+    assert.equal(env.page.reloaded, false);
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    assert.equal(env.localStorage.get('apiKey'), 'old-key');
+});
+
+test('a migration interrupted by a failed write completes on retry', async () => {
+    const env = setup({ local: v107Defaults, chromeStorage: { ...v106, installDate: '05/06/2025' },
+        failSetItem: 'selectedDomainName' });
+    await env.update('1.0.7');
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    await env.context.configure();
+    assert.equal(env.storage.legacySettingsMigrated, true);
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
+    assert.equal(env.localStorage.get('apiSecret'), 'new-secret');
+    assert.equal(env.localStorage.get('defaultGroupId'), '2');
+    assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
+    assert.equal(env.localStorage.get('installDate'), '05/06/2025');
 });

@@ -29,10 +29,9 @@ Confirm dashboard v2's supported editor route before replacing the fragment; ver
 - **Symptom:** After updating, a user who changed API keys, group, or domain in 1.0.6 creates
   links with the credentials, group, or domain they had saved in 1.0.5 or earlier.
 - **Cause:** 1.0.6 stored settings in `chrome.storage.local`; 1.0.7 reads only `localStorage`
-  and shipped without a migration (GL-2619). `migrateLegacySettings` in
-  `ChromeExtension/js/service-worker.js` and the `migrate` operation in
-  `ChromeExtension/js/offscreen.js` cannot tell stale 1.0.5 values from values re-saved in 1.0.7,
-  so for users already on 1.0.7 they keep existing values and only fill missing ones.
+  and shipped without a migration (GL-2619). The migration in
+  `ChromeExtension/js/legacy-settings.js` cannot tell stale 1.0.5 values from values re-saved
+  in 1.0.7, so for users already on 1.0.7 it keeps existing values and only fills missing ones.
 - **Workaround:** Re-save API keys, group, and domain in the extension popup.
 - **Deferred fix:** None planned. Overwriting would revert settings users changed in 1.0.7.
 - **Validation:** Covered by `ChromeExtension/tests/migration.test.cjs`; run `npm test` in
