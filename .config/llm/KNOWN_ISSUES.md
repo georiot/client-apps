@@ -26,15 +26,17 @@ Confirm dashboard v2's supported editor route before replacing the fragment; ver
 
 ## Release version check has no baseline until the first tagged Chrome release
 
-- **Symptom:** A `chrome-v*` tag at or below `1.0.6` passes the packaging workflow,
-  but the Chrome Web Store rejects the zip with "Invalid version number in manifest".
+- **Symptom:** A `manifest.json` version at or below the published version is released by
+  the packaging workflow, but the Chrome Web Store rejects the zip with "Invalid version number
+  in manifest".
 - **Cause:** The "Resolve version" step in `.github/workflows/package-chrome-extension.yml`
-  compares the tag only against existing `chrome-v*` git tags; it does not query the Web Store.
-  Version `1.0.6` was uploaded manually from the `manifest-v3` branch and never tagged,
-  and no `chrome-v*` tags existed when the check was added (GL-2448).
-- **Workaround:** Release `1.0.7` or later. Tagging `origin/manifest-v3` as `chrome-v1.0.6`
-  was considered and intentionally skipped.
-- **Deferred fix:** None needed. Remove this entry once a `chrome-v*` tag at `1.0.7` or later
-  exists; that tag becomes the baseline for the check.
-- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at `1.0.7`
-  or later is listed.
+  compares the version only against existing `chrome-v*` git tags; it does not query the Web Store.
+  Version `1.0.6` was uploaded manually from the `manifest-v3` branch, and `1.0.7` was published
+  without a `chrome-v1.0.7` tag (GL-2448), so no `chrome-v*` tags existed before the workflow
+  started tagging releases (GL-2620).
+- **Workaround:** Check the version on the Web Store listing and set a higher one.
+  Tagging `origin/manifest-v3` as `chrome-v1.0.6` was considered and intentionally skipped.
+- **Deferred fix:** None needed. Remove this entry once any `chrome-v*` tag at or above the
+  published version exists; the workflow creates one on the next release.
+- **Validation:** Run `git ls-remote --tags origin 'chrome-v*'` and confirm a tag at or above
+  the published version is listed.
