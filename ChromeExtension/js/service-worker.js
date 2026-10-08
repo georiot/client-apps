@@ -23,7 +23,8 @@ async function offscreen(operation, data) {
 var LEGACY_SETTINGS = ['apiKey', 'apiSecret', 'defaultGroup', 'defaultGroupId', 'selectedDomainName',
     'createdLinks', 'doneReview', 'installDate', 'wrongKeys', 'lastCreatedLink', 'groups', 'groupsIds'];
 async function migrateLegacySettings() {
-    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated', 'legacySettingsPending'));
+    var stored = await chrome.storage.local.get(LEGACY_SETTINGS.concat('legacySettingsMigrated', 'legacySettingsPending',
+        'legacySettingsBaseline'));
     // Only onInstalled knows the previous version, so wait for its decision (see the listener below).
     if (stored.legacySettingsMigrated || !stored.legacySettingsPending) return;
     var values = {};
@@ -32,7 +33,8 @@ async function migrateLegacySettings() {
         if (stored[key] !== undefined && stored[key] !== null) values[key] = String(stored[key]);
     });
     if (Object.keys(values).length) {
-        await offscreen('migrate', { values: values, overwrite: stored.legacySettingsPending.overwrite });
+        await offscreen('migrate', { values: values, overwrite: stored.legacySettingsPending.overwrite,
+            baseline: stored.legacySettingsBaseline });
     }
     await chrome.storage.local.set({ legacySettingsMigrated: true });
 }

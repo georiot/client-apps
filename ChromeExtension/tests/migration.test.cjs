@@ -51,7 +51,22 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0 } = {}) {
         listeners.startup();
         await context.configuring;
     };
-    return { context, localStorage, storage, popups, update, startup };
+    // Load a popup page's shared utilities.js, which shares localStorage with the offscreen document.
+    const openPopup = async () => {
+        const keys = () => [...localStorage.keys()];
+        const page = vm.createContext({
+            location: { pathname: '/groups.html' },
+            localStorage: {
+                get length() { return keys().length; },
+                key: (i) => keys()[i] ?? null,
+                getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null)
+            },
+            chrome: { storage: context.chrome.storage }
+        });
+        vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/utilities.js'), 'utf8'), page);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+    };
+    return { context, localStorage, storage, popups, update, startup, openPopup };
 }
 
 const v105 = {
@@ -201,4 +216,44 @@ test('a later update does not replace a pending 1.0.6 decision before the migrat
     await env.context.configure();
     assert.equal(env.storage.legacySettingsMigrated, true);
     assert.equal(env.localStorage.get('apiKey'), 'new-key');
+});
+
+test('after a failed 1.0.6 migration, credentials saved before the retry are kept', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
+    await env.update('1.0.6');
+    await env.openPopup();
+    env.localStorage.set('apiKey', 'typed-key');
+    env.localStorage.set('apiSecret', 'typed-secret');
+    env.localStorage.set('defaultGroupId', '8');
+    await env.context.configure();
+    assert.equal(env.storage.legacySettingsMigrated, true);
+    assert.equal(env.localStorage.get('apiKey'), 'typed-key');
+    assert.equal(env.localStorage.get('apiSecret'), 'typed-secret');
+    assert.equal(env.localStorage.get('defaultGroupId'), '8');
+    assert.equal(env.localStorage.get('defaultGroup'), 'Old group');
+    assert.equal(env.localStorage.get('selectedDomainName'), 'geni.us');
+});
+
+test('after a failed 1.0.6 migration, a group picked before the retry keeps the whole account', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
+    await env.update('1.0.6');
+    await env.openPopup();
+    env.localStorage.set('defaultGroupId', '8');
+    await env.context.configure();
+    assert.equal(env.localStorage.get('apiKey'), 'old-key');
+    assert.equal(env.localStorage.get('apiSecret'), 'old-secret');
+    assert.equal(env.localStorage.get('defaultGroupId'), '8');
+    assert.equal(env.localStorage.get('doneReview'), 'true');
+});
+
+test('after a failed 1.0.6 migration, untouched settings still take the 1.0.6 values', async () => {
+    const env = setup({ local: { ...v105, doneReview: 'false' }, chromeStorage: v106, failMigrate: 1 });
+    await env.update('1.0.6');
+    await env.openPopup();
+    assert.ok(env.storage.legacySettingsBaseline);
+    await env.context.configure();
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
+    assert.equal(env.localStorage.get('defaultGroupId'), '2');
+    assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
+    assert.equal(env.localStorage.get('doneReview'), 'true');
 });
