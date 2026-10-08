@@ -64,10 +64,13 @@ than every existing `chrome-v*` tag. It does not check the Chrome Web Store, so
 always release through `master`; an upload built from another branch leaves the
 repo unaware of the published version.
 
-If a release run fails, fix the cause and use **Re-run jobs** on that run; it
-compares the same commits, so it releases the same version. The workflow never
-creates tags for versions released earlier; create a missing tag by hand on the
-commit that was published.
+If a release run fails for a temporary reason, such as a GitHub outage, or because
+of a repository setting, such as tag protection, fix that and use **Re-run jobs**
+on the run. A re-run uses the original commit and workflow file, so it cannot pick
+up a code, manifest, or workflow fix; merge such a fix in a PR that raises the
+version again, which releases the next version instead. The workflow never creates
+tags for versions released earlier; create a missing tag by hand on the commit
+that was published.
 
 Running the workflow manually via the **Run workflow** button on the Actions tab
 builds a zip of the selected branch without tagging; use this for test builds,
