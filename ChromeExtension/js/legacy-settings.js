@@ -45,7 +45,20 @@ if (typeof chrome !== 'undefined' && chrome.storage && typeof localStorage !== '
     chrome.storage.local.get(LEGACY_SETTINGS.concat(LEGACY_STATE)).then(function (stored) {
         var pending = pendingLegacySettings(stored);
         if (!pending) return;
-        applyLegacySettings(localStorage, pending.values, pending.overwrite);
-        return chrome.storage.local.set({ legacySettingsMigrated: true }).then(function () { location.reload(); });
+        // This page's scripts started with the old settings; for example, groups.js may be loading groups
+        // with stale credentials. Drop this page's writes until the reload, so a late response cannot
+        // replace the restored settings. The migration writes through the original setItem.
+        var setItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function () {};
+        return Promise.resolve().then(function () {
+            applyLegacySettings({
+                getItem: function (key) { return localStorage.getItem(key); },
+                setItem: function (key, value) { setItem.call(localStorage, key, value); }
+            }, pending.values, pending.overwrite);
+            return chrome.storage.local.set({ legacySettingsMigrated: true });
+        }).then(function () { location.reload(); }, function (error) {
+            Storage.prototype.setItem = setItem;
+            throw error;
+        });
     }).catch(console.error);
 }

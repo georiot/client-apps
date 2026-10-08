@@ -62,16 +62,27 @@ function setup({ local = {}, chromeStorage = {}, failMigrate = 0, failSetItem } 
         await context.configuring;
     };
     // Open a popup page: it loads js/legacy-settings.js and shares localStorage with the offscreen document.
+    // beforeMigratedSet runs while the page migration is in progress, e.g. a late groups.js response.
     const page = { reloaded: false };
-    const openPopup = async () => {
+    const openPopup = async ({ beforeMigratedSet, failPageWrite } = {}) => {
+        function Storage() {}
+        Storage.prototype.getItem = (key) => (localStorage.has(key) ? localStorage.get(key) : null);
+        Storage.prototype.setItem = (key, value) => {
+            if (key === failPageWrite) throw new Error('QuotaExceededError');
+            localStorage.set(key, String(value));
+        };
+        page.localStorage = new Storage();
         load(vm.createContext({
-            console: { ...console, error() {} },
+            Storage, console: { ...console, error() {} },
             location: { reload: () => { page.reloaded = true; } },
-            localStorage: {
-                getItem: (key) => (localStorage.has(key) ? localStorage.get(key) : null),
-                setItem: (key, value) => localStorage.set(key, String(value))
-            },
-            chrome: { storage: context.chrome.storage }
+            localStorage: page.localStorage,
+            chrome: { storage: { local: {
+                get: context.chrome.storage.local.get,
+                set: async (values) => {
+                    if (beforeMigratedSet) beforeMigratedSet();
+                    return context.chrome.storage.local.set(values);
+                }
+            } } }
         }), 'legacy-settings.js');
         await new Promise((resolve) => setTimeout(resolve, 0));
     };
@@ -268,4 +279,24 @@ test('a migration interrupted by a failed write completes on retry', async () =>
     assert.equal(env.localStorage.get('defaultGroupId'), '2');
     assert.equal(env.localStorage.get('selectedDomainName'), 'example.link');
     assert.equal(env.localStorage.get('installDate'), '05/06/2025');
+});
+
+test('a late write from the popup page during its migration does not replace restored settings', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
+    await env.update('1.0.6');
+    // groups.js finishes loading groups for the old account while the page is migrating.
+    await env.openPopup({ beforeMigratedSet: () => env.page.localStorage.setItem('defaultGroupId', '99') });
+    assert.equal(env.page.reloaded, true);
+    assert.equal(env.localStorage.get('defaultGroupId'), '2');
+    assert.equal(env.localStorage.get('apiKey'), 'new-key');
+});
+
+test('if the popup page migration fails, the page can still save settings', async () => {
+    const env = setup({ local: v105, chromeStorage: v106, failMigrate: 1 });
+    await env.update('1.0.6');
+    await env.openPopup({ failPageWrite: 'apiSecret' });
+    assert.equal(env.page.reloaded, false);
+    assert.equal(env.storage.legacySettingsMigrated, undefined);
+    env.page.localStorage.setItem('defaultGroup', 'Saved after failure');
+    assert.equal(env.localStorage.get('defaultGroup'), 'Saved after failure');
 });
