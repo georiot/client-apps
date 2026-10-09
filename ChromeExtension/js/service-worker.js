@@ -18,10 +18,21 @@ async function offscreen(operation, data) {
     return result;
 }
 
+// Copy 1.0.6 settings into the popup's localStorage once; see js/legacy-settings.js.
+importScripts('legacy-settings.js');
+async function migrateLegacySettings() {
+    var pending = pendingLegacySettings(await chrome.storage.local.get(LEGACY_SETTINGS.concat(LEGACY_STATE)));
+    if (!pending) return;
+    if (Object.keys(pending.values).length) await offscreen('migrate', pending);
+    await chrome.storage.local.set({ legacySettingsMigrated: true });
+}
+
 var configuring = Promise.resolve();
 function configure() {
     // Serialize menu rebuilds when several popup pages request an update.
     configuring = configuring.catch(function () {}).then(async function () {
+        // A failed migration is retried on the next configure instead of blocking the extension.
+        await migrateLegacySettings().catch(console.error);
         var settings = (await offscreen('settings')).settings;
         var configured = settings.apiKey && settings.apiSecret && settings.defaultGroupId;
         var reviewDue = Date.now() - new Date(settings.installDate).getTime() >= 14 * 86400000 &&
@@ -99,7 +110,16 @@ async function createLink(url, tabId, outside) {
     return { url: link, copied: result.copied };
 }
 
-chrome.runtime.onInstalled.addListener(function () { configure().catch(console.error); });
+chrome.runtime.onInstalled.addListener(function (details) {
+    // Users updating straight from 1.0.6 never saved settings in 1.0.7, so their 1.0.6 values are newest.
+    // Save the decision before configuring: onStartup can run first when an update is applied at browser
+    // start, and a failed migration is retried later by calls that do not know the previous version.
+    return chrome.storage.local.get(['legacySettingsMigrated', 'legacySettingsPending']).then(function (stored) {
+        if (stored.legacySettingsMigrated || stored.legacySettingsPending) return;
+        var overwrite = details.reason === 'update' && details.previousVersion === '1.0.6';
+        return chrome.storage.local.set({ legacySettingsPending: { overwrite: overwrite } });
+    }).then(function () { return configure(); }).catch(console.error);
+});
 chrome.runtime.onStartup.addListener(function () { configure().catch(console.error); });
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     if (info.menuItemId !== 'child1' && info.menuItemId !== 'child2') return;

@@ -11,6 +11,7 @@ function setup(response) {
     const event = () => ({ addListener() {} });
     const context = vm.createContext({
         URL, AbortSignal, console,
+        importScripts: (file) => vm.runInContext(fs.readFileSync(path.join(__dirname, '../js', file), 'utf8'), context),
         fetch: async (url, options) => { requests.push({ url, options }); return response; },
         chrome: {
             runtime: { onInstalled: event(), onStartup: event(), onMessage: event() },

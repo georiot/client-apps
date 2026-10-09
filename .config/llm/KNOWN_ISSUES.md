@@ -23,3 +23,16 @@ Check `ChromeExtension/js/lastLinksViewModel.js` and `ChromeExtension/js/utiliti
 which still append this legacy fragment to `https://my.geniuslink.com`.
 Open the matching link's editor manually from the links page until a fix is available.
 Confirm dashboard v2's supported editor route before replacing the fragment; verify the target editor opens.
+
+## Users updated to 1.0.7 may still use stale 1.0.5 settings
+
+- **Symptom:** After updating, a user who changed API keys, group, or domain in 1.0.6 creates
+  links with the credentials, group, or domain they had saved in 1.0.5 or earlier.
+- **Cause:** 1.0.6 stored settings in `chrome.storage.local`; 1.0.7 reads only `localStorage`
+  and shipped without a migration (GL-2619). The migration in
+  `ChromeExtension/js/legacy-settings.js` cannot tell stale 1.0.5 values from values re-saved
+  in 1.0.7, so for users already on 1.0.7 it keeps existing values and only fills missing ones.
+- **Workaround:** Re-save API keys, group, and domain in the extension popup.
+- **Deferred fix:** None planned. Overwriting would revert settings users changed in 1.0.7.
+- **Validation:** Covered by `ChromeExtension/tests/migration.test.cjs`; run `npm test` in
+  `ChromeExtension`.

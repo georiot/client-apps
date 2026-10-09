@@ -25,6 +25,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             var copied = document.execCommand('copy');
             input.value = '';
             sendResponse({ copied: copied });
+        } else if (message.operation === 'migrate') {
+            applyLegacySettings(localStorage, message.values, message.overwrite);
+            sendResponse({ ok: true });
         }
     } catch (error) { sendResponse({ error: error.message }); }
 });
